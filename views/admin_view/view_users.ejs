@@ -1,0 +1,74 @@
+<section class="container">
+    <!-- <div class="row">
+        <div class="mt-3 d-flex"><a href="/admin/addproducts" class="btn btn-success ms-auto">Add Products</a></div>
+    </div> -->
+    
+    <div class="mt-4">
+      <table class="table mt-4 display" id="productsTable">
+        <thead>
+            <tr>
+              <th scope="col">No</th>             
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Mobile</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+              <!-- <th scope="col">Image</th> -->
+ 
+            </tr>
+          </thead>
+          
+        <tbody>
+          
+            <% allUser.forEach(function(items, index) { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= items.name %></td>
+              <td><%= items.email %></td>
+              <td><%= items.mobile%></td>
+              <td>
+                <% if ( items.status ) { %>
+                <span class="badge rounded-pill alert-success">Active</span>
+                <% } else { %>
+                  <span class="badge rounded-pill alert-danger">Inactive</span>
+                  <% } %>
+              </td>
+              <td class="text-end">
+                <% if ( items.status ) { %>
+                <a href="/admin/block_user/<%=items._id%>" class="btn btn-sm btn-danger rounded font-sm"> Block</a>
+                <% } else { %>
+                <a href="/admin/unblock_user/<%=items._id%>" class="btn btn-sm btn-brand rounded font-sm"> Unblock</a>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+          
+      </table>
+    </div>
+    <div class="pagination-area mt-15 mb-50 ">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <% if (currentPage > 1) { %>
+          <li class="page-item"><a class="page-link" href="?page=<%=currentPage-1%>"><i class="material-icons md-chevron_left"></i></a></li>
+          <% } %>
+          <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link" href="?page=<%=i%>"><%=i%></a></li>
+          <% } %>
+          <% if (currentPage < totalPages) { %>
+          <li class="page-item"><a class="page-link" href="?page=<%=currentPage+1%>"><i class="material-icons md-chevron_right"></i></a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
+    
+</section>
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready( function () {
+      $('#productsTable').DataTable();
+  } );
+</script>
+

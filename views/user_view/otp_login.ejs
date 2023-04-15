@@ -1,0 +1,126 @@
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <section class="vh-100 ">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col col-xl-8 col-lg-5">
+            <div class="card" style="border-radius: 1rem;">
+              <div class="row g-0">
+                <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                  <div class="card-body p-4 p-lg-5 text-black">
+    
+                    <form id="send-otp">
+                      <div class="d-flex align-items-center mb-3 pb-1">
+                        <span class="h1 fw-bold mb-0">OTP Login</span>
+                      </div>
+    
+                      <div class="form-outline mb-4">
+                        <input type="tel" id="typeNumberX-2"
+                          class="form-control form-control-lg" placeholder="Enter Phone Number" name="phone"
+                          style="border-radius: 1rem;" />
+                        <span id="number-error" class="validation" style="color: red;"></span>
+                      </div>
+    
+                      <div id="submit-error mb-4">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" type="submit"
+                         >Send OTP</button>
+                        <span id="submit-error" class="validation" style="color: red;"></span>
+                      </div>
+    
+                      <p class=" pb-lg-2 mt-3" style="color: #000000;">Login Using Email and Password <a href="/login"
+                          style="color: #008cff;">Click Here</a></p>
+                    </form>
+    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    
+    <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Enter OTP</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    
+          <form id="otp-verify">
+    
+            <div class="modal-body">
+              <div class="form-outline mb-4">
+                <input type="tel" id="typeNumberX-2" class="form-control form-control-md" placeholder="Enter OTP"
+                  name="otp" style="border-radius: 1rem;" />
+              </div>
+    
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" value="Login">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <script src="/userAssets/mainotp.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    
+    
+      const verifyButton = document.getElementById('verify');
+      $('#send-otp').submit((e) => {
+        e.preventDefault();
+        $.ajax({
+          url: '/send-otp',
+          method: 'POST',
+          data: $('#send-otp').serialize(),
+          success: (res) => {
+            if (res) {
+              console.log("api call back")
+              console.log(res)
+              // verifyButton.style.visibility = 'visible'
+            }
+            else {
+              location.reload();
+            }
+    
+          }
+        })
+      })
+    
+      $('#otp-verify').submit((e) => {
+        e.preventDefault();
+        $.ajax({
+          url: '/otp-verify',
+          method: 'post',
+          data: $('#otp-verify').serialize(),
+          success: (res) => {
+            console.log(`response top verfiy:  ${res}`)
+            if (res) {
+              // location.href = '/';
+              // location.assign('/')
+              location.href = '/'
+            }
+            else {
+              location.reload();
+            }
+          }
+        })
+      })
+      const modal = document.querySelector('.modal');
+      const closeButton = document.querySelector('.close-modal');
+    
+    </script>
+  
+  </body>

@@ -1,0 +1,48 @@
+let express = require('express');
+let router = express.Router();
+let adminControllers = require('../controllers/admin_controllers')
+const upload = require('../utils/multer')
+let middlewares =require('../middlewares/middlewares')
+
+
+
+
+/* GET home page. */
+router.get('/', adminControllers.admin_homepage) 
+
+router.get('/login', adminControllers.admin_login) 
+router.post('/login', adminControllers.admin_loginPost) 
+
+router.post('/admin/login', adminControllers.adminLogout)
+
+router.get('/addproducts',middlewares.checkAdminLoggedIn, adminControllers.add_product) 
+router.post('/addproducts',middlewares.checkAdminLoggedIn, upload.array('image'), adminControllers.adminAddProductPost)
+
+router.get('/viewproducts',middlewares.checkAdminLoggedIn, adminControllers.view_products) 
+
+router.get('/viewusers',middlewares.checkAdminLoggedIn, adminControllers.view_users) 
+
+router.get('/block_user/:id', middlewares.checkAdminLoggedIn,adminControllers.blockUser) 
+router.get('/unblock_user/:id', middlewares.checkAdminLoggedIn,adminControllers.unblockUser) 
+
+router.get('/addcategory', middlewares.checkAdminLoggedIn,  adminControllers.getCategory)
+router.post('/addcategory',middlewares.checkAdminLoggedIn, adminControllers.postCategory)
+
+// router.get('/editcategory/:id', middlewares.checkAdminLoggedIn,  adminControllers.getEditCategory)
+// router.post('/editcategory/:id', middlewares.checkAdminLoggedIn,  adminControllers.postEditCategory)
+
+
+router.get("/block_product/:id", middlewares.checkAdminLoggedIn, adminControllers.blockProduct)
+router.get("/unblock_product/:id", middlewares.checkAdminLoggedIn, adminControllers.unblockProduct)
+
+router.get("/edit_product/:id", middlewares.checkAdminLoggedIn, adminControllers.editProduct)
+router.post("/edit_product/:id", middlewares.checkAdminLoggedIn,upload.array('image'), adminControllers.editProductPost)
+
+router.get("/unlistcategory/:id", middlewares.checkAdminLoggedIn, adminControllers.unlistCategory)
+router.get("/listcategory/:id", middlewares.checkAdminLoggedIn, adminControllers.listCategory)
+
+router.get("/")
+
+
+
+module.exports = router;
