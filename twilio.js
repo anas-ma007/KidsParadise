@@ -50,12 +50,17 @@ module.exports = {
         client.verify.v2.services(verifySid)
             .verifications
             .create({ to: "+91" + phone_number, channel: 'sms' })
-            .then(verification => console.log(verification.sid))
+            .then((verification) => {
+                console.log(verification.sid);
+                console.log("otp send succesfully")
+            })
             .catch((error) => {
+                console.log('otp send error');
                 console.log(error);
             })
     },
-    verifyOtpForForgotPass(otp, phone_number) {
+    verifyOtpForForgotPass(phone_number, otp) {
+        console.log(phone_number);
         return client.verify.v2.services(verifySid)
             .verificationChecks
             .create({ to: "+91" + phone_number, code: otp })

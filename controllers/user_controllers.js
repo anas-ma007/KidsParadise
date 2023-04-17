@@ -318,17 +318,16 @@ module.exports = {
     },
     forgotPasswordOtp: (req, res) => {
         req.session.mobile = req.body.mobile;
+        console.log("sesion mobile: ",req.session.mobile)
         user_helpers.checkForUser(req.body.mobile).then(async (user) => {
+            console.log("user exist : " ,user);
             if (user) {
                 req.session.user = user;
-
-
-                
                 await twilioApi.sendOtpForForgotPass(req.body.mobile);
-                // res.json(true)
-                res.render('user_view/forgot_password', { user,  layout: 'user_LogLayout'  })
+                res.json(true);
+                //res.render('user_view/forgot_password', { user,  layout: 'user_LogLayout'  })
             } else {
-                req.session.user = null;
+                // req.session.user = null;
                 req.session.otpLoginErr = "The phone number is not registerd with any account";
                 res.json(false);
             }
@@ -339,9 +338,11 @@ module.exports = {
 
 
     forgotPasswordVerify: (req, res) => {
+        console.log("modile: ", req.session.mobile);
         twilioApi.verifyOtpForForgotPass(req.session.mobile, req.body.otp).then((result) => {
             if (result === "approved") {
                 req.session.loggedIn = true;
+                // req.session.user = response.user
                 res.json({ status: true })
 
             }
@@ -358,7 +359,24 @@ module.exports = {
         req.session.destroy();
         res.redirect('/login');
     },
-
+    renderResetPass: (req,res)=>{
+        res.render('user_view/reset_password', {layout: 'user_LogLayout'})
+    },
+    setNewPass:(req,res)=>{
+        const newPass = req.body.newPassword;
+        const user = req.session.user;
+        console.log("last round", user);
+        req.session.user = user;
+        user_helpers.setNewPass(user._id, newPass).then(()=>{
+            req.session.loggedIn=true;
+            req.session.user=user;
+            res.redirect('/');
+        })
+        .catch((err)=>{
+            console.log(err);
+            res.redirect('/');
+        })
+    },
 
     /////forgot password////////////
 

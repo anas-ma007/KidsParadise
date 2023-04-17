@@ -1,4 +1,3 @@
-
 <section class="content-main">
   <div class="row">
     <div class="col-9">
@@ -19,7 +18,9 @@
 
             <div class="mb-4">
               <label for="product_name" class="form-label">Product Name</label>
-              <input type="text" placeholder="Product Name" required name="name" class="form-control" id="name">
+              <input type="text" placeholder="Product Name" required name="name" onkeyup="validateProductName()"  class="form-control" id="name">
+              <span id="productName-error" class="validation-label text-danger"></span>
+
             </div>
             <!-- <div class="mb-4 ">
               <label for="product_category" class="form-label">Category</label>
@@ -30,38 +31,42 @@
             <div class=" mb-4">
               <!-- <select class="form-select mb-2" name="category" aria-label="Default select example"> 
                 <option selected >Category</option> -->
-                <label class="form-label" >Category</label>  
-                <select class="form-select" name="category">
-                <% for (var i =0; i < category.length;  i++ ) { %>
-                <option value="<%=category[i].category%>"><%= category[i].category%></option>
-                <% } %>
-  
+              <label class="form-label">Category</label>
+              <select class="form-select" name="category">
+                <% for (var i=0; i < category.length; i++ ) { %>
+                  <option value="<%=category[i].category%>">
+                    <%= category[i].category%>
+                  </option>
+                  <% } %>
+
               </select>
             </div>
 
             <!-- <div class="row"> -->
-              <div class="col-lg-4">
-                <div class="mb-4">
-                  <label class="form-label">Price</label>
-                  <div class="row gx-2">
-                    <input placeholder="₹" type="text" required name="price" class="form-control">
-                  </div>
+            <div class="col-lg-4">
+              <div class="mb-4">
+                <label class="form-label">Price</label>
+                <div class="row gx-2">
+                  <input placeholder="₹" type="text" required name="price" class="form-control">
                 </div>
               </div>
-              <div class="col-lg-4">
-                <div class="mb-4">
-                  <label class="form-label">Stock</label>
-                  <div class="row gx-2">
-                    <input placeholder="0" type="text" required name="stock" class="form-control">
-                  </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="mb-4">
+                <label class="form-label">Stock</label>
+                <div class="row gx-2">
+                  <input placeholder="0" type="text" required name="stock" class="form-control">
                 </div>
               </div>
+            </div>
             <!-- </div> -->
 
             <div class="mb-4">
               <label class="form-label">Description</label>
-              <textarea placeholder="Product Description" required name="description" class="form-control"
-                rows="2"></textarea>
+              <textarea placeholder="Product Description" id="description" required name="description"
+                onkeyup="validateDescription()" class="form-control" rows="2"></textarea>
+              <span id="description-error" class="validation-label text-danger"></span>
+
             </div>
 
             <div class="">
@@ -82,10 +87,66 @@
             </div>
 
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-              <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg" />
+              <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg"
+                onclick="return validateForm()" />
             </div>
 
           </form>
         </div>
       </div>
 </section>
+
+
+<script>
+  
+  var productNameError = document.getElementById('productName-error');
+  var descriptionError = document.getElementById('description-error');
+  var submitError = document.getElementById('submit-error');
+  
+  function validateProductName() {
+    var product = document.getElementById('name').value;
+    var required = 14;
+    var left = required - product.length;
+    if (left > 0) {
+      productNameError.innerHTML = left + ' more characters required.';
+      return false;
+    } else {
+      productNameError.innerHTML = 'Enter a valid name';
+    }
+
+    productNameError.innerHTML = '';
+    return true;
+  }
+
+
+  function validateDescription() {
+    var description = document.getElementById('description').value;
+    var required = 80;
+    var left = required - description.length;
+    if (left > 0) {
+      descriptionError.innerHTML = left + ' more characters required.';
+      return false;
+    } else {
+      descriptionError.innerHTML = 'Enter a valid description';
+    }
+
+    descriptionError.innerHTML = '';
+    return true;
+  }
+
+
+  function validateForm() {
+    if (validateProductName() || !validateDescription()) {
+      submitError.style.display = 'flex';
+      submitError.style.justifyContent = 'center';
+      submitError.innerHTML = 'Please fix all errors to submit';
+      setTimeout(() => {
+        submitError.style.display = 'none';
+      }, 3000);
+      return false;
+    }
+  }
+
+
+
+</script>

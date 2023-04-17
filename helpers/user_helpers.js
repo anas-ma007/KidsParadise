@@ -3,6 +3,7 @@ let db = require("../config/connection")
 const bcrypt = require("bcrypt")
 const { sendSms, sendSmsChecking } = require('../twilio')
 const { ObjectId } = require("mongodb")
+const collections = require('../config/collections')
 // const { sendotp } = require('../controllers/user_controllers')
 // const { response } = require('../app')
 
@@ -98,7 +99,7 @@ module.exports = {
     /////////////////////// password recovery ///////////////////////
 
     checkForUser: async (mobile) => {
-        let user = await db.get().collection(collection.USER_COLLECTION).findone({mobile : mobile})
+        let user = await db.get().collection(collection.USER_COLLECTION).findOne({mobile : mobile})
         if(user){
             return user
         }else {
@@ -161,19 +162,30 @@ module.exports = {
             }
         })
     },
-
+    setNewPass:(userId, newPass)=>{
+        return new Promise(async(resolve, reject)=>{
+            try{
+                newPass = await bcrypt.hash(newPass, 10);
+                db.get().collection(collections.USER_COLLECTION)
+                .updateOne(
+                    {
+                        _id: new ObjectId(userId)
+                    },
+                    {
+                        $set:{
+                            password: newPass
+                        }
+                    }
+                )
+                .then((response)=>{
+                    console.log(response);
+                    resolve(response);
+                })
+            }catch(err){
+                console.log(err);
+                reject();
+            }
+        })
+    }
     // ///////////////// password recover 
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
