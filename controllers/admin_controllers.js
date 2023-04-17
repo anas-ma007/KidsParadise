@@ -54,23 +54,23 @@ module.exports = {
 
 
     adminAddProductPost: async (req, res) => {
-        console.log(req.body, 'pppppppppppppppppppppppppppppppppppp');
+        // console.log(req.body, 'pppppppppppppppppppppppppppppppppppp');
         try {
             console.log(req.files)
             const imgUrl = [];
             for (let i = 0; i < req.files.length; i++) {
                 const result = await cloudinary.uploader.upload(req.files[i].path);
                 imgUrl.push(result.url);
-                console.log(result.url);
+                // console.log(result.url);
             }
             adminHelpers.addProduct(req.body, async (id) => {
                 adminHelpers.addProductImages(id, imgUrl).then((response) => {
-                    console.log(response);
+                    // console.log(response);
                 })
                 // req.session.submitStatus="product added succesfully"
             })
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         } finally {
             // req.session.submitStatus = "product Added"
             res.redirect('/admin/addproducts');
@@ -80,7 +80,7 @@ module.exports = {
         if (req.session.adminLoggedIn) {
             try {
                 const page = parseInt(req.query.page) || 1;
-                const pageSize = parseInt(req.query.pageSize) || 7;
+                const pageSize = parseInt(req.query.pageSize) || 5;
                 const skip = (page - 1) * pageSize;
 
                 const products = await productHelpers.findAllProducts(skip, pageSize)

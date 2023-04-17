@@ -9,10 +9,11 @@ const { ObjectId } = require("mongodb")
 module.exports = {
     addProduct: (productData, callback) => {
         productData.status = true
+        productData.date =new Date()
+        productData.price=parseInt(productData.price)
+        productData.stock=parseInt(productData.stock)
         db.get().collection(collection.PRODUCTS_COLLECTION).insertOne(productData).then((data) => {
-
             callback(data.insertedId)
-
         })
 
     },
@@ -38,8 +39,8 @@ module.exports = {
                     $set: {
                         name: productdetails.name,
                         description: productdetails.description,
-                        price: productdetails.price,
-                        stock: productdetails.stock,
+                        price: parseInt(productdetails.price),
+                        stock: parseInt(productdetails.stock),
                         // pro_cat: productdetails.pro_cat,
                         // image: productdetails.image,
                         // password: productdetails.password

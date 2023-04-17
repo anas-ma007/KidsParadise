@@ -37,20 +37,23 @@ module.exports = {
         })
     },
 
-    // getProducts: (skip, pageSize) => {
+    // getProducts: () => {
     //     return new Promise(async (resolve, reject) => {
     //         let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).toArray()
     //         resolve(products)
     //     })
     // },
     userGetProducts: async (skip, pageSize) => {
+        console.log(skip, pageSize, "hiihihihihihihihihihi");
         let products= await db.get().collection(collection.PRODUCTS_COLLECTION).find({status:true}).skip(skip).limit(pageSize).toArray()
         return products
 
     },
 
     userProductCount: async () => {
-        let count = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).countDocuments()
+        // console.log( "sgzsxbg");
+        let count = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments({status:true})
+        // console.log(count, "sgzsg");
         return count
 
     },
@@ -58,7 +61,7 @@ module.exports = {
     getCategory: () => {
         return new Promise(async (resolve, reject) => {
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status:true}).toArray()
-            console.log(category, "sooorajjj");
+            // console.log(category, "sooorajjj");
             resolve(category)
 
         })
@@ -131,7 +134,73 @@ module.exports = {
         const productsCount = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments()
         return productsCount
 
-    }
+    },
+
+    //vijay search products page
+    searchProducts: async (name) => {
+        let products= await db.get().collection(collection.PRODUCTS_COLLECTION).find({status:true,name:name}).toArray()
+        return products
+
+    },
+
+    doSearch : (details) => {
+        return new Promise(async(resolve, reject) => {
+          try {
+            const searchValue = details.search;
+            const products = await db.get().collection(collection.PRODUCTS_COLLECTION)
+              .find({
+                'name': { $regex: `.*${searchValue}.*`, $options: 'i' } 
+              }).toArray();
+            resolve(products);
+          } catch (err) {
+            reject(err);
+          }            
+        })
+      },
+
+
+
+
+      filterGetProducts: async (skip, pageSize, filter) => {
+        // console.log(filter);
+        if(filter=== "high"||"low"){
+            if(filter==="high"){
+                filter=-1;
+            }else{
+                filter=1;
+            }
+            // console.log(skip, pageSize, "hiihihihihihihihihihi");
+            let products= await db.get().collection(collection.PRODUCTS_COLLECTION).find({status:true}).sort({price:filter}).skip(skip).limit(pageSize).toArray()
+            return products
+        } else if(filter==="newness"){
+            filter=1
+            let products= await db.get().collection(collection.PRODUCTS_COLLECTION).find({status:true}).sort({date:filter}).skip(skip).limit(pageSize).toArray()
+            return products
+
+        } else if(filter==="filterOne"){
+
+        }
+    
+
+    },
+    findAllSearchProduct:async(skip,limit,searchkey)=>{
+        const  product  =  await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
+           
+            {
+                $match: {
+                  $or:[
+                    {name:{$regex:searchkey,$options:'i'}},
+                    {category:{$regex:searchkey,$options:'i'}},
+                  ]
+                }
+
+            },
+            {$skip: skip},
+            {$limit:limit}
+        ]).toArray()
+        return product
+    
+        },
 
 
 

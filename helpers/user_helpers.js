@@ -3,6 +3,7 @@ let db = require("../config/connection")
 const bcrypt = require("bcrypt")
 const { sendSms, sendSmsChecking } = require('../twilio')
 const { ObjectId } = require("mongodb")
+// const { sendotp } = require('../controllers/user_controllers')
 // const { response } = require('../app')
 
 
@@ -94,9 +95,82 @@ module.exports = {
 
     },
 
-   
+    /////////////////////// password recovery ///////////////////////
 
-    
+    checkForUser: async (mobile) => {
+        let user = await db.get().collection(collection.USER_COLLECTION).findone({mobile : mobile})
+        if(user){
+            return user
+        }else {
+            user=null
+            return user
+        }
+
+    },
+
+    // sendOtpForForgotPass: (mobNo) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         if (mobNo.phone) {
+    //             let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone })
+    //             if (userData) {
+    //                 this.doSendOtp(mobNo)
+    //             }
+    //         }
+    //     })
+                    
+        //             sendSms(mobNo.phone)
+        //             resolve(true)
+        //         } else {
+        //             resolve(false)
+        //         }
+        //     } else {
+        //         resolve(false)
+        //     }
+        // })
+   // },
+
+
+    verifyOtpForForgotPass: (otp, phone) => {
+        return new Promise(async (resolve, reject) => {
+            if (otp.otp && phone) {
+                let sendSms = await sendSmsChecking(otp.otp, phone)
+                let user = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: phone })
+                resolve({ sendSms, user })
+            } else {
+                resolve(false)
+            }
+        })
+
+    },
+
+
+    newPasswordUpdate: (userId, password) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                password.password = await bcrypt.hash(password.password, 10);
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: new ObjectId(userId) },
+                    {
+                        $set: {
+                            password: password.password
+                        }
+                    }).then((response) => {
+                        resolve(response)
+                    })
+            } catch (err) {
+                console.log(err);
+            }
+        })
+    },
+
+    // ///////////////// password recover 
+
+
+
+
+
+
+
+
 
 
 

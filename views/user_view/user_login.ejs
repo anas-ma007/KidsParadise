@@ -1,50 +1,53 @@
-<section class="vh-100" style="background-color:#8d96a7;">
-  <br>
-  <br>
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="card shadow-2-strong" style="border-radius: 1rem;">
-          <form action="/login" method="post"
-          
-          <div class="card-body p-5 text-center">
 
-            <h3 class="mb-5">Sign in</h3>
 
-            <div class="form-outline mb-4">
-              <input name="email" type="email" id="typeEmailX-2" class="form-control form-control-lg" />
-              <label class="form-label" for="typeEmailX-2">Email</label>
+<div class="d-md-flex half">
+  <div class="bg" style="background-image: url('images/bg_1.jpg');"></div>
+  <div class="contents">
+<br>
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-12">
+          <div class="form-block mx-auto">
+            <div class="text-center mb-5">
+              <h3 class="text-uppercase">Login to <strong>Kids Paradise</strong></h3>
             </div>
+            <form action="/login" method="post">
+              <div class="form-group first">
+                <label for="username">Email</label>
+                <input name="email" type="text" class="form-control" placeholder="your-email@gmail.com" id="username">
+              </div>
+              <div class="form-group last mb-3">
+                <label for="password">Password</label>
+                <input name="password" value="Abc@123" type="password" class="form-control" placeholder="Your Password" id="password">
+                <% if (loginErr) { %>
+                  <p class="error text-danger"> Invalid Credentials</p>
+                <% } %>
+              </div>
+              
+              <div class="d-sm-flex mb-5 align-items-center">
+                
+                <span class="mr-auto"><a href="/signup" class="forgot-pass">Dont have an account ?</a></span> 
 
-            <div class="form-outline mb-4" >
-              <input name="password" type="password" value="Abc@123" id="typePasswordX-2" class="form-control form-control-lg" />
-              <label class="form-label" for="typePasswordX-2">Password</label>
-              <% if (loginErr) { %>
-                <p class="error text-danger"> Invalid Credentials</p>
-              <% } %>
-            </div>
+                <span class="ml-auto"><a href='/forgotPassword' class="forgot-pass">Forgot Password ?</a></span> 
+              </div>
 
-            <!-- Checkbox -->
-            <!-- <div class="form-check d-flex justify-content-start mb-4">
-                  <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                  <label class="form-check-label" for="form1Example3"> Remember password </label>
-                </div> -->
+              <input type="submit" value="Log In" class="btn btn-block py-2 btn-primary">
 
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/signup"
-                class="link-danger">Register</a></p>
-
-
-
-               <h6 class="mt-2">  <a href="/otplogin"> Forgot Password? Login with OTP ?</a>  </h6>
-
-            <hr class="my-4">
-            
-
+              <span class="text-center my-3 d-block">or</span>
+              
+              
+              <div class="">
+              <a href="/otplogin" class="btn btn-block py-2 btn-facebook">
+                <span class=" mr-3"></span> Login with OTP
+              </a>
+             
+              </div>
+            </form>
+          </div>
         </div>
-        </form>
       </div>
     </div>
   </div>
-  </div>
-</section>
+</div>
+  
+  

@@ -1,49 +1,38 @@
 <body>
-    <br>
-    <br>
-    <br>
-    <br>
-    <section class="vh-100 ">
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col col-xl-8 col-lg-5">
-            <div class="card" style="border-radius: 1rem;">
-              <div class="row g-0">
-                <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                  <div class="card-body p-4 p-lg-5 text-black">
-    
-                    <form id="send-otp">
-                      <div class="d-flex align-items-center mb-3 pb-1">
-                        <span class="h1 fw-bold mb-0">OTP Login</span>
-                      </div>
-    
-                      <div class="form-outline mb-4">
-                        <input type="tel" id="typeNumberX-2"
-                          class="form-control form-control-lg" placeholder="Enter Phone Number" name="phone"
-                          style="border-radius: 1rem;" />
-                        <span id="number-error" class="validation" style="color: red;"></span>
-                      </div>
-    
-                      <div id="submit-error mb-4">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" type="submit"
-                         >Send OTP</button>
-                        <span id="submit-error" class="validation" style="color: red;"></span>
-                      </div>
-    
-                      <p class=" pb-lg-2 mt-3" style="color: #000000;">Login Using Email and Password <a href="/login"
-                          style="color: #008cff;">Click Here</a></p>
-                    </form>
-    
-                  </div>
+    <div class="d-md-flex half">
+        <div class="bg" style="background-image: url('images/bg_1.jpg');"></div>
+        <div class="contents">
+
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-12">
+                        <div class="form-block mx-auto">
+                            <div class="text-center mb-5">
+                                <h4 class="text-uppercase">Login with OTP to <strong>Kids Paradise</strong></h4>
+                            </div>
+                            <form id="send-otp">
+                                <div class="form-group last mb-3">
+                                    <label for="password">Enter Your Mobile Number without Country Code</label>
+                                    <input type="tel" id="mobileId" class="form-control"
+                                        placeholder="Enter Your 10digit Mobile Number" name="phone">
+                                </div>
+
+                                <div class="d-sm-flex mb-5 align-items-center">
+                                    <span class="ml-auto"><a href="/login" class="forgot-pass">Login using Email and
+                                            Password ?</a></span>
+                                </div>
+
+                                <button  value="SUBMIT" data-toggle="modal" data-target="#exampleModal" type="submit" class="btn btn-block py-2 btn-primary" style="background-color: #088168;" > SEND OTP
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </section>
-    
-    
+    </div>
+
     
     <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
@@ -66,7 +55,11 @@
     
             </div>
             <div class="modal-footer">
-              <input type="submit" class="btn btn-primary" value="Login">
+              <input type="submit" class="btn" style="background-color: #088168;"  value="Login">
+              <!-- <input type="submit" class="btn" value="Cancel"> -->
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
             </div>
           </form>
         </div>

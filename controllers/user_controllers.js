@@ -1,10 +1,9 @@
-const db = require('../config/connection')
-const collection = require('../config/collections')
 const user_helpers = require('../helpers/user_helpers')
 // const { request, response } = require('express')
 const productHelpers = require("../helpers/product_helpers")
 const admin_helpers = require('../helpers/admin_helpers')
 const cartHelpers = require("../helpers/cart_helpers")
+const twilioApi = require("../twilio")
 
 module.exports = {
     user_homepage: (req, res) => {
@@ -13,12 +12,12 @@ module.exports = {
 
             if (user) {
                 // console.log('anas user check', user);
-                res.render('user_view/index', { user });
+                res.render('user_view/index', { user, layout: 'user_LogLayout' });
             } else {
-                res.render('user_view/index')
+                res.render('user_view/index', { layout: 'user_LogLayout' })
             }
         } else {
-            res.render('user_view/index')
+            res.render('user_view/index', { layout: 'user_LogLayout' })
         }
     },
 
@@ -28,13 +27,13 @@ module.exports = {
             res.redirect("/")
         } else {
 
-            res.render('user_view/user_login', { "loginErr": req.session.loginErr })
+            res.render('user_view/user_login', { "loginErr": req.session.loginErr, layout: 'user_LogLayout' })
             req.session.loginErr = null
         }
     },
 
     user_signup: function (req, res) {
-        res.render('user_view/user_signup')
+        res.render('user_view/user_signup', { layout: 'user_LogLayout' })
     },
 
     user_signupPost: (req, res) => {
@@ -47,6 +46,7 @@ module.exports = {
     },
 
     user_loginPost: function (req, res) {
+        console.log("lllllllllllllllllllll", req.body);
         user_helpers.doLogin(req.body).then((response) => {
             if (response.status) {
                 req.session.loggedIn = true
@@ -61,35 +61,59 @@ module.exports = {
     },
 
     viewProducts: async (req, res) => {
-        
+
         var user = req.session.user
         try {
             var page = parseInt(req.query.page) || 1;
             var pageSize = parseInt(req.query.pageSize) || 8;
             var skip = (page - 1) * pageSize;
+            var filter = req.query.filter
+            console.log(filter);
 
-            var products = await productHelpers.userGetProducts(skip, pageSize)
+            if(filter){
 
-            var count = await productHelpers.userProductCount()
+                // var allProdcuts=await productHelpers.allproducts(filter)
+                var products = await productHelpers.filterGetProducts(skip, pageSize,filter)
+                var count = await productHelpers.userProductCount()
+                // console.log(count);
+                var totalPages = Math.ceil(count / pageSize);
+                var currentPage = page > totalPages ? totalPages : page;
+                console.log("from try block", currentPage);
+                res.render("user_view/all_products", {
+                    user,
+                    products,
+                    totalPages,
+                    currentPage,
+                    pageSize,
+                });
 
-            var totalPages = Math.ceil(count / pageSize);
-            var currentPage = page > totalPages ? totalPages : page;
-            console.log("from try block");
-            res.render("user_view/all_products", {
-                user,
-                products,
-                totalPages,
-                currentPage,
-                pageSize,
-            });
+            }else{
+
+                var products = await productHelpers.userGetProducts(skip, pageSize)
+                // console.log(products,"joyelll");
+                var count = await productHelpers.userProductCount()
+                // console.log(count);
+                var totalPages = Math.ceil(count / pageSize);
+                var currentPage = page > totalPages ? totalPages : page;
+                console.log("from try block", currentPage);
+                res.render("user_view/all_products", {
+                    user,
+                    products,
+                    totalPages,
+                    currentPage,
+                    pageSize,
+                });
+
+            }
+
+           
         } catch (err) {
             console.log("from catch block");
             res.render("user_view/all_products", {
                 products,
                 totalPages,
                 currentPage,
-                pageSize,
-                user
+                pageSize
             });
         }
 
@@ -129,7 +153,7 @@ module.exports = {
     },
 
     otplogin: (req, res) => {
-        res.render("user_view/otp_login")
+        res.render("user_view/otp_login", { layout: 'user_LogLayout' })
 
     },
     sendotp: (req, res) => {
@@ -182,14 +206,226 @@ module.exports = {
         })
     },
 
-    shoppingCart:async (req, res)=>{
-        let user=req.session.user
-        let userId=req.session.user._id
-        let products=await cartHelpers.getCartProducts(userId)
+    shoppingCart: async (req, res) => {
+        let user = req.session.user
+        let userId = req.session.user._id
+        let products = await cartHelpers.getCartProducts(userId)
         // console.log(products);
-            res.render("user_view/shopping_cart", {products, user}) 
-    
+        res.render("user_view/shopping_cart", { products, user })
+
     },
+
+
+
+    // searchProducts: async (req, res) => {
+    //     let name=req.body.search
+    //     console.log(name);
+    //     var user = req.session.user
+    //     try {
+    //         var page = parseInt(req.query.page) || 1;
+    //         var pageSize = parseInt(req.query.pageSize) || 8;
+    //         var skip = (page - 1) * pageSize;
+
+    //         var products = await productHelpers.searchProducts(name)
+    //         console.log(products,"vijay annaaan products");
+    //         var count = await productHelpers.userProductCount()
+
+    //         var totalPages = Math.ceil(count / pageSize);
+    //         var currentPage = page > totalPages ? totalPages : page;
+    //         console.log("from try block");
+    //         res.render("user_view/all_products", {
+    //             user,
+    //             products,
+    //             totalPages,
+    //             currentPage,
+    //             pageSize,
+    //         });
+    //     } catch (err) {
+    //         console.log("from catch block");
+    //         res.render("user_view/all_products", {
+    //             products,
+    //             totalPages,
+    //             currentPage,
+    //             pageSize,
+    //             user
+    //         });
+    //     }
+
+    // productHelpers.getProducts().then((products) => {
+    //     if (req.session.user) {
+    //         res.render("user_view/all_products", { user, products })
+    //     } else {
+    //         res.render("user_view/all_products", { products })
+
+    //     }
+    // })
+
+    // },
+
+
+    search: async (req, res) => {
+        const searchValue = req.query.search;
+        // let cartCount = 0;
+        // let wishlistCount = 0;
+        // if(req.session.loggedIn) {
+        let user = req.session.user;
+        // cartCount = await userHelpers.getCartCountNew(req.session.user._id);
+        // req.session.cartCount = parseInt(cartCount);
+        // wishlistCount = await userHelpers.wishlistCount(req.session.user._id);
+        // req.session.wishlistCount = parseInt(wishlistCount);
+        // productHelpers.doSearch({ search: searchValue }).then((products) => {
+        // if (products.length > 0) {
+        //   res.render('user/shop', {admin:false,userHeader:true,products,user,cartCount,wishlistCount})
+        // res.render("user_view/all_products", { user, products, });
+        //         } else {
+        //           res.json({
+        //             status: 'error',
+        //             message: 'No matching products found'
+        //           });
+        //         }
+        //       }).catch((err) => {
+        //         res.json({
+        //           status: 'error',
+        //           message: err.message
+        //         });
+        //       });
+        // }else{
+
+        productHelpers.doSearch({ search: searchValue }).then((products) => {
+            if (products.length > 0) {
+                res.render("user_view/all_products", { user, products, });
+
+            } else {
+                res.json({
+                    status: 'error',
+                    message: 'No matching products found'
+                });
+            }
+        }).catch((err) => {
+            res.json({
+                status: 'error',
+                message: err.message
+            });
+        });
+
+    },
+
+    ///forgot password /////
+
+    getForgotPassword: (req, res) => {
+        res.render('user_view/forgot_password', { layout: 'user_LogLayout' });
+        // req.session.user=false;
+    },
+    forgotPasswordOtp: (req, res) => {
+        req.session.mobile = req.body.mobile;
+        user_helpers.checkForUser(req.body.mobile).then(async (user) => {
+            if (user) {
+                req.session.user = user;
+
+
+                
+                await twilioApi.sendOtpForForgotPass(req.body.mobile);
+                // res.json(true)
+                res.render('user_view/forgot_password', { user,  layout: 'user_LogLayout'  })
+            } else {
+                req.session.user = null;
+                req.session.otpLoginErr = "The phone number is not registerd with any account";
+                res.json(false);
+            }
+
+        })
+
+    },
+
+
+    forgotPasswordVerify: (req, res) => {
+        twilioApi.verifyOtpForForgotPass(req.session.mobile, req.body.otp).then((result) => {
+            if (result === "approved") {
+                req.session.loggedIn = true;
+                res.json({ status: true })
+
+            }
+            else {
+                res.json({ status: false })
+            }
+        })
+    },
+    newPasswordUpdate: (req, res) => {
+        res.render('user/forgotSetNewPassword', { admin: false, userHeader: true })
+    },
+    newPasswordUpdatePost: async (req, res) => {
+        password = await user_helpers.newPasswordUpdate(req.session.user._id, req.body);
+        req.session.destroy();
+        res.redirect('/login');
+    },
+
+
+    /////forgot password////////////
+
+
+
+    // filterProducts: async (req, res) => {
+
+    //     var user = req.session.user
+    //     try {
+    //         var page = parseInt(req.query.page) || 1;
+    //         var pageSize = parseInt(req.query.pageSize) || 8;
+    //         var skip = (page - 1) * pageSize;
+
+    //         var products = await productHelpers.filterGetProducts(skip, pageSize)
+    //         // console.log(products,"joyelll");
+    //         var count = await productHelpers.userProductCount()
+    //         // console.log(count);
+    //         var totalPages = Math.ceil(count / pageSize);
+    //         var currentPage = page > totalPages ? totalPages : page;
+    //         console.log("from try block", currentPage);
+    //         res.render("user_view/all_products", {
+    //             user,
+    //             products,
+    //             totalPages,
+    //             currentPage,
+    //             pageSize,
+    //         });
+    //     } catch (err) {
+    //         console.log("from catch block");
+    //         res.render("user_view/all_products", {
+    //             products,
+    //             totalPages,
+    //             currentPage,
+    //             pageSize
+    //         });
+    //     }
+
+
+    // },
+
+    postSearch : async (req, res)=>{
+        console.log(req.body);
+        var user = req.session.user
+        var searchkey = req.body.search
+        var page = parseInt(req.query.page) || 1;
+            var pageSize = parseInt(req.query.pageSize) || 8;
+            var skip = (page - 1) * pageSize;
+            var filter = req.query.filter
+            console.log(filter);
+        var products = await productHelpers.findAllSearchProduct(skip, pageSize,searchkey)
+                // console.log(products,"joyelll");
+                var count = await productHelpers.userProductCount()
+                // console.log(count);
+                var totalPages = Math.ceil(count / pageSize);
+                var currentPage = page > totalPages ? totalPages : page;
+                console.log("from try block", currentPage);
+                res.render("user_view/all_products", {
+                    user,
+                    products,
+                    totalPages,
+                    currentPage,
+                    pageSize,
+                });
+
+
+    },
+
 
 
 
