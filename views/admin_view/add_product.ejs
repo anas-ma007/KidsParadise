@@ -18,7 +18,8 @@
 
             <div class="mb-4">
               <label for="product_name" class="form-label">Product Name</label>
-              <input type="text" placeholder="Product Name" required name="name" onkeyup="validateProductName()"  class="form-control" id="name">
+              <input type="text" placeholder="Product Name" required name="name" onkeyup="validateProductName()"
+                class="form-control" id="name">
               <span id="productName-error" class="validation-label text-danger"></span>
 
             </div>
@@ -28,26 +29,33 @@
                 id="category">
             </div> -->
 
-            <div class=" mb-4">
-              <!-- <select class="form-select mb-2" name="category" aria-label="Default select example"> 
-                <option selected >Category</option> -->
+
+            <div class="mb-4">
               <label class="form-label">Category</label>
-              <select class="form-select" name="category">
-                <% for (var i=0; i < category.length; i++ ) { %>
-                  <option value="<%=category[i].category%>">
-                    <%= category[i].category%>
+              <select class="form-select" name="category" id="categorySelect">
+                <option selected>Category</option>
+
+                <% for (var i=0; i < category.length; i++) { %>
+                  <option value="<%= category[i].category %>">
+                    <%= category[i].category %>
                   </option>
                   <% } %>
-
               </select>
+              <button id="categoryButton" class="btn btn-xs mt-1" disabled>Select Category</button>
             </div>
+
+
+
 
             <!-- <div class="row"> -->
             <div class="col-lg-4">
               <div class="mb-4">
                 <label class="form-label">Price</label>
                 <div class="row gx-2">
-                  <input placeholder="₹" type="text" required name="price" class="form-control">
+                  <input placeholder="₹" type="text" required name="price" class="form-control" id="price"
+                    onkeyup="validateProductPrice()">
+                  <span id="price-error" class="validation-label text-danger"></span>
+
                 </div>
               </div>
             </div>
@@ -55,7 +63,10 @@
               <div class="mb-4">
                 <label class="form-label">Stock</label>
                 <div class="row gx-2">
-                  <input placeholder="0" type="text" required name="stock" class="form-control">
+                  <input placeholder="0" type="text" required name="stock" class="form-control" id="stock"
+                    onkeyup="validateProductStock() ">
+                  <span id="stock-error" class="validation-label text-danger"></span>
+
                 </div>
               </div>
             </div>
@@ -89,20 +100,41 @@
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
               <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg"
                 onclick="return validateForm()" />
+
+              <div>
+                <span id="submit-error" class="validation-label text-danger"></span>
+              </div>
+
+
             </div>
 
           </form>
         </div>
       </div>
 </section>
+<script>
+  const categorySelect = document.getElementById('categorySelect');
+  const categoryButton = document.getElementById('categoryButton');
+
+  categorySelect.addEventListener('change', () => {
+    if (categorySelect.value !== '') {
+      categoryButton.disabled = false;
+    } else {
+      categoryButton.disabled = true;
+    }
+  });
+</script>
 
 
 <script>
-  
+
   var productNameError = document.getElementById('productName-error');
   var descriptionError = document.getElementById('description-error');
+  var productPriceError = document.getElementById('price-error');
+  var productStockError = document.getElementById('stock-error');
   var submitError = document.getElementById('submit-error');
-  
+
+
   function validateProductName() {
     var product = document.getElementById('name').value;
     var required = 14;
@@ -117,6 +149,35 @@
     productNameError.innerHTML = '';
     return true;
   }
+
+  function validateProductPrice() {
+    var price = document.getElementById('price').value;
+    if (isNaN(price)) {
+      productPriceError.innerHTML = 'Price should be a number.';
+      return false;
+    }
+    else if (price < 0) {
+      productPriceError.innerHTML = 'Price should be greater than or equal to 0.';
+      return false;
+    }
+    else {
+      productPriceError.innerHTML = '';
+      return true;
+    }
+  }
+
+  function validateProductStock() {
+    var stock = document.getElementById('stock').value;
+    if (stock == '' || isNaN(stock) || stock <= 0 || !Number.isInteger(Number(stock))) {
+      productStockError.innerHTML = 'stock should be a positive integer.';
+      return false;
+    }
+    else {
+      productStockError.innerHTML = '';
+      return true;
+    }
+  }
+
 
 
   function validateDescription() {
@@ -136,10 +197,10 @@
 
 
   function validateForm() {
-    if (validateProductName() || !validateDescription()) {
+    if (validateProductName() || !validateDescription() || validateProductPrice() || validateProductStock()) {
       submitError.style.display = 'flex';
       submitError.style.justifyContent = 'center';
-      submitError.innerHTML = 'Please fix all errors to submit';
+      submitError.innerHTML = ' Please fix all errors to submit';
       setTimeout(() => {
         submitError.style.display = 'none';
       }, 3000);
@@ -150,3 +211,6 @@
 
 
 </script>
+<div>
+  <br>
+</div>

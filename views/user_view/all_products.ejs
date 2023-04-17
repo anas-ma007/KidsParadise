@@ -10,24 +10,27 @@
 
         <div class="flex-w flex-sb-m p-b-52">
             <div class="flex-w flex-l-m filter-tope-group m-tb-10">
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-                    All Products
-                </button>
+                <a href="/allproducts">
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+                        All Products
+                    </button>
+                </a>
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
+                <!-- <a href="/allproducts?filter=jeep">  </a> -->
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Jeep">
                     Jeep
                 </button>
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
+                <!-- <a href="/allproducts?filter=car"> </a> -->
+
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Car">
                     Car
-                </button>
+                </button> 
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                    Bike
-                </button>
-
-
-
+                <!-- <a href="/allproducts?filter=newness"> </a>-->
+                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Bike">
+                        Bike
+                    </button>
             </div>
 
             <div class="flex-w flex-c-m m-tb-10">
@@ -44,7 +47,7 @@
                 </div> -->
 
 
-            <!-- Search product -->
+                <!-- Search product -->
 
 
                 <div class="col-search  main-menu-padding-1">
@@ -121,7 +124,7 @@
                             </li>
                             <li class="p-b-6">
                                 <a href="/allproducts?filter=15kabove" class="filter-link stext-106 trans-04">
-                                     ₹15000.00 above
+                                    ₹15000.00 above
                                 </a>
                             </li>
 
@@ -178,7 +181,7 @@
                     </div>
                 </div>
 
-            <% }) %>
+                <% }) %>
 
         </div>
 
@@ -190,13 +193,18 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <% if (currentPage> 1) { %>
-                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage-1%>"><i class="material-icons md-chevron_left"></i></a></li>
+                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage-1%>"><i
+                                class="material-icons md-chevron_left"></i></a></li>
                     <% } %>
                         <% for (let i=1; i <=totalPages; i++) { %>
-                            <li class="page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link" href="?page=<%=i%>"> <%=i%> </a></li>
+                            <li class="page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link"
+                                    href="?page=<%=i%>">
+                                    <%=i%>
+                                </a></li>
                             <% } %>
                                 <% if (currentPage < totalPages) { %>
-                                   <li class="page-item"><a class="page-link" href="?page=<%=currentPage+1%>"><i class="material-icons md-chevron_right"></i></a></li>
+                                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage+1%>"><i
+                                                class="material-icons md-chevron_right"></i></a></li>
                                     <% } %>
             </ul>
         </nav>

@@ -187,6 +187,15 @@ module.exports = {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
                 .find({ status: true, price: { $gte: 15000 } }).toArray();
             return products;
+        } else if(filter==="jeep"){
+            let products=await db.get().collection(collection.PRODUCTS_CATEGORY).find({status: true, category: "Jeep"})
+            console.log("hello its producst fromjeep", products);
+            return products
+
+        } else if(filter==="car"){
+
+        }else if(filter==="bike"){
+
         }
     },
 

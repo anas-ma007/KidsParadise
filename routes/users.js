@@ -27,15 +27,11 @@ router.post("/otp-verify", usercontrollers.verifyOtp)
 router.get("/addtocart/:id", middlewares.checkUserLoggedIn, usercontrollers.addToCart )
 router.get("/cart", middlewares.checkUserLoggedIn, usercontrollers.shoppingCart)
 
-// router.post("/search", usercontrollers.postSearch)      //vijay
-// router.get("/search", usercontrollers.search)     //akhila
 router.post("/search", usercontrollers.postSearch) 
-
 
 router.get('/forgotPassword', usercontrollers.getForgotPassword);
 router.post('/forgotPassword-otp', usercontrollers.forgotPasswordOtp);
 router.post('/forgotPassword-otpVerify', usercontrollers.forgotPasswordVerify);
-
 router.get('/renderResetPass', usercontrollers.renderResetPass);
 router.post('/setNewPassword', usercontrollers.setNewPass);
 

@@ -12,9 +12,11 @@
                             </div>
                             <form id="send-otp">
                                 <div class="form-group last mb-3">
-                                    <label for="password">Enter Your Mobile Number without Country Code</label>
+                                    <label for="password">Enter Your Mobile Number</label>
                                     <input type="tel" id="mobileId" class="form-control"
-                                        placeholder="Enter Your 10digit Mobile Number" name="phone">
+                                        placeholder="Enter Your 10digit Mobile Number" name="phone"  onkeyup="validateMobNo()" >
+                                    <span id="mobileNo-error" class="validation-label text-danger"></span>
+
                                 </div>
 
                                 <div class="d-sm-flex mb-5 align-items-center">
@@ -22,8 +24,10 @@
                                             Password ?</a></span>
                                 </div>
 
-                                <button  value="SUBMIT" data-toggle="modal" data-target="#exampleModal" type="submit" class="btn btn-block py-2 btn-primary" style="background-color: #088168;" > SEND OTP
+                                <button  value="SUBMIT" data-toggle="modal" data-target="#exampleModal" type="submit" class="btn btn-block py-2 btn-primary" style="background-color: #088168;" onclick="return validateForm()" > SEND OTP
                                 </button>
+                            <span id="submit-error" class="validation-label text-danger"></span>
+
 
                             </form>
                         </div>
@@ -33,7 +37,44 @@
         </div>
     </div>
 
+
     
+<script>
+  var mobileNoError = document.getElementById('mobileNo-error');
+  var submitError = document.getElementById('submit-error');
+
+
+  function validateMobNo() {
+      let mobileNo = document.getElementById("mobileId").value
+      if (mobileNo.length == 0) {
+          mobileNoError.innerHTML = "Mobile Number is required";
+          return false
+      }
+      if (!mobileNo.match(/^\d{10}$/)) {
+          mobileNoError.innerHTML = "Enter a valid mobile number wihtout country code"
+          return false
+      }
+      mobileNoError.innerHTML = ""
+      return true
+  }
+
+  function validateForm() {
+      if ( !validateMobNo()) {
+          submitError.style.display = 'flex';
+          submitError.style.justifyContent = 'center';
+          submitError.innerHTML = '';
+          setTimeout(() => {
+              submitError.style.display = 'none';
+          }, 3000);
+          return false;
+      }
+  }
+
+</script>
+
+
+
+    <!-- modal -->
     <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
