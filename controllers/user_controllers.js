@@ -38,15 +38,13 @@ module.exports = {
 
     user_signupPost: (req, res) => {
         user_helpers.doSignup(req.body).then((response) => {
-            console.log(response);
-
-
+            console.log("signup log", response, "signup log");
             res.redirect('/')
         })
     },
 
     user_loginPost: function (req, res) {
-        console.log("lllllllllllllllllllll", req.body);
+        // console.log("lllllllllllllllllllll", req.body);
         user_helpers.doLogin(req.body).then((response) => {
             if (response.status) {
                 req.session.loggedIn = true
@@ -65,7 +63,7 @@ module.exports = {
         var user = req.session.user
         try {
             var page = parseInt(req.query.page) || 1;
-            var pageSize = parseInt(req.query.pageSize) || 8;
+            var pageSize = parseInt(req.query.pageSize) || 12;
             var skip = (page - 1) * pageSize;
             var filter = req.query.filter
             console.log(filter);
