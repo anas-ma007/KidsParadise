@@ -20,27 +20,33 @@ module.exports = {
             })
         })
     },
+    
 
     doLogin: (userData) => {
         return new Promise(async (resolve, reject) => {
             let loginStatus = false
             let response = {}
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
-            if (user && user.status) {
-                bcrypt.compare(userData.password, user.password).then((status) => {
-                    if (status) {
-                        console.log("Login Success");
-                        response.user = user
-                        response.status = true
-                        resolve(response)
-                    } else {
-                        console.log("Login Error");
-                        resolve({ status: false })
-                    }
-                })
+            if (user) {
+                if(user.status){
+                    bcrypt.compare(userData.password, user.password).then((passCheck) => {
+                        if (passCheck) {
+                            console.log("Login Success");
+                            response.user = user
+                            response.status = true
+                            resolve(response)
+                        } else {
+                            console.log("password error");
+                            resolve({status:false, message: "Password is incorrect..!"})
+                        }
+                    })
+                }else{
+                    console.log("user blocked");
+                    resolve({status: false, message: " You were blocked..!"})
+                }
             } else {
-                console.log("No user available");
-                resolve({ status: false })
+                console.log("user not found !!!");
+                resolve({status: false, message: "User not found..."})
             }
         })
     },
@@ -59,8 +65,8 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             if (mobNo.phone) {
                 let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone })
-                if (userData) {
-                    sendSms(mobNo.phone)
+                if (userData && userData.status) {
+                    sendSms(mobNo.phone)    
                     resolve(true)
                 } else {
                     resolve(false)
@@ -108,28 +114,6 @@ module.exports = {
         }
 
     },
-
-    // sendOtpForForgotPass: (mobNo) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         if (mobNo.phone) {
-    //             let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone })
-    //             if (userData) {
-    //                 this.doSendOtp(mobNo)
-    //             }
-    //         }
-    //     })
-                    
-        //             sendSms(mobNo.phone)
-        //             resolve(true)
-        //         } else {
-        //             resolve(false)
-        //         }
-        //     } else {
-        //         resolve(false)
-        //     }
-        // })
-   // },
-
 
     verifyOtpForForgotPass: (otp, phone) => {
         return new Promise(async (resolve, reject) => {

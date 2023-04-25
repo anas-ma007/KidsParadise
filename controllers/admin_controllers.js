@@ -11,12 +11,12 @@ const productHelpers = require("../helpers/product_helpers")
 const adminCredential = {
     name: "Admin",
     email: "admin@gmail.com",
-    password: "123",
+    password: "Admin@123",
 };
 
 
 module.exports = {
-    admin_homepage: (req, res) => {
+    admin_homepage: (req, res) => { 
         if (req.session.adminLoggedIn) {
             res.render('admin_view/index', { layout: 'admin_layout' })
         } else {
@@ -42,7 +42,7 @@ module.exports = {
 
     add_product: (req, res) => {
         productHelpers.getCategory().then((category) => {
-            console.log(category, "sooorajjj");
+            // console.log(category, "sooorajjj");
 
             if (req.session.adminLoggedIn) {
                 res.render('admin_view/add_product', { category, layout: 'admin_layout' })

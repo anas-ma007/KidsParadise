@@ -3,7 +3,7 @@ const db = require("../config/connection")
 const { ObjectId } = require("mongodb")
 const cloudinary = require("../utils/cloudinary")
 const path = require("path")
-let adminHelpers = require("../helpers/admin_helpers")
+// let adminHelpers = require("../helpers/admin_helpers")
 const user_helpers = require('../helpers/user_helpers')
 // const { response } = require('../app')
 
@@ -45,7 +45,34 @@ module.exports = {
     // },
     userGetProducts: async (skip, pageSize) => {
         console.log(skip, pageSize, "hiihihihihihihihihihi");
-        let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).skip(skip).limit(pageSize).toArray()
+        let products = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
+            {
+                $lookup: {
+                    from: collection.PRODUCTS_CATEGORY,
+                    localField: "category",
+                    foreignField: "category",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $match: {
+                    "status": true,
+                    "category.status": true
+                }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: pageSize
+            }
+        ]).toArray();
+        
+        // console.log(products, "products only from status true");
+
         return products
 
     },
@@ -61,7 +88,7 @@ module.exports = {
     getCategory: () => {
         return new Promise(async (resolve, reject) => {
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
-            // console.log(category, "sooorajjj");
+            console.log(category, "sooorajjj");
             resolve(category)
 
         })
@@ -100,7 +127,7 @@ module.exports = {
     getProductDetails: (proId) => {
         return new Promise((resolve, rejection) => {
             db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: ObjectId(proId) }).then((product) => {
-                console.log(product, "DVGGGGGGGGGGGGGGGGGGGGG");
+                console.log(product, "get productdetails in product heplers");
                 resolve(product)
             })
         })
@@ -166,16 +193,16 @@ module.exports = {
             filter = -1;
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
             return products
-        }else if(filter==='low'){
-            filter=1
+        } else if (filter === 'low') {
+            filter = 1
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
             return products
-        } 
-        else if(filter==="newness"){
-                filter=-1
-                let products= await db.get().collection(collection.PRODUCTS_COLLECTION).find({status:true}).sort({date:filter}).skip(skip).limit(pageSize).toArray()
-                return products }
-         else if (filter === '6k') {
+        }
+        else if (filter === "newness") {
+            filter = -1
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ date: filter }).skip(skip).limit(pageSize).toArray()
+            return products
+        } else if (filter === '6k') {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
                 .find({ status: true, price: { $gte: 0, $lte: 6000 } }).toArray();
             return products;
@@ -187,14 +214,17 @@ module.exports = {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
                 .find({ status: true, price: { $gte: 15000 } }).toArray();
             return products;
-        } else if(filter==="jeep"){
-            let products=await db.get().collection(collection.PRODUCTS_CATEGORY).find({status: true, category: "Jeep"})
-            console.log("hello its producst fromjeep", products);
+        } else if (filter === "jeep") {
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Jeep" }).toArray();
             return products
 
-        } else if(filter==="car"){
+        } else if (filter === "car") {
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Car" }).toArray();
+            return products
 
-        }else if(filter==="bike"){
+        } else if (filter === "bike") {
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Bike" }).toArray();
+            return products
 
         }
     },
@@ -215,6 +245,18 @@ module.exports = {
             { $limit: limit }
         ]).toArray()
         return product
+
+    },
+
+    getCartCount: (userId)=>{
+        return new Promise(async (resolve, rejct)=>{
+            let count=0
+            let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user : new ObjectId(userId)})
+            if(cart){   
+                count=cart.products.length
+            }
+            resolve(count)
+        })
 
     },
 

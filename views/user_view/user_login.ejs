@@ -24,8 +24,10 @@
                 <span id="password-error" class="validation-label text-danger"></span>
 
                 <% if (loginErr) { %>
-                  <p class="error text-danger"> Invalid Credentials</p>
+                  <p class="error text-danger"><%= locals.loginErr %></p>
                 <% } %>
+               
+
               </div>
               
               <div class="d-sm-flex mb-5 align-items-center">

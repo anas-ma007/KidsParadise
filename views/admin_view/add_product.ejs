@@ -33,15 +33,14 @@
             <div class="mb-4">
               <label class="form-label">Category</label>
               <select class="form-select" name="category" id="categorySelect">
-                <option selected>Category</option>
-
+                <!-- <option selected  disabled>Category</option> -->
                 <% for (var i=0; i < category.length; i++) { %>
                   <option value="<%= category[i].category %>">
                     <%= category[i].category %>
                   </option>
                   <% } %>
               </select>
-              <button id="categoryButton" class="btn btn-xs mt-1" disabled>Select Category</button>
+              <!-- <button id="categoryButton" class="btn btn-xs mt-1" disabled>Select Category</button> -->
             </div>
 
 
@@ -99,10 +98,10 @@
 
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
               <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg"
-                onclick="return validateForm()" />
+                 />
 
-              <div>
                 <span id="submit-error" class="validation-label text-danger"></span>
+              <div>
               </div>
 
 
@@ -207,9 +206,6 @@
       return false;
     }
   }
-
-
-
 </script>
 <div>
   <br>

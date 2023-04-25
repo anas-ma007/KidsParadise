@@ -12,7 +12,7 @@
               <th scope="col">Email</th>
               <th scope="col">Mobile</th>
               <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col" class="ml-4">Action</th>
               <!-- <th scope="col">Image</th> -->
  
             </tr>
@@ -35,9 +35,9 @@
               </td>
               <td class="text-end">
                 <% if ( items.status ) { %>
-                <a href="/admin/block_user/<%=items._id%>" class="btn btn-sm btn-danger rounded font-sm"> Block</a>
+                <a href="/admin/block_user/<%=items._id%>" class="btn btn-sm btn-danger rounded font-sm mr-5"> Block</a>
                 <% } else { %>
-                <a href="/admin/unblock_user/<%=items._id%>" class="btn btn-sm btn-brand rounded font-sm"> Unblock</a>
+                <a href="/admin/unblock_user/<%=items._id%>" class="btn btn-sm btn-brand rounded font-sm mr-5"> Unblock</a>
                 <% } %>
               </td>
             </tr>
