@@ -223,7 +223,7 @@ module.exports = {
             })
         } else {
             productHelpers.getProductDetails(req.params.id).then((product) => {
-                res.render('user_view/product_details', { product })
+                res.render('user_view/product_details', { product }) 
             })
         }
 
@@ -232,9 +232,10 @@ module.exports = {
     addToCart: async (req, res) => {
         let userId = req.session.user._id
         let proId = req.params.id
+        console.log("api call");
         cartHelpers.doAddToCart(proId, userId).then(() => {
-            console.log("addeddddd to cart......");
-            res.redirect("back")
+            // console.log("addeddddd to cart......");
+            // res.redirect("back")
 
         })
     },
