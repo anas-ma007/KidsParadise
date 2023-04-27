@@ -70,7 +70,7 @@
             Rs <%=product.price%>
           </span>
 
-          <p class="stext-102 cl3 p-t-23">
+          <p class="stext-102 cl3 p-t-23 mb-3``">
             <%=product.description%>
           </p>
 
@@ -79,20 +79,21 @@
 
           <div class="flex-w flex-r-m p-b-10">
             <div class="size-204 flex-w flex-m respon6-next">
-            
-                
-                
-                <!-- <button
-                  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn"
-                  style="margin-left:-30px" type="submit" onclick="addToCart('{{this._id}}'')" id="addToCart"
-                  data-product="">
-                  Add to cart
-                </button> -->
-                <button  id="addToCart" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail mt-3 js-addcart-btn btn-addcart-btn"
-                 onclick="window.location.href='/addtocart/<%=product._id%>' ">
+
+              <% if ( locals.user ) { %>
+                <button
+                  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3"
+                  type="submit" onclick="addToCart('<%= product._id %>')" id="addToCart"
+                  data-product="<%= product._id %>">
                   Add to cart
                 </button>
-                
+                <% } else { %>
+                  <a href="/login"
+                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3">
+                    Add to cart
+                  </a>
+                  <% } %>
+
             </div>
           </div>
         </div>
@@ -144,14 +145,14 @@
 
 
 
-  <script>
+  <!-- <script>
 
     $('.js-addcart-detail').each(function () {
       var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
       $(this).on('click', function () {
         Toastify({
           text: nameProduct + ' is added to cart !',
-          duration: 3000,
+          duration: 1500,
           gravity: "bottom",
           position: "center",
           backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
@@ -160,19 +161,28 @@
         }).showToast();
       });
     });
+  </script> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+    integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+
+    function addToCart(proId) {
+      // console.log("api call prod details first page");
+      $.ajax({
+        url: '/addToCart/' + proId,
+        method: "get",
+        success: (response) => {
+          if (response.status) {
+            let count = $("#cart_count").html()
+            count = parseInt(count) + 1
+            $("#cart_count").html(count)
+            $("#cartTcountt").load(location.href + " #cartTcountt");
+
+          }
+        }
+      })
+    }
+
   </script>
-
-
-<script>
-
-  function addToCart(prodId){
-    $.ajax({
-      url:'/addtocart',
-      data:prodId,
-      method:"get",
-      success:(response)=>{
-        alert(response)
-      }
-    })
-  }
-</script>

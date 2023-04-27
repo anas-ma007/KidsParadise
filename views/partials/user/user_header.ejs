@@ -37,9 +37,13 @@
 
                     <% if ( locals.user ) { %>
                         <a href="/cart">
-                            <div href="" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-                                data-notify="<%= locals.cartCount %>">
-                                <i class="zmdi zmdi-shopping-cart"></i>
+                            <div id="cartTcountt">
+                                <div id="cart_count" href=""
+                                    class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
+                                    data-notify="<%= locals.cartCount %>">
+                                    <i class="zmdi zmdi-shopping-cart"></i>
+                                    <!-- <span class="total-count" id="cart_count"> <%= locals.cartCount %> </span> -->
+                                </div>
                             </div>
                         </a>
 
@@ -54,14 +58,14 @@
                                     <i class="zmdi zmdi-shopping-cart"></i>
                                 </div>
                             </a>
-    
+
                             <a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 ">
                                 <i class="zmdi zmdi-favorite-outline"></i>
                             </a>
-                        <% } %>
-                        <ul>
-                            <li>
-                                <!--                             
+                            <% } %>
+                                <ul>
+                                    <li>
+                                        <!--                             
                             <% if(locals.loggedIn){%>
                             
                             <div class="dropdown">
@@ -88,34 +92,34 @@
                             <% } %> -->
 
 
-                                <% if ( locals.user ) { %>
-                                    <div class="dropdown">
-                                        <!-- <button class="btn btn-success btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
-                                        <a href="" class="m-l-20 dropdown-toggle text-dark"
-                                            style="font-family: Georgia, 'Times New Roman', Times, serif;"
-                                            data-toggle="dropdown">
-                                            <%= locals.user.name %>
-                                        </a>
-                                        <!-- </button> -->
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="/logout">Logout</a>
-                                        </div>
-                                    </div>
-                                    <% } else { %>
-                                        <div class="dropdown">
-                                            <button class="btn btn-dark btn-sm m-l-20  dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                Account
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/login">Login</a>
-                                                <a class="dropdown-item" href="/signup">Signup</a>
+                                        <% if ( locals.user ) { %>
+                                            <div class="dropdown">
+                                                <!-- <button class="btn btn-success btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                                                <a href="" class="m-l-20 dropdown-toggle text-dark"
+                                                    style="font-family: Georgia, 'Times New Roman', Times, serif;"
+                                                    data-toggle="dropdown">
+                                                    <%= locals.user.name %>
+                                                </a>
+                                                <!-- </button> -->
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <% } %>
-                            </li>
-                        </ul>
+                                            <% } else { %>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-dark btn-sm m-l-20  dropdown-toggle"
+                                                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                        Account
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" href="/login">Login</a>
+                                                        <a class="dropdown-item" href="/signup">Signup</a>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                    </li>
+                                </ul>
                 </div>
             </nav>
         </div>

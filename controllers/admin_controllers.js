@@ -227,7 +227,7 @@ module.exports = {
     },
 
     editProductPost: async (req, res) => {
-        console.log('THIS IS REQUSESY -----', req.body)
+        // console.log('THIS IS REQUSESY -----', req.body)
         try {
             const imgUrl = [];
             for (let i = 0; i < req.files.length; i++) {
@@ -235,7 +235,7 @@ module.exports = {
                 imgUrl.push(result.url);
                 console.log(result.url);
             }
-            console.log(req.params.id, req.body, 'oooooooooooooooooooooooooooo');
+            // console.log(req.params.id, req.body, 'oooooooooooooooooooooooooooo');
             // proId=req.params.id
             adminHelpers.editProductDetails(req.params.id, req.body).then(() => {
                 if (imgUrl.length != 0) {

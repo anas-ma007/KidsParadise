@@ -27,6 +27,9 @@ router.post("/otp-verify", usercontrollers.verifyOtp)
 router.get("/addtocart/:id", middlewares.checkUserLoggedIn, usercontrollers.addToCart )
 router.get("/cart", middlewares.checkUserLoggedIn, usercontrollers.shoppingCart)
 
+router.post('/change-product-quantity',middlewares.checkUserLoggedIn, usercontrollers.changeProQuantity)
+router.post('/remove-product',middlewares.checkUserLoggedIn, usercontrollers.removeCartProduct);
+
 router.post("/search", usercontrollers.postSearch) 
 
 router.get('/forgotPassword', usercontrollers.getForgotPassword);

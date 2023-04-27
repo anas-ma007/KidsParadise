@@ -31,7 +31,6 @@ router.post('/addcategory',middlewares.checkAdminLoggedIn, adminControllers.post
 // router.get('/editcategory/:id', middlewares.checkAdminLoggedIn,  adminControllers.getEditCategory)
 // router.post('/editcategory/:id', middlewares.checkAdminLoggedIn,  adminControllers.postEditCategory)
 
-
 router.get("/block_product/:id", middlewares.checkAdminLoggedIn, adminControllers.blockProduct)
 router.get("/unblock_product/:id", middlewares.checkAdminLoggedIn, adminControllers.unblockProduct)
 

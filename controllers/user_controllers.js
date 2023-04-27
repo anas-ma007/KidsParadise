@@ -236,7 +236,7 @@ module.exports = {
         cartHelpers.doAddToCart(proId, userId).then(() => {
             // console.log("addeddddd to cart......");
             // res.redirect("back")
-
+            res.json({status:true}) 
         })
     },
 
@@ -244,13 +244,10 @@ module.exports = {
         console.log("trrrrrrrrrrrrrrrrrrrrrrrrr");
         let user = req.session.user
         let userId = req.session.user._id
-        let products = await cartHelpers.getCartProducts(userId)
         let cartCount = await productHelpers.getCartCount(user._id)
-
-        products.forEach(item => {
-            console.log(item.productsDetails)
-        });
-        console.log(products, "getCartProdcuts in shopping cart user controlles ");
+        let products = await cartHelpers.getCartProducts(userId)
+        console.log([products,'hhhhh']);
+    
         res.render("user_view/shopping_cart", { products, user, cartCount })
 
     },
@@ -399,6 +396,26 @@ module.exports = {
 
 
     },
+
+
+    changeProQuantity: (req,res)=>{
+        cartHelpers.changeProductQuantity(req.body).then((response)=>{
+          res.json({
+            response
+          })
+        })
+      },
+      
+      removeCartProduct: (req,res)=>{
+        console.log("40987656-0987656987657890-@#$%^&*()_)(*&^%$")
+        console.log(req.body,"rmv ordtct");
+        cartHelpers.removeProductCart(req.body).then((response)=>{
+            console.log("deleted product    ")
+            console.log(response);
+          res.json(response)
+        })
+      },
+  
 
 
 

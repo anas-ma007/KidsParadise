@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<title>Home</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="/user_assets/images/icons/favicon.png"/>
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/user_assets/images/icons/favicon.png" />
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/fonts/linearicons-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/animate/animate.css">
-<!--===============================================================================================-->	
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/slick/slick.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/MagnificPopup/magnific-popup.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/user_assets/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/user_assets/css/main.css">
-<!--===============================================================================================-->
+	<!--===============================================================================================-->
 
-<!-- taost -->
-	
+	<!-- taost -->
+
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 	<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<!-- taost -->
+	<!-- taost -->
 
 
 
@@ -51,56 +52,67 @@
 <body>
 
 	<%- include('partials/user/user_header.ejs')%>
-	<%- body%>
-	<%- include('partials/user/user_footer.ejs') %>
+		<%- body%>
+			<%- include('partials/user/user_footer.ejs') %>
 
 
-<!--===============================================================================================-->	
-<script src="/user_assets/vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/bootstrap/js/popper.js"></script>
-	<script src="/user_assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/select2/select2.min.js"></script>
-	<script>
-		$(".js-select2").each(function(){
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
-	</script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/daterangepicker/moment.min.js"></script>
-	<script src="/user_assets/vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/slick/slick.min.js"></script>
-	<script src="/user_assets/js/slick-custom.js"></script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/parallax100/parallax100.js"></script>
-	<script>
-        $('.parallax100').parallax100();
-	</script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
-	<script>
-		$('.gallery-lb').each(function() { // the containers for all your galleries
-			$(this).magnificPopup({
-		        delegate: 'a', // the selector for gallery item
-		        type: 'image',
-		        gallery: {
-		        	enabled:true
-		        },
-		        mainClass: 'mfp-fade'
-		    });
-		});
-	</script>
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/isotope/isotope.pkgd.min.js"></script>
-<!--===============================================================================================-->
-	<!-- <script src="/user_assets/vendor/sweetalert/sweetalert.min.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/animsition/js/animsition.min.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/bootstrap/js/popper.js"></script>
+				<script src="/user_assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/select2/select2.min.js"></script>
+
+
+
+				<!-- {{!-- Swal --}} -->
+				<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.js"></script>
+				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css"
+					  />
+
+
+
+
+				<script>
+					$(".js-select2").each(function () {
+						$(this).select2({
+							minimumResultsForSearch: 20,
+							dropdownParent: $(this).next('.dropDownSelect2')
+						});
+					})
+				</script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/daterangepicker/moment.min.js"></script>
+				<script src="/user_assets/vendor/daterangepicker/daterangepicker.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/slick/slick.min.js"></script>
+				<script src="/user_assets/js/slick-custom.js"></script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/parallax100/parallax100.js"></script>
+				<script>
+					$('.parallax100').parallax100();
+				</script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+				<script>
+					$('.gallery-lb').each(function () { // the containers for all your galleries
+						$(this).magnificPopup({
+							delegate: 'a', // the selector for gallery item
+							type: 'image',
+							gallery: {
+								enabled: true
+							},
+							mainClass: 'mfp-fade'
+						});
+					});
+				</script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/isotope/isotope.pkgd.min.js"></script>
+				<!--===============================================================================================-->
+				<!-- <script src="/user_assets/vendor/sweetalert/sweetalert.min.js"></script>
 	<script>
 		$('.js-addwish-b2').on('click', function(e){
 			e.preventDefault();
@@ -126,7 +138,7 @@
 				$(this).off('click');
 			});
 		}); -->
-<!-- 
+				<!-- 
 		/*---------------------------------------------*/
 
 		// $('.js-addcart-detail').each(function(){
@@ -136,43 +148,44 @@
 		// 	});
 		// }); -->
 
-		
-	
-	</script>
-	
-<!--===============================================================================================-->
-	<script src="/user_assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-	<script>
-		$('.js-pscroll').each(function(){
-			$(this).css('position','relative');
-			$(this).css('overflow','hidden');
-			var ps = new PerfectScrollbar(this, {
-				wheelSpeed: 1,
-				scrollingThreshold: 1000,
-				wheelPropagation: false,
-			});
-
-			$(window).on('resize', function(){
-				ps.update();
-			})
-		});
-	</script>
-<!--===============================================================================================-->
-	<script src="/user_assets/js/main.js"></script>
-	
-	<!-- =================================ZOOM================================  -->
-    <!-- jQuery library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- jQuery Zoom library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
-
-	<script src="/assets/js/main.js" type="text/javascript"></script>
-	<script src="/assets/js/custom-chart.js" type="text/javascript"></script>
 
 
-	
-	</body>
+				</script>
+
+				<!--===============================================================================================-->
+				<script src="/user_assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+				<script>
+					$('.js-pscroll').each(function () {
+						$(this).css('position', 'relative');
+						$(this).css('overflow', 'hidden');
+						var ps = new PerfectScrollbar(this, {
+							wheelSpeed: 1,
+							scrollingThreshold: 1000,
+							wheelPropagation: false,
+						});
+
+						$(window).on('resize', function () {
+							ps.update();
+						})
+					});
+				</script>
+				<!--===============================================================================================-->
+				<script src="/user_assets/js/main.js"></script>
+
+				<!-- =================================ZOOM================================  -->
+				<!-- jQuery library -->
+				<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+				<!-- jQuery Zoom library -->
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
+
+				<script src="/assets/js/main.js" type="text/javascript"></script>
+				<script src="/assets/js/custom-chart.js" type="text/javascript"></script>
+
+
 
 </body>
+
+</body>
+
 </html>
