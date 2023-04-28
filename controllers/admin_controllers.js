@@ -77,65 +77,72 @@ module.exports = {
         }
     },
     view_products: async (req, res) => {
-        if (req.session.adminLoggedIn) {
-            try {
-                const page = parseInt(req.query.page) || 1;
-                const pageSize = parseInt(req.query.pageSize) || 5;
-                const skip = (page - 1) * pageSize;
+        // if (req.session.adminLoggedIn) {
+        //     try {
+        //         const page = parseInt(req.query.page) || 1;
+        //         const pageSize = parseInt(req.query.pageSize) || 5;
+        //         const skip = (page - 1) * pageSize;
 
-                const products = await productHelpers.findAllProducts(skip, pageSize)
+        //         const products = await productHelpers.findAllProducts(skip, pageSize)
 
-                const count = await productHelpers.productCount()
+        //         const count = await productHelpers.productCount()
 
-                const totalPages = Math.ceil(count / pageSize);
-                const currentPage = page > totalPages ? totalPages : page;
+        //         const totalPages = Math.ceil(count / pageSize);
+        //         const currentPage = page > totalPages ? totalPages : page;
 
-                res.render('admin_view/view_products', {
-                    layout: 'admin_layout',
-                    products,
-                    totalPages,
-                    currentPage,
-                    pageSize
-                });
-            } catch (err) {
-                // console.log(err, "hhihhihihihihih");
-                res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
-            }
-        }
-        // adminHelpers.getAllProducts().then((products) => {
-        //     console.log(products,'999999999999999999999999999999');
-        //     res.render('admin_view/view_products', { products, layout: 'admin_layout' })
+        //         res.render('admin_view/view_products', {
+        //             layout: 'admin_layout',
+        //             products,
+        //             totalPages,
+        //             currentPage,
+        //             pageSize
+        //         });
+        //     } catch (err) {
+        //         // console.log(err, "hhihhihihihihih");
+        //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
+        //     }
+        // }
+        adminHelpers.getAllProducts().then((products) => {
+            console.log(products,'999999999999999999999999999999');
+            res.render('admin_view/view_products', { products, layout: 'admin_layout' })
 
 
-        // })
+        })
     },
 
 
     view_users: async (req, res) => {
-        if (req.session.adminLoggedIn) {
-            try {
-                const page = parseInt(req.query.page) || 1;
-                const pageSize = parseInt(req.query.pageSize) || 6;
-                const skip = (page - 1) * pageSize;
+        return new Promise(async (resolve, reject)=>{
+            const allUser = await user_helpers.findAllUser().then((allUser)=>{
+                // console.log(allUser);
+                res.render('admin_view/view_users', { allUser, layout: 'admin_layout' })
+            })
 
-                const allUser = await user_helpers.findAllUser(skip, pageSize)
-                const count = await user_helpers.findUserCount()
+        })
+        // if (req.session.adminLoggedIn) {
+        //     try {
+        //         const page = parseInt(req.query.page) || 1;
+        //         const pageSize = parseInt(req.query.pageSize) || 6;
+        //         const skip = (page - 1) * pageSize;
 
-                const totalPages = Math.ceil(count / pageSize);
-                const currentPage = page > totalPages ? totalPages : page;
+        //         const allUser = await user_helpers.findAllUser(skip, pageSize)
+        //         const count = await user_helpers.findUserCount()
 
-                res.render('admin_view/view_users', {
-                    layout: 'admin_layout',
-                    allUser,
-                    totalPages,
-                    currentPage,
-                    pageSize
-                });
-            } catch (err) {
-                // console.log(err, "hhihhihihihihih");
-                res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
-            }
-        }
+        //         const totalPages = Math.ceil(count / pageSize);
+        //         const currentPage = page > totalPages ? totalPages : page;
+
+        //         res.render('admin_view/view_users', {
+        //             layout: 'admin_layout',
+        //             allUser,
+        //             totalPages,
+        //             currentPage,
+        //             pageSize
+        //         });
+        //     } catch (err) {
+        //         // console.log(err, "hhihhihihihihih");
+        //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
+        //     }
+        // }
 
         //     .then((users) => {
         //         // console.log(products,'999999999999999999999999999999');

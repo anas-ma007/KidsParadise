@@ -92,7 +92,7 @@ module.exports = {
 
 
     findAllUser: async (skip, pageSize) => {
-        const allUser = await db.get().collection(collection.USER_COLLECTION).find().skip(skip).limit(pageSize).toArray()
+        const allUser = await db.get().collection(collection.USER_COLLECTION).find().toArray()
         return allUser
     },
 
@@ -211,7 +211,85 @@ module.exports = {
             ]).toArray()
 
             console.log(total);
-            resolve(total[0].total)
+            resolve(total)
+        })
+    },
+
+    updateAddress: (addressData, userId) => {
+        return new Promise((resolve, rej) => {
+            addressData._id = new ObjectId()
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: new ObjectId(userId) },
+                {
+                    $push: {
+                        address: addressData
+                    }
+                }).then((response) => {
+                    resolve(response)
+                })
+        })
+    },
+
+    findUserId: (userId) => {
+        return new Promise(async (resolve, rej) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: new ObjectId(userId) })
+            resolve(user)
+        })
+    },
+
+    getUserAddress: (userId, addressId) => {
+        return new Promise(async (resolve, reject) => {
+            userId = new ObjectId(userId);
+            addressId = new ObjectId(addressId);
+            const address = await db.get().collection(collection.USER_COLLECTION)
+                .findOne(
+                    {
+                        _id: userId,
+                        address: { $elemMatch: { _id: addressId } }
+                    },
+                    {
+                        projection: {
+                            _id: 0,
+                            'address.$': 1
+                        }
+                    }
+                )
+            resolve(address.address[0]);
+        })
+    },
+
+    getCartList: (userId) => {
+        return new Promise(async (res, rej) => {
+            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
+            res(cart.products)
+        })
+    },
+
+    placeOrder: (order, products, grandTotal, payment, userId) => {
+        return new Promise((res, rej) => {
+            // let status = order.paymentMethod === 'Cash on delivery' ? 'placed' : 'pending'
+            let orderObj = {
+                deliveryAddress: {
+                    name: order.name,
+                    address: order.housename,
+                    city: order.city,
+                    district: order.district,
+                    pincode: order.pincode,
+                    mobile: order.phone
+                },
+                userId: ObjectId(userId),
+                paymentmethod: payment,
+                products: products,
+                // status: status,
+                orderstatus: 'placed',
+                totalPrice: grandTotal,
+                date: Date.now()
+            }
+
+            db.get().collection(collection.ORDERS).insertOne(orderObj).then((response) => {
+                db.get().collection(collection.CART_COLLECTION).deleteOne({ user: ObjectId(userId) })
+                res(response.insertedId)
+            })
+
         })
     },
 

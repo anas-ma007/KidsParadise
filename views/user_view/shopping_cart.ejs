@@ -219,7 +219,7 @@
 					fill="none"></path>
 			</svg>
 
-			<h3 class="pb-5">Your Cart is Empty... <span><a class="btn btn-warning" href="/allproducts"> Go to
+			<h3 class="pb-5">Your Cart is Empty... <br> <span><a class="btn btn-warning mt-3" href="/allproducts"> Go to
 						SHOP</a></span> </h3>
 
 		</div>
@@ -311,49 +311,51 @@
 									Cart Totals
 								</h4>
 
-								<div class="flex-w flex-t bor12 p-b-13">
-									<div class="size-208">
-										<span class="stext-110 cl2">
-											Subtotal:
-										</span>
+
+								<% if(grandTotal!==null) { %>
+
+									<div class="flex-w flex-t bor12 p-b-13">
+										<div class="size-208">
+											<span class="stext-110 cl2">
+												Subtotal:
+											</span>
+										</div>
+
+										<div class="size-209">
+											<span class="mtext-110 cl2">
+												₹ <%= grandTotal[0].total%>
+											</span>
+										</div>
+
 									</div>
 
-									<div class="size-209">
-										<span class="mtext-110 cl2">
-											$79.65
-										</span>
+
+									<div class="flex-w flex-t p-t-27 p-b-33">
+										<div class="size-208">
+											<span class="mtext-101 cl2">
+												Total:
+											</span>
+										</div>
+
+										<div class="size-209 p-t-1">
+											<span class="mtext-110 cl2">
+												₹ <%=grandTotal[0].total%>
+											</span>
+										</div>
 									</div>
-								</div>
 
+									<a href="/orderplaced"
+										class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+										Proceed to Checkout
+									</a>
 
-
-								<div class="flex-w flex-t p-t-27 p-b-33">
-									<div class="size-208">
-										<span class="mtext-101 cl2">
-											Total:
-										</span>
-									</div>
-
-									<div class="size-209 p-t-1">
-										<span class="mtext-110 cl2">
-											$79.65
-										</span>
-									</div>
-								</div>
-
-								<button
-									class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-									Proceed to Checkout
-								</button>
+									<% } %>
 							</div>
 
 						</div>
 					</div>
 				</div>
 			</form>
-
-
-
 
 
 
@@ -369,6 +371,7 @@
 						let quantity = parseInt(document.getElementById('quantityCount').value);
 						count = parseInt(count)
 						if (count + quantity == 0) {
+							console.log("ajml ", count, quantity);
 							Swal.fire({
 								title: "Remove Product",
 								text: `Do you want to remove this product?`,

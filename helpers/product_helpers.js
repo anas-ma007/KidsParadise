@@ -260,6 +260,21 @@ module.exports = {
 
     },
 
+    getOrderDetails: async(userid)=>{
+        let order = await db.get().collection(collection.ORDERS).aggregate(
+            [
+                {
+                    $match:{userId:new ObjectId(userid)
+                    }
+                },
+                {
+                    $sort:{date: -1}
+                }
+            ]
+            ).toArray()
+        return order
+    },
+
 
 
 

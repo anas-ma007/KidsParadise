@@ -1,0 +1,379 @@
+<br>
+<br>
+<br>
+
+
+<!-- breadcrumb -->
+<div class="container">
+	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+		<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+			Home
+			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+		</a>
+
+		<span class="stext-109 cl4">
+			cart
+			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+		</span>
+		<span class="stext-109 cl4">
+			checkout
+		</span>
+	</div>
+</div>
+
+
+<!-- Shoping Cart -->
+<form method="post" id="checkout-form" action="/place-order" class="bg0 p-t-75 p-b-85">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+				<div class="m-l-25 m-r--38 m-lr-0-xl">
+
+					<div class="wrap-table-shopping-cart">
+						<table class="table-shopping-cart">
+							<tr class="table_head">
+								<th class="column-1">Product</th>
+								<th class="column-2">Name</th>
+								<th class="column-3">Price</th>
+								<th class="column-4">Quantity</th>
+								<th class="column-5">Total</th>
+								<!-- <th class="column-5">Remove</th> -->
+							</tr>
+							<% products.forEach(function(pro) { %>
+								<tr class="table_row">
+									<td class="column-1">
+										<div class="how-itemcart1">
+											<img src="<%=pro.productsDetails[0].image[0]%>" alt="IMG">
+										</div>
+									</td>
+									<td class="column-2">
+										<%=pro.productsDetails[0].name%>
+									</td>
+									<td class="column-3"> Rs <%=pro.productsDetails[0].price%>
+									</td>
+									<td class="column-4">
+										<input id="quantityCount" class="mtext-104 cl3 txt-center num-product ml-5"
+											type="number" name="num-product1"
+											value="<%=pro.productsDetails[0].quantity%>">
+
+									</td>
+									<td class="column-5"> Rs
+										<%=(pro.productsDetails[0].price)*(pro.productsDetails[0].quantity) %>
+									</td>
+
+								</tr>
+								<% }) %>
+
+						</table>
+
+						
+						<table class="table-shopping-cart">
+							<tr class="table_head">
+								<th class="column-1"> Select Address</th>
+							</tr>
+							
+							<% if ( user.address ) { %>
+
+								<tr class="table_row">
+									<td>
+										<% user.address.forEach(user=> { %>
+
+											<label class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2 border">
+												<div class="p-3">
+													<p> <b>
+															<input type="radio" id="addressId" name="addressId"
+																for="addressId" value="<%=user._id%>"
+																class="form-check-input float-right"
+																style="accent-color: black ; width: 15px; height: 15px;"
+																checked required>
+															<label class="form-check-label" for="addressId"
+																name="user_name">
+																<%=user.name%>
+															</label>
+														</b></p>
+
+													<b class="">
+														<label class="form-check-label" name="phone" for="addressId">
+															<%=user.phone%>
+														</label>
+													</b>
+													<p>
+														<label class="form-check-label" id="addressId"
+															name="homeAddress" for="addressId">
+															<%=user.housename%> , <%=user.city%> , <%=user.district%> ,
+																		<%=user.pincode%>
+														</label>
+
+													</p>
+												</div>
+											</label>
+											<% }) %>
+
+												<% } else { %>
+
+													<label
+														class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2 border">
+														<div class="p-3">
+															<p> <b>
+
+																	<label class="form-check-label" for="addressId"
+																		name="user_name">
+
+																	</label>
+																</b></p>
+
+															<b class="">
+																<label class="form-check-label" name="phone"
+																	for="addressId">
+
+																</label>
+															</b>
+															<p>
+																<label class="form-check-label" id="addressId"
+																	name="homeAddress" for="addressId">
+
+																</label>
+
+															</p>
+														</div>
+													</label>
+													<% } %>
+									</td>
+								</tr>
+						</table>
+					</div>
+
+
+				</div>
+				<a href="#" data-toggle="modal" data-target="#address123" class="btn btn-dark mb-4 hov-btn3 mt-4 ml-4"
+					style="border-radius: 2rem;">Add New Address</a>
+			</div>
+
+
+			<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+				<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+					<h4 class="mtext-109 cl2 p-b-30">
+						Cart Totals
+					</h4>
+
+					<div class="flex-w flex-t bor12 p-b-13">
+						<div class="size-208">
+							<span class="stext-110 cl2">
+								Subtotal: ₹ <%= grandTotal[0].total%>
+							</span>
+						</div>
+
+						<div class="size-209">
+							<span class="mtext-110 cl2">
+
+							</span>
+						</div>
+					</div>
+
+					<!-- <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+						<div class="flex-w flex-m m-r-20 m-tb-5">
+							<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"
+								name="coupon" placeholder="Coupon Code">
+
+							<div
+								class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+								Apply coupon
+							</div>
+						</div>
+					</div> -->
+					<hr style="border: 1px dashed;">
+
+					<div class="flex-w flex-t p-t-27 p-b-33">
+						<div class="size-208">
+							<span class="mtext-101 cl2">
+								Total:
+							</span>
+						</div>
+
+						<div class="size-209 p-t-1">
+							<span class="mtext-110 cl2" name="total-price">
+								₹ <%= grandTotal[0].total%>
+
+							</span>
+						</div>
+					</div>
+
+					<hr style="border: 1px dashed;">
+
+					<div class="mb-5">
+
+						<h4 class="mtext-109 cl2 p-b-30">
+							Payments
+						</h4>
+
+						<label class="radio-inline ">
+							<h5><input type="radio" checked required name="paymentMethod" value="Cash on delivery"
+									class="float-left mr-4 mt-1">Cash on delivery</h5>
+						</label>
+
+						<label class="radio-inline ">
+							<h5><input type="radio" required name="paymentMethod" value="Razorpay"
+									class="float-left mr-4 mt-1">Razorpay</h5>
+						</label>
+
+					</div>
+
+					<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+						type="submit" onclick="placeOrder() ; event.preventDefault()">Place Order</button>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+	</div>
+</form>
+
+
+
+<div class="modal fade mt-5" id="address123" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content" style="border-radius: 10px; background:rgb(247 247 247) ;">
+			<div class="modal-header ">
+				<h5 class="modal-title " id="exampleModalLongTitle">ADD ADDRESS</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form action="/add-address" method="post" id="addressForm">
+				<div class="modal-body container">
+
+
+					<fieldset class="p-2">
+						<div class="row">
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+									placeholder="Name" name="name" style="border-radius: 1rem; width: 70%;" />
+							</div>
+
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
+									placeholder="Phonenumber" name="phone" style="border-radius: 1rem; width: 70%;" />
+							</div>
+						</div>
+						<div class="row d-flex">
+
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+									placeholder="City" name="city" style="border-radius: 1rem; width: 70%;" />
+							</div>
+
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input placeholder="Address" id="description" required name="housename"
+									class="form-control" rows="4" style="border-radius: 1rem; width: 70%;"></input>
+							</div>
+
+						</div>
+
+
+						<div class="row">
+
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input type="number" id="typeUsernameX-2" required class="form-control form-control-md"
+									placeholder="Pincode" name="pincode" style="border-radius: 1rem; width: 70%;" />
+							</div>
+
+							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+								<input type="text" required class="form-control form-control-md" placeholder="District"
+									name="district" style="border-radius: 1rem; width: 70%;" />
+							</div>
+						</div>
+						<div class="row">
+
+
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="modal-footer">
+
+					<button type="submit" class=" btn-primary p-2 pl-4 pr-4">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+<script>
+	function placeOrder() {
+		Swal.fire(
+			'Order Placed Successfull',
+			'success'
+		).then(() => {
+
+			$.ajax({
+				url: '/place-order',
+				data: $('#checkout-form').serialize(),
+				method: 'post',
+				success: (response) => {
+					if (response.codSuccess) {
+						console.log(response);
+						window.location.href = '/'
+					} else {
+						// razorpayPayment(response)
+					}
+				}
+			})
+
+		})
+	}
+
+	// function razorpayPayment(order) {
+	// 	var options = {
+	// 		"key": "rzp_test_FN9OHxJLyD7IWz", // Enter the Key ID generated from the Dashboard
+	// 		"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+	// 		"currency": "INR",
+	// 		"name": "Act Shady",
+	// 		"description": "Test Transaction",
+	// 		"image": "https://example.com/your_logo",
+	// 		"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+	// 		"handler": function (response) {
+	// 			verifyPayment(response, order)
+	// 		},
+	// 		"prefill": {
+	// 			"name": "Gaurav Kumar",
+	// 			"email": "gaurav.kumar@example.com",
+	// 			"contact": "9000090000"
+	// 		},
+	// 		"notes": {
+	// 			"address": "Razorpay Corporate Office"
+	// 		},
+	// 		"theme": {
+	// 			"color": "#3399cc"
+	// 		}
+	// 	};
+	// 	var rzp1 = new Razorpay(options);
+	// 	rzp1.open();
+	// }
+
+	// function verifyPayment(payment,order){
+	// 	$.ajax({
+	// 		url:'/verify-payment',
+	// 		data:{
+	// 			payment,
+	// 			order
+	// 		},
+	// 		method:'post',
+	// 		success:(response)=>{
+	// 			if(response.status){
+	// 				console.log("ORDER SUCCESS");
+	// 				location.href = "/"
+	// 			}else{
+	// 				alert("PAYMENT FAILED")
+	// 			}
+	// 		}
+	// 	})
+	// }
+
+
+
+</script>

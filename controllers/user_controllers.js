@@ -223,7 +223,7 @@ module.exports = {
             })
         } else {
             productHelpers.getProductDetails(req.params.id).then((product) => {
-                res.render('user_view/product_details', { product }) 
+                res.render('user_view/product_details', { product })
             })
         }
 
@@ -236,7 +236,7 @@ module.exports = {
         cartHelpers.doAddToCart(proId, userId).then(() => {
             // console.log("addeddddd to cart......");
             // res.redirect("back")
-            res.json({status:true}) 
+            res.json({ status: true })
         })
     },
 
@@ -246,9 +246,12 @@ module.exports = {
         let userId = req.session.user._id
         let cartCount = await productHelpers.getCartCount(user._id)
         let products = await cartHelpers.getCartProducts(userId)
-        console.log([products,'hhhhh']);
-    
-        res.render("user_view/shopping_cart", { products, user, cartCount })
+        let grandTotal = await user_helpers.getTotalAmount(userId)
+        // console.log(grandTotal, "grand total price");
+        // console.log([products, 'hhhhh']);
+
+
+        res.render("user_view/shopping_cart", { products, user, cartCount, grandTotal })
 
     },
 
@@ -398,24 +401,86 @@ module.exports = {
     },
 
 
-    changeProQuantity: (req,res)=>{
-        cartHelpers.changeProductQuantity(req.body).then((response)=>{
-          res.json({
-            response
-          })
+    changeProQuantity: (req, res) => {
+        cartHelpers.changeProductQuantity(req.body).then((response) => {
+            res.json({
+                response
+            })
         })
-      },
-      
-      removeCartProduct: (req,res)=>{
-        console.log("40987656-0987656987657890-@#$%^&*()_)(*&^%$")
-        console.log(req.body,"rmv ordtct");
-        cartHelpers.removeProductCart(req.body).then((response)=>{
+    },
+
+    removeCartProduct: (req, res) => {
+        // console.log("40987656-0987656987657890-@#$%^&*()_)(*&^%$")
+        // console.log(req.body,"rmv ordtct");
+        cartHelpers.removeProductCart(req.body).then((response) => {
             console.log("deleted product    ")
             console.log(response);
-          res.json(response)
+            res.json(response)
         })
-      },
-  
+    },
+
+
+    orderPlaced: async (req, res) => {
+        let user = req.session.user
+        let userId = req.session.user._id
+        let cartCount = await productHelpers.getCartCount(user._id)
+        let products = await cartHelpers.getCartProducts(userId)
+        let grandTotal = await user_helpers.getTotalAmount(userId)
+
+        console.log(grandTotal, "total", products, "products", cartCount, "cartcount", userId, "userid", user, "user");
+
+        res.render("user_view/checkout", { user, grandTotal, cartCount, products })
+
+
+    },
+
+    addAddressPost: (req, res) => {
+        console.log(req.body, "soorajjjj");
+        try {
+            user_helpers.updateAddress(req.body, req.session.user._id);
+            user_helpers.findUserId(req.session.user._id).then((user) => {
+                req.session.user = user;
+                res.redirect("/orderplaced");
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
+    placeOrderPost: async (req, res) => {
+        const address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
+        let payment = req.body.paymentMethod;
+        let products = await user_helpers.getCartList(req.session.user._id);
+        let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
+        console.log(grandTotal);
+        user_helpers.placeOrder(
+            address,
+            products,
+            grandTotal,
+            payment,
+            req.session.user._id,
+        )
+            .then((orderId) => {
+                if (req.body["paymentMethod"] == "Cash on delivery") {
+                    res.json({ codSuccess: true });
+                }
+                // else {
+                //     user_helpers
+                //     .generateRazorpay(orderId, grandTotal)
+                //     .then((response) => {
+                //       res.json(response);
+                //     });
+                // }
+            });
+    },
+    viewOrders: async (req, res) => {
+        let user = req.session.user
+        let cartCount = await productHelpers.getCartCount(user._id)
+        let orders = await productHelpers.getOrderDetails(req.session.user._id);
+        res.render("user_view/orders", {user, cartCount, orders})
+    }
+
 
 
 

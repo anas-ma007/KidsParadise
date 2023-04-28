@@ -26,6 +26,12 @@ router.post("/otp-verify", usercontrollers.verifyOtp)
 
 router.get("/addtocart/:id", middlewares.checkUserLoggedIn, usercontrollers.addToCart )
 router.get("/cart", middlewares.checkUserLoggedIn, usercontrollers.shoppingCart)
+router.get("/orderplaced", middlewares.checkUserLoggedIn, usercontrollers.orderPlaced)
+router.post('/add-address',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost);
+router.post('/place-order',middlewares.checkUserLoggedIn, usercontrollers.placeOrderPost)
+router.get("/orders", middlewares.checkUserLoggedIn, usercontrollers.viewOrders )
+
+
 
 router.post('/change-product-quantity',middlewares.checkUserLoggedIn, usercontrollers.changeProQuantity)
 router.post('/remove-product',middlewares.checkUserLoggedIn, usercontrollers.removeCartProduct);

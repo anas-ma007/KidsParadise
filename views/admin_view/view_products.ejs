@@ -80,22 +80,6 @@
   </div>
 
 
-  <div class="pagination-area mt-15 mb-50 ">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <% if (currentPage > 1) { %>
-        <li class="page-item"><a class="page-link" href="?page=<%=currentPage-1%>"><i class="material-icons md-chevron_left"></i></a></li>
-        <% } %>
-        <% for (let i = 1; i <= totalPages; i++) { %>
-        <li class="page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link" href="?page=<%=i%>"><%=i%></a></li>
-        <% } %>
-        <% if (currentPage < totalPages) { %>
-        <li class="page-item"><a class="page-link" href="?page=<%=currentPage+1%>"><i class="material-icons md-chevron_right"></i></a></li>
-        <% } %>
-      </ul>
-    </nav>
-  </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.5/pagination.min.js"></script>
 
 </section>
 
