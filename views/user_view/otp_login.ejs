@@ -10,6 +10,9 @@
                             <div class="text-center mb-5">
                                 <h4 class="text-uppercase">Login with OTP to <strong>Kids Paradise</strong></h4>
                             </div>
+                           
+                             
+                             
                             <form id="send-otp">
                                 <div class="form-group last mb-3">
                                     <label for="password">Enter Your Mobile Number</label>
@@ -18,6 +21,10 @@
                                     <span id="mobileNo-error" class="validation-label text-danger"></span>
 
                                 </div>
+
+                                <% if (locals.loginErr) { %>
+                                  <p class="error text-danger font-weight"><%= locals.loginErr %></p>
+                                <% } %>
 
                                 <div class="d-sm-flex mb-5 align-items-center">
                                     <span class="ml-auto"><a href="/login" class="forgot-pass">Login using Email and
@@ -126,7 +133,7 @@
               // verifyButton.style.visibility = 'visible'
             }
             else {
-              location.reload();
+              location.reload()
             }
     
           }
@@ -142,8 +149,6 @@
           success: (res) => {
             console.log(`response top verfiy:  ${res}`)
             if (res) {
-              // location.href = '/';
-              // location.assign('/')
               location.href = '/'
             }
             else {

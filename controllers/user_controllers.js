@@ -12,9 +12,6 @@ module.exports = {
             const user = req.session.user;
             if (user) {
                 let cartCount = await productHelpers.getCartCount(user._id)
-                // console.log(cartCount);
-                // console.log('anas user check', user);
-                // console.log('anas user id check', user._id);
                 res.render('user_view/index', { user, cartCount });
             } else {
                 res.render('user_view/index')
@@ -35,13 +32,22 @@ module.exports = {
     },
 
     user_signup: function (req, res) {
-        res.render('user_view/user_signup', { layout: 'user_LogLayout' })
+        // console.log("success user signup");
+        res.render('user_view/user_signup', { layout: 'user_LogLayout', message: '' })
     },
 
     user_signupPost: (req, res) => {
         user_helpers.doSignup(req.body).then((response) => {
-            res.redirect('/login')
-        })
+            if (response.status) {
+                // console.log("logg in if ", response.status, );
+                req.session.user = response.userData;
+                req.session.loggedIn = true;
+                res.redirect("/");
+            } else {
+                // console.log("logg in else ", response.status, );
+                res.render('user_view/user_signup', { layout: 'user_LogLayout', message: response.message })
+            }
+        });
     },
 
     user_loginPost: function (req, res) {
@@ -77,6 +83,8 @@ module.exports = {
 
             if (filter) {
                 var category = await productHelpers.getCategory()
+                // console.log(category, "category filter")
+
                 var cartCount = await productHelpers.getCartCount(user._id)
 
                 // var allProdcuts=await productHelpers.allproducts(filter)
@@ -85,7 +93,7 @@ module.exports = {
                 // console.log(count);
                 var totalPages = Math.ceil(count / pageSize);
                 var currentPage = page > totalPages ? totalPages : page;
-                console.log("from try block", currentPage);
+                // console.log("from try block", currentPage);
                 res.render("user_view/all_products", {
                     user,
                     products,
@@ -100,13 +108,16 @@ module.exports = {
 
                 var products = await productHelpers.userGetProducts(skip, pageSize)
                 var cartCount = await productHelpers.getCartCount(user._id)
+                var category = await productHelpers.getCategory()
+                // console.log(category, "category else")
+
                 ReferSip
                 // console.log(products,"joyelll");
                 var count = await productHelpers.userProductCount()
                 // console.log(count);
                 var totalPages = Math.ceil(count / pageSize);
                 var currentPage = page > totalPages ? totalPages : page;
-                console.log("from try block", currentPage);
+                // console.log("from try block", currentPage);
                 res.render("user_view/all_products", {
                     user,
                     products,
@@ -125,13 +136,16 @@ module.exports = {
             var page = parseInt(req.query.page) || 1;
             var pageSize = parseInt(req.query.pageSize) || 12;
             var count = await productHelpers.userProductCount()
+            var category = await productHelpers.getCategory()
+            // console.log(category, "category catch")
+
 
             var skip = (page - 1) * pageSize;
             var totalPages = Math.ceil(count / pageSize);
             var currentPage = page > totalPages ? totalPages : page;
-            console.log(skip, pageSize);
+            // console.log(skip, pageSize);
             var products = await productHelpers.userGetProducts(skip, pageSize)
-            console.log("from catch block", products);
+            // console.log("from catch block", products);
             res.render("user_view/all_products", {
                 products,
                 totalPages,
@@ -164,37 +178,50 @@ module.exports = {
         let user = req.session.loggedIn
         let product = await admin_helpers.getOneProduct(req.params.id)
 
-        // console.log(product.image)
 
         if (req.session.userLoggedIn) {
-            // cartcount = await productHelpers.getCartCount(user._id)
-
             res.render('user/productdetails', { user, product, cartCount });
-            // res.render('user/singleProductView', { userHead: true, user, products, cartcount });
 
         } else {
             res.render('user/productdetails', { product });
-            // res.render('user/singleProductView', { userHead: false, user, product, cartcount });
+
         }
     },
 
     otplogin: (req, res) => {
-        res.render("user_view/otp_login", { layout: 'user_LogLayout' })
+        if (req.session.loggedIn) {
+            res.redirect('/');
+        } else {
+            res.render("user_view/otp_login", { layout: 'user_LogLayout', "loginErr": req.session.otpErr, });
+            req.session.otpErr = false;
+        }
+
 
     },
     sendotp: (req, res) => {
-        // console.log(req.body);
         let phone = req.body.phone
-        user_helpers.doSendOtp(req.body).then((response) => {
-            if (response) {
-                req.session.otpphone = phone
-                res.json(response)
+        user_helpers.checkUserOTP(req.body).then(async (userData) => {
+            if (userData) {
+                user_helpers.doSendOtp(req.body).then((response) => {
+                    if (response) {
+                        req.session.otpphone = phone
+                        res.json(response)
+                    } else {
+                        req.session.user = null;
+                        req.session.otpErr = "You were blocked by admin..!!!";
+                        res.json(false);
+                    }
+                })
             } else {
-                res.json(response)
+                req.session.user = null;
+                req.session.otpErr = "This mobile number is not registered with any account";
+                res.json(false);
             }
-
         })
+
     },
+
+
 
     verifyOtp: (req, res) => {
         console.log(req.body);
@@ -247,12 +274,9 @@ module.exports = {
         let cartCount = await productHelpers.getCartCount(user._id)
         let products = await cartHelpers.getCartProducts(userId)
         let grandTotal = await user_helpers.getTotalAmount(userId)
-        // console.log(grandTotal, "grand total price");
+        // console.log(grandTotal.total, "grnd 0 total ");
         // console.log([products, 'hhhhh']);
-
-
         res.render("user_view/shopping_cart", { products, user, cartCount, grandTotal })
-
     },
 
 
@@ -357,7 +381,7 @@ module.exports = {
     setNewPass: (req, res) => {
         const newPass = req.body.newPassword;
         const user = req.session.user;
-        console.log("last round", user);
+        // console.log("last round", user);
         req.session.user = user;
         user_helpers.setNewPass(user._id, newPass).then(() => {
             req.session.loggedIn = true;
@@ -381,20 +405,23 @@ module.exports = {
         var pageSize = parseInt(req.query.pageSize) || 8;
         var skip = (page - 1) * pageSize;
         var filter = req.query.filter
-        console.log(filter);
+        // console.log(filter);
         var products = await productHelpers.findAllSearchProduct(skip, pageSize, searchkey)
+        var category = await productHelpers.getCategory()
         // console.log(products,"joyelll");
         var count = await productHelpers.userProductCount()
         // console.log(count);
         var totalPages = Math.ceil(count / pageSize);
         var currentPage = page > totalPages ? totalPages : page;
-        console.log("from try block", currentPage);
+        // console.log("from try block", currentPage);
         res.render("user_view/all_products", {
             user,
             products,
             totalPages,
             currentPage,
             pageSize,
+            category
+
         });
 
 
@@ -402,7 +429,10 @@ module.exports = {
 
 
     changeProQuantity: (req, res) => {
-        cartHelpers.changeProductQuantity(req.body).then((response) => {
+        const userId = req.session.user._id;
+        cartHelpers.changeProductQuantity(req.body).then(async (response) => {
+            const grandTotal = await user_helpers.getTotalAmount(userId);
+            response.grandTotal = grandTotal[0].total
             res.json({
                 response
             })
@@ -453,11 +483,13 @@ module.exports = {
         let payment = req.body.paymentMethod;
         let products = await user_helpers.getCartList(req.session.user._id);
         let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
-        console.log(grandTotal);
+        // console.log(grandTotal[0].total, "total andTotal[0].tota");
+        let total = grandTotal[0].total
+        // console.log(total, "total log");
         user_helpers.placeOrder(
             address,
             products,
-            grandTotal,
+            total,
             payment,
             req.session.user._id,
         )
@@ -467,7 +499,7 @@ module.exports = {
                 }
                 // else {
                 //     user_helpers
-                //     .generateRazorpay(orderId, grandTotal)
+                //     .generateRazorpay(orderId, total)
                 //     .then((response) => {
                 //       res.json(response);
                 //     });
@@ -478,9 +510,49 @@ module.exports = {
         let user = req.session.user
         let cartCount = await productHelpers.getCartCount(user._id)
         let orders = await productHelpers.getOrderDetails(req.session.user._id);
-        res.render("user_view/orders", {user, cartCount, orders})
-    }
+        // console.log(orders, "ttoal priced obj");
+        res.render("user_view/orders", { user, cartCount, orders })
+    },
 
+    // StockCount : async(req, res)=>{
+    //     let user= req.session.user
+    //     let stockCount = await productHelpers.doGetStockCount(user._id)
+    // },
+
+
+    orderDetails: async (req, res) => {
+        console.log(req.body);
+        let user = req.session.user
+        let cartCount = await productHelpers.getCartCount(user._id)
+        let products = await productHelpers.orderProductDetail(req.params.id);
+        let order = await productHelpers.findOrder(req.params.id);
+        console.log(order, "orderssssss from control page");
+        // let orders = await productHelpers.getOrderDetails(req.session.user._id);
+        res.render("user_view/order_details", { user, cartCount, products, order })
+    },
+
+    // returnOrder: (req, res)=>{
+    //     let orderId= req.params.id
+    //     return new Promise(async ()=>{
+    //         await productHelpers.returnProduct(orderId).then(()=>{
+    //             res.redirect("/orders");
+    //         })
+    //     })
+    // },
+
+    returnOrder: async (req, res) => {
+        let orderId = req.params.id;
+        await productHelpers.returnProduct(orderId).then(() => {
+          res.redirect("/orders");
+        });
+      },
+    
+      cancelOrder: async (req, res) => {
+        let orderId = req.params.id;
+        await productHelpers.cancelOrder(orderId).then(() => {
+          res.redirect("/orders");
+        });
+      },
 
 
 

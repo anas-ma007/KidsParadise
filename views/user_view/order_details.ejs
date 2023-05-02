@@ -1,0 +1,95 @@
+<body class="animsition">
+    <br>
+    <br>
+    <br>
+
+
+
+    <!-- breadcrumb -->
+    <div class="container">
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+            <a href="/allproducts" class="stext-109 cl8 hov-cl1 trans-04">
+                Home
+                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="stext-109 cl8 hov-cl1 trans-04">
+                My Orders
+                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+            </a>
+            <span class="stext-109 cl4">
+                Order details
+            </span>
+        </div>
+    </div>
+
+
+
+    <!-- Order details -->
+    <form class="bg0 p-t-75 p-b-85">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+                    <div class="m-l-25 m-r--38 m-lr-0-xl">
+                        <div class="wrap-table-shopping-cart" id="cartTable">
+                            <table class="table-shopping-cart">
+                                <tr class="table_head">
+                                    <th class="column-1">Product</th>
+                                    <th class="column-2">Name</th>
+                                    <th class="column-4">Quantity</th>
+                                    <th class="column-5">Total</th>
+
+                                </tr>
+                                <% products.forEach(function(pro) { %>
+                                    <tr class="table_row">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <img src="<%=pro.product.image[0]%>" alt="IMG">
+                                            </div>
+                                        </td>
+                                        <td class="column-2">
+                                            <%=pro.product.name%>
+                                        </td>
+                                       
+                                        <td class="column-4">
+                                            <div class="wrap-num-product flex-w m-l-auto m-r-0">
+
+
+                                                <input id="pro.quantity<%=pro.product._id%>"
+                                                    class="mtext-104 cl3 txt-center num-product" type="number"
+                                                    name="num-product1" value="<%=pro.quantity%>">
+
+
+                                            </div>
+                                        </td>
+                                        <td class="column-5" id="productTotal<%=pro.product._id%>"> Rs <%=
+                                                (pro.product.price)*(pro.quantity)%>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+                <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+                    <h4 class="mtext-109 cl2 p-b-30">
+                        Delivery Address
+                    </h4>
+                    
+                    <div class="flex-w flex-t bor12 p-b-13">
+                        <div class="size-208">
+                            <span class="stext-110 cl2">
+                                Address: Address: Address: Address: Address: Address: Address:
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</body>

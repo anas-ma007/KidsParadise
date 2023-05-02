@@ -1,0 +1,193 @@
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">All Orders</h2>
+  </div>
+  <div class="card mb-4">
+    <!-- card-header end -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="example">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Order Id</th>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Payment Method</th>
+              <th>Status</th>
+              <th class="">Action</th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+
+            <% allOrders.forEach(order=> { %>
+              <tr>
+                <td>
+                  <%= new Date(order.date).toLocaleDateString('en-GB', { day: '2-digit' , month: '2-digit' ,
+                    year: 'numeric' }).replace(/\//g, '-' )%>
+                </td>
+                <td>
+                  <%=order._id%>
+                </td>
+                <td>
+                  <%= order.deliveryAddress.name%>
+                </td>
+                <td>
+                  Rs <%=order.totalPrice%>
+                </td>
+                <td>
+                  <%=order.paymentmethod%>
+                </td>
+                <td>
+                  <%=order.orderstatus%>
+                </td>
+
+                <% if (order.orderstatus==="placed" ) { %>
+
+                  <td class="dropdown">
+                    <button class="btn-sm btn-primary btn-sm" onclick="shipOrder('<%=order._id%>'); event.preventDefault();" style="border-radius: 1rem ;"
+                      type="button">
+                      Ship
+                    </button>
+                  </td>
+
+                  <% } else if (order.orderstatus==="shipped" ) { %>
+
+                    <td class="dropdown">
+                      <button class="btn-sm btn-success btn-sm" onclick="deliverOrder('<%=order._id%>'); event.preventDefault();" style="border-radius: 1rem ;"
+                        type="button">
+                        Deliver
+                      </button>
+                    </td>
+
+                    <% } else if (order.orderstatus==="delivered" ) { %>
+
+                      <td class="dropdown">
+                        <button class="btn-sm btn-success btn-sm" 
+                          style="border-radius: 1rem ;" type="button">
+                          Delivered
+                        </button>
+                      </td>
+
+                      <% } else if (order.orderstatus==="return pending" ) { %>
+
+                        <td class="dropdown">
+                          <button class="btn-sm btn-danger btn-sm" onclick="returnOrder('<%=order._id%>'); event.preventDefault();"
+                            style="border-radius: 1rem ;" type="button">
+                            Return
+                          </button>
+                        </td>
+
+                        <% } else if (order.orderstatus==="order cancelled" ) { %>
+
+                          <td class="dropdown">
+                            <button class="btn-sm btn-info btn-sm" 
+                              style="border-radius: 1rem ;" type="button">
+                              Order Cancelled
+                            </button>
+                          </td>
+
+                        <% } else { %>
+
+                          <td class="dropdown">
+                            <button class="btn-sm btn-info btn-sm" 
+                              style="border-radius: 1rem ;" type="button">
+                              Returned
+                            </button>
+                          </td>
+
+                          <% } %>
+
+              </tr>
+
+              <% } )%>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script>
+
+    $(document).ready(function () {
+      $('#example').DataTable();
+    });
+  </script>
+
+
+  <script>
+
+    function shipOrder(id) {
+      Swal.fire({
+        title: 'Do you want ship the order?',
+        showDenyButton: true,
+        confirmButtonText: 'Ship',
+        denyButtonText: `Cancel`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+					url: `/admin/ship-product/${id}`,
+					method: 'get',
+					success: (response) => {
+						window.location.href='/admin/order-details'
+					}
+				})
+          Swal.fire('Shipped !', '', 'success')
+        } else if (result.isDenied) {
+          Swal.fire('Cancelled', '', 'info')
+        }
+      })
+    }
+
+    function deliverOrder(id) {
+      Swal.fire({
+        title: 'Do you want deliver the order?',
+        showDenyButton: true,
+        confirmButtonText: 'Deliver',
+        denyButtonText: `Cancel`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+					url: `/admin/deliver-product/${id}`,
+					method: 'get',
+					success: (response) => {
+						window.location.href='/admin/order-details'
+					}
+				})
+          Swal.fire('Order Delivered !', '', 'success')
+        } else if (result.isDenied) {
+          Swal.fire('Cancelled', '', 'info')
+        }
+      })
+    }
+
+    function returnOrder(id) {
+      Swal.fire({
+        title: 'Do you want return the order?',
+        showDenyButton: true,
+        confirmButtonText: 'Return',
+        denyButtonText: `Cancel`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+					url: `/admin/return-product/${id}`,
+					method: 'get',
+					success: (response) => {
+						window.location.href='/admin/order-details'
+					}
+				})
+          Swal.fire('Order Returned !', '', 'success')
+        } else if (result.isDenied) {
+          Swal.fire('Cancelled', '', 'info')
+        }
+      })
+    }
+
+  </script>

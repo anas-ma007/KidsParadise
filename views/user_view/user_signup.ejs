@@ -13,6 +13,11 @@
                         </div>
                         <div class="mb-0">
 
+                            <% if (message) { %>
+                                <div class="alert alert-danger"><%= message %></div>
+                            <% } %>
+                            
+
 
                             <form action="/signup" method="post">
                                 <div class="form-group first">

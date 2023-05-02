@@ -12,35 +12,26 @@
         </div> -->
         <div class="card-body">
 
-          <form name="myAddProdForm" id="addProdform" class="mx-1 mx-md-4 pt-5" action="/admin/addproducts"
-            method="post" enctype="multipart/form-data">
+          <form name="myAddProdForm" class="addProdform" id="checkout-form" class="mx-1 mx-md-4 pt-5"
+            action="/admin/addproducts" method="post" enctype="multipart/form-data">
 
 
             <div class="mb-4">
               <label for="product_name" class="form-label">Product Name</label>
-              <input type="text" placeholder="Product Name" required name="name" onkeyup="validateProductName()"
-                class="form-control" id="name">
+              <input type="text" placeholder="Product Name" required name="name" class="form-control" id="name">
               <span id="productName-error" class="validation-label text-danger"></span>
-
             </div>
-            <!-- <div class="mb-4 ">
-              <label for="product_category" class="form-label">Category</label>
-              <input type="text" placeholder="Product Category" required name="category" class="form-control"
-                id="category">
-            </div> -->
-
 
             <div class="mb-4">
               <label class="form-label">Category</label>
-              <select class="form-select" name="category" id="categorySelect">
-                <!-- <option selected  disabled>Category</option> -->
+              <select class="form-select" required name="category" id="categorySelect">
+                <option selected disabled>Select Category</option>
                 <% for (var i=0; i < category.length; i++) { %>
                   <option value="<%= category[i].category %>">
                     <%= category[i].category %>
                   </option>
                   <% } %>
               </select>
-              <!-- <button id="categoryButton" class="btn btn-xs mt-1" disabled>Select Category</button> -->
             </div>
 
 
@@ -51,21 +42,19 @@
               <div class="mb-4">
                 <label class="form-label">Price</label>
                 <div class="row gx-2">
-                  <input placeholder="₹" type="text" required name="price" class="form-control" id="price"
-                    onkeyup="validateProductPrice()">
+                  <input placeholder="₹" type="text" required name="price" class="form-control" id="price">
                   <span id="price-error" class="validation-label text-danger"></span>
-
                 </div>
               </div>
             </div>
+
+
             <div class="col-lg-4">
               <div class="mb-4">
                 <label class="form-label">Stock</label>
                 <div class="row gx-2">
-                  <input placeholder="0" type="text" required name="stock" class="form-control" id="stock"
-                    onkeyup="validateProductStock() ">
+                  <input placeholder="0" type="text" required name="stock" class="form-control" id="stock">
                   <span id="stock-error" class="validation-label text-danger"></span>
-
                 </div>
               </div>
             </div>
@@ -74,9 +63,8 @@
             <div class="mb-4">
               <label class="form-label">Description</label>
               <textarea placeholder="Product Description" id="description" required name="description"
-                onkeyup="validateDescription()" class="form-control" rows="2"></textarea>
+                class="form-control" rows="2"></textarea>
               <span id="description-error" class="validation-label text-danger"></span>
-
             </div>
 
             <div class="">
@@ -86,7 +74,6 @@
                 </div>
                 <div class="card-body">
                   <div class="input-upload">
-
                     <input class="form-control" name="image" type="file" multiple required>
                     <input class="form-control" name="image" type="file" multiple required>
                     <!-- <input class="form-control" name="image" type="file" multiple required> -->
@@ -97,115 +84,66 @@
             </div>
 
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-              <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg"
-                 />
-
-                <span id="submit-error" class="validation-label text-danger"></span>
+              <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg" />
+              <span id="submit-error" class="validation-label text-danger"></span>
               <div>
               </div>
-
-
             </div>
-
           </form>
         </div>
       </div>
 </section>
-<script>
-  const categorySelect = document.getElementById('categorySelect');
-  const categoryButton = document.getElementById('categoryButton');
 
-  categorySelect.addEventListener('change', () => {
-    if (categorySelect.value !== '') {
-      categoryButton.disabled = false;
-    } else {
-      categoryButton.disabled = true;
-    }
+
+<script>
+  $(document).ready(function () {
+    $("#checkout-form").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 6,
+        },
+        category: {
+          requiured: true,
+        },
+        price: {
+          required: true,
+          number: true,
+        },
+        stock: {
+          required: true,
+          number: true,
+        },
+        description: {
+          required: true,
+          minlength: 60
+        },
+      },
+
+      messages: {
+        name: {
+          required: "Please enter a valid product name.",
+          minlength: "Name must be atleast 6 characters long.",
+        },
+        category :{
+          required : "Please Select one category"
+        },
+        price: {
+          required: "Please enter a valid price",
+          number: "Price should be greater than or equal to 0.",
+        },
+        stock: {
+          required: "Please enter a valid number",
+          number: "Stock should be must be positive number",
+        },
+        description: {
+          requierd: "Please enter a valid description",
+          minlength: "Description mubst be contain atleast 60 charactrs long"
+        },
+      },
+      errorClass: "text-danger",
+    });
   });
-</script>
-
-
-<script>
-
-  var productNameError = document.getElementById('productName-error');
-  var descriptionError = document.getElementById('description-error');
-  var productPriceError = document.getElementById('price-error');
-  var productStockError = document.getElementById('stock-error');
-  var submitError = document.getElementById('submit-error');
-
-
-  function validateProductName() {
-    var product = document.getElementById('name').value;
-    var required = 14;
-    var left = required - product.length;
-    if (left > 0) {
-      productNameError.innerHTML = left + ' more characters required.';
-      return false;
-    } else {
-      productNameError.innerHTML = 'Enter a valid name';
-    }
-
-    productNameError.innerHTML = '';
-    return true;
-  }
-
-  function validateProductPrice() {
-    var price = document.getElementById('price').value;
-    if (isNaN(price)) {
-      productPriceError.innerHTML = 'Price should be a number.';
-      return false;
-    }
-    else if (price < 0) {
-      productPriceError.innerHTML = 'Price should be greater than or equal to 0.';
-      return false;
-    }
-    else {
-      productPriceError.innerHTML = '';
-      return true;
-    }
-  }
-
-  function validateProductStock() {
-    var stock = document.getElementById('stock').value;
-    if (stock == '' || isNaN(stock) || stock <= 0 || !Number.isInteger(Number(stock))) {
-      productStockError.innerHTML = 'stock should be a positive integer.';
-      return false;
-    }
-    else {
-      productStockError.innerHTML = '';
-      return true;
-    }
-  }
-
-
-
-  function validateDescription() {
-    var description = document.getElementById('description').value;
-    var required = 80;
-    var left = required - description.length;
-    if (left > 0) {
-      descriptionError.innerHTML = left + ' more characters required.';
-      return false;
-    } else {
-      descriptionError.innerHTML = 'Enter a valid description';
-    }
-
-    descriptionError.innerHTML = '';
-    return true;
-  }
-
-
-  function validateForm() {
-    if (validateProductName() || !validateDescription() || validateProductPrice() || validateProductStock()) {
-      submitError.style.display = 'flex';
-      submitError.style.justifyContent = 'center';
-      submitError.innerHTML = ' Please fix all errors to submit';
-      setTimeout(() => {
-        submitError.style.display = 'none';
-      }, 3000);
-      return false;
-    }
-  }
 </script>
 <div>
   <br>

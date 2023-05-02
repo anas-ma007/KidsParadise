@@ -11,7 +11,7 @@
           
           <div class="card-body">
   
-            <form name="myAddProdForm" id="addProdform" class="mx-1 mx-md-4 pt-5" action="/admin/edit_product/<%=response._id%>"
+            <form name="myAddProdForm" id="checkout-form" class="mx-1 mx-md-4 pt-5" action="/admin/edit_product/<%=response._id%>"
               method="post" enctype="multipart/form-data">
   
   
@@ -74,8 +74,8 @@
                       <span>
                         <img src="<%=response?.image[0]%>" alt="" style="width: 120px; height: 120px;" id="img">
                         <img src="<%=response?.image[1]%>" alt="" style="width: 60px; height: 60px;" class="img">
-                        <img src="<%=response?.image[2]%>" alt="" style="width: 60px; height: 60px;" class="img">
-                        <img src="<%=response?.image[3]%>" alt="" style="width: 60px; height: 60px;" class="img">
+                        <!-- <img src="<%=response?.image[2]%>" alt="" style="width: 60px; height: 60px;" class="img">
+                        <img src="<%=response?.image[3]%>" alt="" style="width: 60px; height: 60px;" class="img"> -->
                       </span>
                     </div>
                   </div>
@@ -97,3 +97,48 @@
       document.getElementById("img").src=URL.createObjectURL(event.target.files[0])
     }
   </script>
+
+  
+<script>
+  $(document).ready(function () {
+    $("#checkout-form").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 6,
+        },
+        price: {
+          required: true,
+          number: true,
+        },
+        stock: {
+          required: true,
+          number: true,
+        },
+        description: {
+          required: true,
+          minlength: 60
+        },
+      },
+      messages: {
+        name: {
+          required: "Please enter a valid product name.",
+          minlength: "Name must be atleast 6 characters long.",
+        },
+        price: {
+          required: "Please enter a valid price",
+          number: "Price should be greater than or equal to 0.",
+        },
+        stock: {
+          required: "Please enter a valid number",
+          number: "Stock should be must be positive number",
+        },
+        description: {
+          requierd: "Please enter a valid description",
+          minlength: "Description mubst be contain atleast 60 charactrs long"
+        },
+      },
+      errorClass: "text-danger",
+    });
+  });
+</script>

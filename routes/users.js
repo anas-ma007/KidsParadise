@@ -30,8 +30,11 @@ router.get("/orderplaced", middlewares.checkUserLoggedIn, usercontrollers.orderP
 router.post('/add-address',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost);
 router.post('/place-order',middlewares.checkUserLoggedIn, usercontrollers.placeOrderPost)
 router.get("/orders", middlewares.checkUserLoggedIn, usercontrollers.viewOrders )
+router.get("/order-product-details/:id",  middlewares.checkUserLoggedIn, usercontrollers.orderDetails)
 
 
+router.get('/return-order/:id',middlewares.checkUserLoggedIn, usercontrollers.returnOrder)
+router.get('/cancel-order/:id',middlewares.checkUserLoggedIn, usercontrollers.cancelOrder)
 
 router.post('/change-product-quantity',middlewares.checkUserLoggedIn, usercontrollers.changeProQuantity)
 router.post('/remove-product',middlewares.checkUserLoggedIn, usercontrollers.removeCartProduct);

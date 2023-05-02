@@ -16,7 +16,7 @@ const adminCredential = {
 
 
 module.exports = {
-    admin_homepage: (req, res) => { 
+    admin_homepage: (req, res) => {
         if (req.session.adminLoggedIn) {
             res.render('admin_view/index', { layout: 'admin_layout' })
         } else {
@@ -103,7 +103,7 @@ module.exports = {
         //     }
         // }
         adminHelpers.getAllProducts().then((products) => {
-            console.log(products,'999999999999999999999999999999');
+            console.log(products, '999999999999999999999999999999');
             res.render('admin_view/view_products', { products, layout: 'admin_layout' })
 
 
@@ -112,8 +112,8 @@ module.exports = {
 
 
     view_users: async (req, res) => {
-        return new Promise(async (resolve, reject)=>{
-            const allUser = await user_helpers.findAllUser().then((allUser)=>{
+        return new Promise(async (resolve, reject) => {
+            const allUser = await user_helpers.findAllUser().then((allUser) => {
                 // console.log(allUser);
                 res.render('admin_view/view_users', { allUser, layout: 'admin_layout' })
             })
@@ -273,6 +273,57 @@ module.exports = {
             res.redirect("/admin/addcategory")
         })
 
+    },
+    getOrderDetails: async (req, res) => {
+        return new Promise(async () => {
+            let allOrders = await productHelpers.getAllOrders()
+            res.render("admin_view/all_orders", { allOrders, layout: 'admin_layout' })
+        })
+    },
+
+    // shipProduct: async(req,res)=>{
+    //     let orderId = req.params.id
+    //     console.log(orderId,"orderId in ship product");
+    //     await productHelpers.shipproduct(orderId).then(()=>{
+    //         res.redirect('/admin/order-details')
+    //     })
+    // },
+
+    // deliverProduct: async(req,res)=>{
+    //     let orderId = req.params.id
+    //     await productHelpers.deliverProduct(orderId).then(()=>{
+    //         res.redirect('/admin/order-details')
+    //     })
+    // },
+
+    // returnProduct: async(req,res)=>{
+    //     let orderId = req.params.id
+    //     await productHelpers.returnConfirm(orderId).then(()=>{
+    //         res.redirect('/admin/order-details')
+    //     })
+    // },
+
+    
+    shipProduct: async(req,res)=>{
+        let orderId = req.params.id
+        console.log(orderId, "orderId in shipproduct");
+        await productHelpers.shipproduct(orderId).then(()=>{
+            res.redirect('/admin/order-details')
+        })
+    },
+
+    deliverProduct: async(req,res)=>{
+        let orderId = req.params.id
+        await productHelpers.deliverProduct(orderId).then(()=>{
+            res.redirect('/admin/order-details')
+        })
+    },
+
+    returnProduct: async(req,res)=>{
+        let orderId = req.params.id
+        await productHelpers.returnConfirm(orderId).then(()=>{
+            res.redirect('/admin/order-details')
+        })
     },
 
 

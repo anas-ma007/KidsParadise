@@ -40,6 +40,13 @@ router.post("/edit_product/:id", middlewares.checkAdminLoggedIn,upload.array('im
 router.get("/unlistcategory/:id", middlewares.checkAdminLoggedIn, adminControllers.unlistCategory)
 router.get("/listcategory/:id", middlewares.checkAdminLoggedIn, adminControllers.listCategory)
 
+router.get('/orders_details', middlewares.checkAdminLoggedIn, adminControllers.getOrderDetails)
+
+router.get('/ship-product/:id',middlewares.checkAdminLoggedIn, adminControllers.shipProduct)
+router.get('/deliver-product/:id',middlewares.checkAdminLoggedIn, adminControllers.deliverProduct)
+router.get('/return-product/:id',middlewares.checkAdminLoggedIn, adminControllers.returnProduct)
+
+
 router.get("/")
 
 

@@ -70,7 +70,7 @@ module.exports = {
                 $limit: pageSize
             }
         ]).toArray();
-        
+
         // console.log(products, "products only from status true");
 
         return products
@@ -88,7 +88,7 @@ module.exports = {
     getCategory: () => {
         return new Promise(async (resolve, reject) => {
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
-            console.log(category, "sooorajjj");
+            console.log(category, "category test");
             resolve(category)
 
         })
@@ -248,32 +248,141 @@ module.exports = {
 
     },
 
-    getCartCount: (userId)=>{
-        return new Promise(async (resolve, rejct)=>{
-            let count=0
-            let cart=await db.get().collection(collection.CART_COLLECTION).findOne({user : new ObjectId(userId)})
-            if(cart){   
-                count=cart.products.length
+    getCartCount: (userId) => {
+        return new Promise(async (resolve, rejct) => {
+            let count = 0
+            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: new ObjectId(userId) })
+            if (cart) {
+                count = cart.products.length
             }
             resolve(count)
         })
 
     },
 
-    getOrderDetails: async(userid)=>{
+    getOrderDetails: async (userid) => {
         let order = await db.get().collection(collection.ORDERS).aggregate(
             [
                 {
-                    $match:{userId:new ObjectId(userid)
+                    $match: {
+                        userId: new ObjectId(userid)
                     }
                 },
                 {
-                    $sort:{date: -1}
+                    $sort: { date: -1 }
                 }
             ]
-            ).toArray()
+        ).toArray()
         return order
     },
+
+    // doGetStockCount : async (userId)=>{
+    //     let count=
+
+    // }
+
+    getAllOrders: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.ORDERS).find().toArray().then((orders) => {
+                resolve(orders)
+            })
+        })
+
+    },
+
+    orderProductDetail: async (orderId) => {
+        let cartItems = await db.get().collection(collection.ORDERS)
+            .aggregate([
+                {
+                    $match: { _id: ObjectId(orderId) }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCTS_COLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
+                    }
+                }
+            ]).toArray()
+        // console.log(cartItems, "Cartitems ingggggggggggggggggggggggggggggggg ");
+        return cartItems
+
+    },
+
+    findOrder: async (orderId) => {
+        let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).toArray()
+        // console.log(order,"orderssssss from helper"); 
+        return order
+    },
+
+    
+    shipproduct: (orderId)=>{
+        return new Promise(async(res,rej)=>{
+            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"shipped"}})
+            .then((response)=>{
+                res(response)
+            })
+        })
+    },
+
+    deliverProduct: (orderId)=>{
+        return new Promise(async(res,rej)=>{
+            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"delivered"}})
+            .then((response)=>{
+                res(response)
+            })
+        })
+    },
+
+    returnProduct: (orderId)=>{
+        return new Promise(async(res,rej)=>{
+            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"return pending"}})
+            .then((response)=>{
+                res(response)
+            })
+        })
+    },
+
+    returnConfirm: (orderId)=>{
+        return new Promise(async(res,rej)=>{
+            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"order returned"}})
+            .then((response)=>{
+                res(response)
+            })
+        })
+    },
+
+    cancelOrder: (orderId)=>{
+        return new Promise(async(res,rej)=>{
+            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"order cancelled"}})
+            .then((response)=>{
+                res(response)
+            })
+        })
+    },
+    
+
+
+
+
+
 
 
 

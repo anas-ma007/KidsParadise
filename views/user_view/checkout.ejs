@@ -66,12 +66,12 @@
 
 						</table>
 
-						
+
 						<table class="table-shopping-cart">
 							<tr class="table_head">
 								<th class="column-1"> Select Address</th>
 							</tr>
-							
+
 							<% if ( user.address ) { %>
 
 								<tr class="table_row">
@@ -140,6 +140,7 @@
 													<% } %>
 									</td>
 								</tr>
+
 						</table>
 					</div>
 
@@ -199,6 +200,7 @@
 					</div>
 
 					<hr style="border: 1px dashed;">
+					
 
 					<div class="mb-5">
 
@@ -217,10 +219,26 @@
 						</label>
 
 					</div>
+					
+
+					<% if ( user.address ) { %>
 
 					<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
 						type="submit" onclick="placeOrder() ; event.preventDefault()">Place Order</button>
+
+						<% } else { %>
+
+							<h6 >
+								Add one delivery addess before placeorder
+							</h6>
+
+
+						<% } %> 
+
+
 				</div>
+				
+				
 
 
 			</div>
@@ -255,7 +273,7 @@
 
 							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
 								<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
-									placeholder="Phonenumber" name="phone" style="border-radius: 1rem; width: 70%;" />
+									placeholder="Phonenumber" minlength="10" name="phone" style="border-radius: 1rem; width: 70%;" />
 							</div>
 						</div>
 						<div class="row d-flex">
@@ -276,7 +294,7 @@
 						<div class="row">
 
 							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
-								<input type="number" id="typeUsernameX-2" required class="form-control form-control-md"
+								<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
 									placeholder="Pincode" name="pincode" style="border-radius: 1rem; width: 70%;" />
 							</div>
 
@@ -287,7 +305,6 @@
 						</div>
 						<div class="row">
 
-
 						</div>
 					</fieldset>
 				</div>
@@ -297,6 +314,82 @@
 					<button type="submit" class=" btn-primary p-2 pl-4 pr-4">Submit</button>
 				</div>
 			</form>
+
+			<!--modal address validation from here-->
+			<!-- <script>
+				$(document).ready(function () {
+					$("#addressForm").validate({
+						rules: {
+							name: {
+								required: true,
+								minlength: 5,
+							},
+							phone: {
+								required: true,
+								minlength: 10,
+								maxlength: 10,
+								number: true,
+							},
+							city: {
+								required: true,
+								minlength: 2,
+								maxlength: 6,
+							},
+							housename: {
+								required: true,
+								minlength: 10,
+							},
+							pincode: {
+								required: true,
+								minlength: 6,
+								maxlength: 6,
+								number: true,
+						
+							},
+							district: {
+								required: true,
+								minlength: 2,
+							},
+							
+						},
+						messages: {
+							name: {
+								required: "Please enter your full name.",
+								minlength: "Name must be at least 5 characters long.",
+							},
+							phone: {
+								required: "Please enter your phone number.",
+								minlength: "Phone number must be 10 digits long.",
+								maxlength: "Phone number must be 10 digits long.",
+								number: "Please enter a valid phone number",
+							},
+							city: {
+								required: "Please enter your city.",
+								minlength: "City name must be at least 6 characters long.",
+							},
+							housename: {
+								required: "Please enter your address.",
+								minlength: "Address must be at least 10 characters long.",
+							},
+							
+							
+							pincode: {
+								required: "Please enter your pin code.",
+								minlength: "Pin code must be at least 6 characters long.",
+								maxlength: "Pin code must not exceed 6 characters.",
+								number: "Pin code must contain only numbers.",
+							},
+							district: {
+								required: "Please enter your district.",
+								minlength: "district name must be at least 3 characters long.",
+
+							},  
+						},
+						errorClass: "text-danger",
+					});
+				});
+			</script> -->
+			<!--modal address validation end here-->
 		</div>
 	</div>
 </div>
@@ -307,7 +400,7 @@
 	function placeOrder() {
 		Swal.fire(
 			'Order Placed Successfull',
-			'success'
+			'success' 
 		).then(() => {
 
 			$.ajax({
@@ -317,13 +410,13 @@
 				success: (response) => {
 					if (response.codSuccess) {
 						console.log(response);
-						window.location.href = '/'
+						window.location.href = '/orders'
 					} else {
 						// razorpayPayment(response)
 					}
 				}
 			})
-
+ 
 		})
 	}
 
@@ -368,7 +461,7 @@
 	// 				console.log("ORDER SUCCESS");
 	// 				location.href = "/"
 	// 			}else{
-	// 				alert("PAYMENT FAILED")
+	// 				alert("PAYMENT FAILED") 
 	// 			}
 	// 		}
 	// 	})

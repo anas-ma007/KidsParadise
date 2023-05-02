@@ -1,6 +1,6 @@
 <!-- Product -->
 
-<section class="bg0 p-t-23 p-b-140">
+<section class="bg0 p-t-23 p-b-140" style="background-color: #ebebd2;">
     <div class="container">
         <div class="p-b-10">
             <h3 class="ltext-103 cl5 text-white ">
@@ -16,24 +16,18 @@
                     </button>
                 </a>
 
-                <!-- <a href="/allproducts?filter=jeep">  </a> -->
-                <!-- <a href="/allproducts?filter=car"> </a> -->
-                <!-- <a href="/allproducts?filter=newness"> </a>-->
-                
+                <!-- <a href="/allproducts?filter= ">  </a> -->
+                <!-- <a href="/allproducts?filter=price"> </a> -->
+                <!-- <a href="/allproducts?filter=date"> </a>-->
 
-
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Jeep">
-                    Jeep
+       
+            <% category.forEach(catgry =>{ %>
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="#">
+                    <%=catgry.category%>
                 </button>
+            <% }) %>
 
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Car">
-                    Car
-                </button>
-
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Bike">
-                    Bike
-                </button>
             </div>
 
             <div class="flex-w flex-c-m m-tb-10">
@@ -51,8 +45,6 @@
 
 
                 <!-- Search product -->
-
-
                 <div class="col-search  main-menu-padding-1">
                     <form action="/search" method="post" class="searchform">
                         <div class="input-group">
@@ -131,14 +123,8 @@
                                     ₹15000.00 above
                                 </a>
                             </li>
-
-
                         </ul>
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
@@ -168,7 +154,7 @@
                                 </a>
 
                                 <span class="stext-105 cl3">
-                                    Rs.<%=pro.price%>
+                                    ₹ <%=pro.price%>
                                 </span>
                             </div>
 
@@ -179,8 +165,9 @@
                                         src="user_assets/images/icons/icon-heart-01.png" alt="ICON">
                                     <img class="icon-heart2 dis-block trans-04 ab-t-l"
                                         src="user_assets/images/icons/icon-heart-02.png" alt="ICON">
-                                </a>
-                            </div>
+                                </a> 
+  
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -197,17 +184,17 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <% if (currentPage> 1) { %>
-                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage-1%>"><i
+                    <li class="page-item m-1"><a class="page-link" href="?page=<%=currentPage-1%>"> < Previious <i
                                 class="material-icons md-chevron_left"></i></a></li>
                     <% } %>
                         <% for (let i=1; i <=totalPages; i++) { %>
-                            <li class="page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link"
+                            <li class="m-1 page-item <% if (i === currentPage) { %>active<% } %>"><a class="page-link"
                                     href="?page=<%=i%>">
                                     <%=i%>
                                 </a></li>
                             <% } %>
                                 <% if (currentPage < totalPages) { %>
-                                    <li class="page-item"><a class="page-link" href="?page=<%=currentPage+1%>"><i
+                                    <li class="page-item m-1"><a class="page-link" href="?page=<%=currentPage+1%>">Next ><i
                                                 class="material-icons md-chevron_right"></i></a></li>
                                     <% } %>
             </ul>

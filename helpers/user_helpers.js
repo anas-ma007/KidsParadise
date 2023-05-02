@@ -12,15 +12,29 @@ const collections = require('../config/collections')
 
 module.exports = {
     doSignup: function (userData) {
-        userData.status = true
         return new Promise(async function (resolve, reject) {
-            userData.password = await bcrypt.hash(userData.password, 10)
-            db.get().collection(collection.USER_COLLECTION).insertOne(userData).then(function (data) {
-                resolve(data)
-            })
-        })
+            let mobileExist = await db.get().collection(collection.USER_COLLECTION).findOne({
+                mobile: userData.mobile
+            });
+            let emailExist = await db.get().collection(collection.USER_COLLECTION).findOne({
+                email: userData.email
+            });
+
+            if (mobileExist) {
+                resolve({ status: false, message: "This mobile number is already regsitered with another account..!" });
+            } else if (emailExist) {
+                resolve({ status: false, message: "This Email is already regsitered with another account..!" });
+            } else {
+                userData.status = true;
+                userData.password = await bcrypt.hash(userData.password, 10);
+                db.get().collection(collection.USER_COLLECTION).insertOne(userData).then(function (data) {
+                    resolve({ status: true, userData });
+                });
+            }
+        });
     },
-    
+
+
 
     doLogin: (userData) => {
         return new Promise(async (resolve, reject) => {
@@ -28,7 +42,7 @@ module.exports = {
             let response = {}
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
             if (user) {
-                if(user.status){
+                if (user.status) {
                     bcrypt.compare(userData.password, user.password).then((passCheck) => {
                         if (passCheck) {
                             console.log("Login Success");
@@ -37,16 +51,16 @@ module.exports = {
                             resolve(response)
                         } else {
                             console.log("password error");
-                            resolve({status:false, message: "Password is incorrect..!"})
+                            resolve({ status: false, message: "Password is incorrect..!" })
                         }
                     })
-                }else{
+                } else {
                     console.log("user blocked");
-                    resolve({status: false, message: " You were blocked..!"})
+                    resolve({ status: false, message: " You were blocked..!" })
                 }
             } else {
                 console.log("user not found !!!");
-                resolve({status: false, message: "User not found..."})
+                resolve({ status: false, message: "User not found..." })
             }
         })
     },
@@ -60,13 +74,33 @@ module.exports = {
             })
         })
     },
+    checkUserOTP: (mobNo) => {
+        return new Promise(async (resolve, reject) => {
+            if (mobNo.phone) {
+                let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone, })
+                if (userData) {
+                    resolve(userData)
+                    // if(userData.status){
+                    //     resolve(userData)
+                    // } else {
+                    //     resolve({status: false, message:"You were blocked"})
+                    // }
+
+                } else {
+                    userData = null
+                    resolve(userData);
+                }
+            }
+        })
+    },
+
 
     doSendOtp: (mobNo) => {
         return new Promise(async (resolve, reject) => {
             if (mobNo.phone) {
-                let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone })
+                let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone, })
                 if (userData && userData.status) {
-                    sendSms(mobNo.phone)    
+                    sendSms(mobNo.phone)
                     resolve(true)
                 } else {
                     resolve(false)
@@ -105,11 +139,11 @@ module.exports = {
     /////////////////////// password recovery ///////////////////////
 
     checkForUser: async (mobile) => {
-        let user = await db.get().collection(collection.USER_COLLECTION).findOne({mobile : mobile})
-        if(user){
+        let user = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobile })
+        if (user) {
             return user
-        }else {
-            user=null
+        } else {
+            user = null
             return user
         }
 
@@ -146,26 +180,26 @@ module.exports = {
             }
         })
     },
-    setNewPass:(userId, newPass)=>{
-        return new Promise(async(resolve, reject)=>{
-            try{
+    setNewPass: (userId, newPass) => {
+        return new Promise(async (resolve, reject) => {
+            try {
                 newPass = await bcrypt.hash(newPass, 10);
                 db.get().collection(collections.USER_COLLECTION)
-                .updateOne(
-                    {
-                        _id: new ObjectId(userId)
-                    },
-                    {
-                        $set:{
-                            password: newPass
+                    .updateOne(
+                        {
+                            _id: new ObjectId(userId)
+                        },
+                        {
+                            $set: {
+                                password: newPass
+                            }
                         }
-                    }
-                )
-                .then((response)=>{
-                    console.log(response);
-                    resolve(response);
-                })
-            }catch(err){
+                    )
+                    .then((response) => {
+                        console.log(response);
+                        resolve(response);
+                    })
+            } catch (err) {
                 console.log(err);
                 reject();
             }
@@ -205,12 +239,12 @@ module.exports = {
                 {
                     $group: {
                         _id: null,
-                        total: { $sum: { $multiply: ['$quantity',{$toInt:'$product.price'}] } }
+                        total: { $sum: { $multiply: ['$quantity', { $toInt: '$product.price' }] } }
                     }
                 }
             ]).toArray()
 
-            console.log(total);
+            // console.log(total[0].total, "total from get total amount fn");
             resolve(total)
         })
     },

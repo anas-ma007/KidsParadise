@@ -106,8 +106,8 @@ module.exports = {
           item.productsDetails[0].quantity = item.products.quantity;
           delete item['products'];
         })
-        console.log(cartItems, 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-        console.log(cartItems[0], 'iiiiiiiiiiiiiiityktkrdiiiiiiiiiiiiiii');
+        // console.log(cartItems, 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+        // console.log(cartItems[0], 'iiiiiiiiiiiiiiityktkrdiiiiiiiiiiiiiii');
         return cartItems;
       }catch{
         cartItems=null;
