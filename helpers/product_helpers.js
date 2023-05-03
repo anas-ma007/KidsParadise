@@ -18,10 +18,21 @@ module.exports = {
     },
 
     addCategory: (catDetails) => {
-        catDetails.status = true
         return new Promise(async (resolve, reject) => {
+            // let categoryExit=await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
+            //     category :catDetails.category
+            // })
+            let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
+                category: { $regex: `^${catDetails.category}$`, $options: 'i' }
+              });
+            if(categoryExit){
+                resolve({ status: false, message: "This category is already exist..!" });
+            }else{
+                catDetails.status = true
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
-            resolve(category)
+            resolve({status: true, category})
+
+            }
         })
     },
 
@@ -332,52 +343,52 @@ module.exports = {
         return order
     },
 
-    
-    shipproduct: (orderId)=>{
-        return new Promise(async(res,rej)=>{
-            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"shipped"}})
-            .then((response)=>{
-                res(response)
-            })
+
+    shipproduct: (orderId) => {
+        return new Promise(async (res, rej) => {
+            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "shipped" } })
+                .then((response) => {
+                    res(response)
+                })
         })
     },
 
-    deliverProduct: (orderId)=>{
-        return new Promise(async(res,rej)=>{
-            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"delivered"}})
-            .then((response)=>{
-                res(response)
-            })
+    deliverProduct: (orderId) => {
+        return new Promise(async (res, rej) => {
+            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "delivered" } })
+                .then((response) => {
+                    res(response)
+                })
         })
     },
 
-    returnProduct: (orderId)=>{
-        return new Promise(async(res,rej)=>{
-            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"return pending"}})
-            .then((response)=>{
-                res(response)
-            })
+    returnProduct: (orderId) => {
+        return new Promise(async (res, rej) => {
+            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "return pending" } })
+                .then((response) => {
+                    res(response)
+                })
         })
     },
 
-    returnConfirm: (orderId)=>{
-        return new Promise(async(res,rej)=>{
-            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"order returned"}})
-            .then((response)=>{
-                res(response)
-            })
+    returnConfirm: (orderId) => {
+        return new Promise(async (res, rej) => {
+            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order returned" } })
+                .then((response) => {
+                    res(response)
+                })
         })
     },
 
-    cancelOrder: (orderId)=>{
-        return new Promise(async(res,rej)=>{
-            await db.get().collection(collection.ORDERS).updateOne({_id:new ObjectId(orderId)},{$set:{orderstatus:"order cancelled"}})
-            .then((response)=>{
-                res(response)
-            })
+    cancelOrder: (orderId) => {
+        return new Promise(async (res, rej) => {
+            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
+                .then((response) => {
+                    res(response)
+                })
         })
     },
-    
+
 
 
 

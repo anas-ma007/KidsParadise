@@ -180,16 +180,19 @@ module.exports = {
 
     getCategory: (req, res) => {
         productHelpers.viewAddCategory().then((category) => {
-            res.render("admin_view/add_category", { category, layout: 'admin_layout' })
+            res.render("admin_view/add_category", { category, layout: 'admin_layout', message:"" })
         })
     },
 
-    postCategory: (req, res) => {
-        productHelpers.addCategory(req.body).then((category) => {
-
-            res.redirect("/admin/addcategory")
+    postCategory: async (req, res) => {
+        let category = await productHelpers.viewAddCategory()
+        productHelpers.addCategory(req.body).then((response) => {
+            if (response.status) {
+                res.redirect("/admin/addcategory")
+            } else {
+                res.render("admin_view/add_category", { category, layout: 'admin_layout', message: response.message })
+            }
         })
-
     },
 
     getEditCategory: (req, res) => {
@@ -240,14 +243,14 @@ module.exports = {
             for (let i = 0; i < req.files.length; i++) {
                 const result = await cloudinary.uploader.upload(req.files[i].path);
                 imgUrl.push(result.url);
-                console.log(result.url);
+                // console.log(result.url);
             }
             // console.log(req.params.id, req.body, 'oooooooooooooooooooooooooooo');
             // proId=req.params.id
             adminHelpers.editProductDetails(req.params.id, req.body).then(() => {
                 if (imgUrl.length != 0) {
                     adminHelpers.addProductImages(req.params.id, imgUrl).then((response) => {
-                        console.log(response);
+                        // console.log(response);
                     })
                 }
             })
@@ -281,47 +284,24 @@ module.exports = {
         })
     },
 
-    // shipProduct: async(req,res)=>{
-    //     let orderId = req.params.id
-    //     console.log(orderId,"orderId in ship product");
-    //     await productHelpers.shipproduct(orderId).then(()=>{
-    //         res.redirect('/admin/order-details')
-    //     })
-    // },
-
-    // deliverProduct: async(req,res)=>{
-    //     let orderId = req.params.id
-    //     await productHelpers.deliverProduct(orderId).then(()=>{
-    //         res.redirect('/admin/order-details')
-    //     })
-    // },
-
-    // returnProduct: async(req,res)=>{
-    //     let orderId = req.params.id
-    //     await productHelpers.returnConfirm(orderId).then(()=>{
-    //         res.redirect('/admin/order-details')
-    //     })
-    // },
-
-    
-    shipProduct: async(req,res)=>{
+    shipProduct: async (req, res) => {
         let orderId = req.params.id
         console.log(orderId, "orderId in shipproduct");
-        await productHelpers.shipproduct(orderId).then(()=>{
+        await productHelpers.shipproduct(orderId).then(() => {
             res.redirect('/admin/order-details')
         })
     },
 
-    deliverProduct: async(req,res)=>{
+    deliverProduct: async (req, res) => {
         let orderId = req.params.id
-        await productHelpers.deliverProduct(orderId).then(()=>{
+        await productHelpers.deliverProduct(orderId).then(() => {
             res.redirect('/admin/order-details')
         })
     },
 
-    returnProduct: async(req,res)=>{
+    returnProduct: async (req, res) => {
         let orderId = req.params.id
-        await productHelpers.returnConfirm(orderId).then(()=>{
+        await productHelpers.returnConfirm(orderId).then(() => {
             res.redirect('/admin/order-details')
         })
     },

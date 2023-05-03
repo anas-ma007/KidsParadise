@@ -225,7 +225,8 @@
                 url: `/return-order/${id}`,
                 method: 'get',
                 success: (response) => {
-                  window.location.href = '/orders'
+                  // window.location.href = '/orders'
+                  location.reload()
                 }
               })
               Swal.fire('Order Returned !', '', 'success')
@@ -247,7 +248,8 @@
                 url: `/cancel-order/${id}`,
                 method: 'get',
                 success: (response) => {
-                  window.location.href = '/orders'
+                  // window.location.href = '/orders'
+                  location.reload()
                 }
               })
               Swal.fire('Order Cancelled !', '', 'success')

@@ -8,7 +8,7 @@
     <div class="col-lg-6">
       <div class="card mb-4">
         <div class="card-body">
-          <form class="mx-1 mx-md-4 pt-5" action="/admin/addcategory" method="post">
+          <form class="mx-1 mx-md-4 pt-5" action="/admin/addcategory" method="post" id="category-form">
 
             <div class="mb-4">
               <label for="product_category" class="form-label">Category</label>
@@ -16,13 +16,37 @@
                 id="category">
             </div>
 
-
+            <% if(locals.message) { %>
+              <p style="color: red;"><%=message%></p>
+            <% }%>
 
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
               <input type="submit" style="border-radius: 1rem;" class="btn btn-primary btn-lg" />
             </div>
 
           </form>
+
+          <script>
+            $(document).ready(function () {
+              $("#category-form").validate({
+                rules: {
+                  category: {
+                    required: true,
+                    minlength: 3,
+                  },
+                },
+               categorys: {
+                category: {
+                    required: "Please enter a valid category name.",
+                    minlength: "Name must be atleast 3 characters long.",
+                  },
+              
+                },
+                errorClass: "text-danger",
+              });
+            });
+          </script>
+
         </div>
       </div>
 
