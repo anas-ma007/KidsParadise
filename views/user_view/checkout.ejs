@@ -227,8 +227,10 @@
 						type="submit" onclick="placeOrder() ; event.preventDefault()">Place Order</button>
 
 						<% } else { %>
+							<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+						 disabled>Place Order</button>
 
-							<h6 >
+							<h6 class="m-2 text-danger" >
 								Add one delivery addess before placeorder
 							</h6>
 
@@ -396,12 +398,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
+				
+
+
+
+
 <script>
 	function placeOrder() {
-		Swal.fire(
-			'Order Placed Successfull',
-			'success' 
-		).then(() => {
+		// Swal.fire(
+		// 	'Order Placed Successfull',
+		// 	'success' 
+		// ).then(() => {
 
 			$.ajax({
 				url: '/place-order',
@@ -412,60 +419,62 @@
 						console.log(response);
 						window.location.href = '/orders'
 					} else {
-						// razorpayPayment(response)
+						razorpayPayment(response)
 					}
 				}
 			})
  
-		})
+		// })
 	}
 
-	// function razorpayPayment(order) {
-	// 	var options = {
-	// 		"key": "rzp_test_FN9OHxJLyD7IWz", // Enter the Key ID generated from the Dashboard
-	// 		"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-	// 		"currency": "INR",
-	// 		"name": "Act Shady",
-	// 		"description": "Test Transaction",
-	// 		"image": "https://example.com/your_logo",
-	// 		"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-	// 		"handler": function (response) {
-	// 			verifyPayment(response, order)
-	// 		},
-	// 		"prefill": {
-	// 			"name": "Gaurav Kumar",
-	// 			"email": "gaurav.kumar@example.com",
-	// 			"contact": "9000090000"
-	// 		},
-	// 		"notes": {
-	// 			"address": "Razorpay Corporate Office"
-	// 		},
-	// 		"theme": {
-	// 			"color": "#3399cc"
-	// 		}
-	// 	};
-	// 	var rzp1 = new Razorpay(options);
-	// 	rzp1.open();
-	// }
+	// console.log("razorpamynt");
+	function razorpayPayment(order) {
+		// console.log(order, "ordersss");
+		var options = {
+			"key": "rzp_test_VAYH3mbPterVbs", // Enter the Key ID generated from the Dashboard
+			"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": "INR",
+			"name": "Kids Paradise",
+			"description": "Test Transaction",
+			"image": "https://example.com/your_logo",
+			"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"handler": function (response) {
+				verifyPayment(response, order)
+			},
+			"prefill": {
+				"name": "YOur Name",
+				"email": "your-maile@example.com",
+				"contact": "9000090000"
+			},
+			"notes": {
+				"address": "Razorpay Corporate Office"
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.open();
+	}
 
-	// function verifyPayment(payment,order){
-	// 	$.ajax({
-	// 		url:'/verify-payment',
-	// 		data:{
-	// 			payment,
-	// 			order
-	// 		},
-	// 		method:'post',
-	// 		success:(response)=>{
-	// 			if(response.status){
-	// 				console.log("ORDER SUCCESS");
-	// 				location.href = "/"
-	// 			}else{
-	// 				alert("PAYMENT FAILED") 
-	// 			}
-	// 		}
-	// 	})
-	// }
+	function verifyPayment(payment,order){
+		$.ajax({
+			url:'/verify-payment',
+			data:{
+				payment,
+				order
+			},
+			method:'post',
+			success:(response)=>{
+				if(response.status){
+					console.log("ORDER SUCCESS");
+					location.href = "/"
+				}else{
+					alert("PAYMENT FAILED") 
+				}
+			}
+		})
+	}
 
 
 

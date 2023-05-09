@@ -99,7 +99,7 @@ module.exports = {
     getCategory: () => {
         return new Promise(async (resolve, reject) => {
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
-            console.log(category, "category test");
+            // console.log(category, "category test");
             resolve(category)
 
         })
@@ -387,6 +387,44 @@ module.exports = {
                     res(response)
                 })
         })
+    },
+
+    getOrderStatistics: () => {
+        return new Promise(async (resolve, reject) => {
+            let orderStatistics = await db.get().collection(collection.ORDERS).aggregate([
+                {
+                    $group: {
+                        _id: "$orderstatus",
+                        count: { $sum: 1 },
+                    }
+
+                }
+
+            ]).toArray()
+            resolve(orderStatistics)
+
+        })
+
+
+    }
+    , getSaleStatistics: () => {
+       
+        return new Promise(async (resolve, reject) => {
+            let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
+                { $match: { totalPrice: { $exists: true } } },
+                {
+                    $group: {
+                        _id: { $month:{$toDate: "$date" }}, // Group by month of the "date" field
+                        totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
+                    }
+                }, { $sort: { date: 1 } },
+
+            ]).toArray()
+            resolve(saleStatistics)
+
+        })
+
+
     },
 
 

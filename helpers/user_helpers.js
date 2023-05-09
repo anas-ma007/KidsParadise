@@ -6,6 +6,12 @@ const { ObjectId } = require("mongodb")
 const collections = require('../config/collections')
 // const { sendotp } = require('../controllers/user_controllers')
 // const { response } = require('../app')
+const Razorpay = require('razorpay')
+const instance = new Razorpay({
+    key_id: 'rzp_test_VAYH3mbPterVbs',
+    key_secret: 'wnLz6NmDv9fSha53Po4QAQ20',
+});
+
 
 
 
@@ -80,12 +86,6 @@ module.exports = {
                 let userData = await db.get().collection(collection.USER_COLLECTION).findOne({ mobile: mobNo.phone, })
                 if (userData) {
                     resolve(userData)
-                    // if(userData.status){
-                    //     resolve(userData)
-                    // } else {
-                    //     resolve({status: false, message:"You were blocked"})
-                    // }
-
                 } else {
                     userData = null
                     resolve(userData);
@@ -326,5 +326,60 @@ module.exports = {
 
         })
     },
+
+    
+     generateRazorpay: (orderId, total) => {
+        return new Promise((res, rej) => {
+            var options = {
+                amount: total*100,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: "" + orderId
+            };
+            instance.orders.create(options, function (err, order) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(order);
+                    res(order)
+                }
+            });
+        })
+
+    },
+
+
+    
+    verifyPayment: (details) => {
+        return new Promise(async(res, rej) => {
+            const {
+                createHmac,
+              } = await import('node:crypto');
+            let hmac = createHmac('sha256', 'O70xedTC2mQjy7VCuXXn7lL3');
+
+            hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
+            hmac = hmac.digest('hex')
+            if (hmac == details['payment[razorpay_signature]']) {
+                res()
+            } else {
+                rej()
+            }
+        })
+
+    },
+
+    changePaymentStatus: async(orderId)=>{
+        let result = await db.get().collection(collection.ORDERS)
+        .updateOne(
+            {
+                _id:ObjectId(orderId)
+            },
+            {
+                $set:{
+                    status:'placed'
+                }
+            })
+            return result
+    },
+
 
 }

@@ -4,7 +4,7 @@ const productHelpers = require("../helpers/product_helpers")
 const admin_helpers = require('../helpers/admin_helpers')
 const cartHelpers = require("../helpers/cart_helpers")
 const twilioApi = require("../twilio")
-const { ReferSip } = require('twilio/lib/twiml/VoiceResponse')
+// const { ReferSip } = require('twilio/lib/twiml/VoiceResponse')
 
 module.exports = {
     user_homepage: async (req, res) => {
@@ -78,15 +78,13 @@ module.exports = {
             var pageSize = parseInt(req.query.pageSize) || 12;
             var skip = (page - 1) * pageSize;
             var filter = req.query.filter
-            console.log(filter);
-
-
+            // console.log(filter);
+ 
             if (filter) {
                 var category = await productHelpers.getCategory()
                 // console.log(category, "category filter")
 
                 var cartCount = await productHelpers.getCartCount(user._id)
-
                 // var allProdcuts=await productHelpers.allproducts(filter)
                 let products = await productHelpers.filterGetProducts(skip, pageSize, filter)
                 var count = await productHelpers.userProductCount()
@@ -110,8 +108,7 @@ module.exports = {
                 var cartCount = await productHelpers.getCartCount(user._id)
                 var category = await productHelpers.getCategory()
                 // console.log(category, "category else")
-
-                ReferSip
+                // ReferSip
                 // console.log(products,"joyelll");
                 var count = await productHelpers.userProductCount()
                 // console.log(count);
@@ -127,7 +124,6 @@ module.exports = {
                     category,
                     cartCount
                 });
-
             }
 
 
@@ -138,8 +134,6 @@ module.exports = {
             var count = await productHelpers.userProductCount()
             var category = await productHelpers.getCategory()
             // console.log(category, "category catch")
-
-
             var skip = (page - 1) * pageSize;
             var totalPages = Math.ceil(count / pageSize);
             var currentPage = page > totalPages ? totalPages : page;
@@ -160,7 +154,6 @@ module.exports = {
         //         res.render("user_view/all_products", { user, products })
         //     } else {
         //         res.render("user_view/all_products", { products })
-
         //     }
         // })
 
@@ -443,8 +436,8 @@ module.exports = {
         // console.log("40987656-0987656987657890-@#$%^&*()_)(*&^%$")
         // console.log(req.body,"rmv ordtct");
         cartHelpers.removeProductCart(req.body).then((response) => {
-            console.log("deleted product    ")
-            console.log(response);
+            // console.log("deleted product    ")
+            // console.log(response);
             res.json(response)
         })
     },
@@ -481,6 +474,7 @@ module.exports = {
     placeOrderPost: async (req, res) => {
         const address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
         let payment = req.body.paymentMethod;
+        // console.log(payment,'pppppppppaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyy');
         let products = await user_helpers.getCartList(req.session.user._id);
         let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
         // console.log(grandTotal[0].total, "total andTotal[0].tota");
@@ -497,13 +491,11 @@ module.exports = {
                 if (req.body["paymentMethod"] == "Cash on delivery") {
                     res.json({ codSuccess: true });
                 }
-                // else {
-                //     user_helpers
-                //     .generateRazorpay(orderId, total)
-                //     .then((response) => {
-                //       res.json(response);
-                //     });
-                // }
+                else {
+                    user_helpers.generateRazorpay(orderId, total).then((response) => {
+                      res.json(response);
+                    });
+                }
             });
     },
     viewOrders: async (req, res) => {
@@ -527,6 +519,7 @@ module.exports = {
         let products = await productHelpers.orderProductDetail(req.params.id);
         let order = await productHelpers.findOrder(req.params.id);
         console.log(order, "orderssssss from control page");
+        console.log(products, "products in console");
         // let orders = await productHelpers.getOrderDetails(req.session.user._id);
         res.render("user_view/order_details", { user, cartCount, products, order })
     },
@@ -553,6 +546,21 @@ module.exports = {
           res.redirect("/orders");
         });
       },
+
+
+      razorpayPayment: (req, res) => {
+        // console.log(req.body);
+        user_helpers.verifyPayment(req.body).then(()=>{
+            user_helpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+                
+            res.json({status:true})
+          })
+        }).catch((err)=>{
+          console.log(err,"errrooroor");
+          res.json({status:false})
+        })
+      },
+    
 
 
 

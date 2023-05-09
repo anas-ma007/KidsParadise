@@ -17,7 +17,6 @@ router.post('/signup', usercontrollers.user_signupPost)
 router.get("/logout", usercontrollers.logout)
 
 router.get("/allproducts", usercontrollers.viewProducts)
-
 router.get("/productdetails/:id", usercontrollers.productDetails)
 
 router.get("/otplogin", usercontrollers.otplogin)
@@ -26,12 +25,15 @@ router.post("/otp-verify", usercontrollers.verifyOtp)
 
 router.get("/addtocart/:id", middlewares.checkUserLoggedIn, usercontrollers.addToCart )
 router.get("/cart", middlewares.checkUserLoggedIn, usercontrollers.shoppingCart)
+
 router.get("/orderplaced", middlewares.checkUserLoggedIn, usercontrollers.orderPlaced)
-router.post('/add-address',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost);
 router.post('/place-order',middlewares.checkUserLoggedIn, usercontrollers.placeOrderPost)
+router.post('/verify-payment',middlewares.checkUserLoggedIn, usercontrollers.razorpayPayment)
+
+
+router.post('/add-address',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost);
 router.get("/orders", middlewares.checkUserLoggedIn, usercontrollers.viewOrders )
 router.get("/order-product-details/:id",  middlewares.checkUserLoggedIn, usercontrollers.orderDetails)
-
 
 router.get('/return-order/:id',middlewares.checkUserLoggedIn, usercontrollers.returnOrder)
 router.get('/cancel-order/:id',middlewares.checkUserLoggedIn, usercontrollers.cancelOrder)

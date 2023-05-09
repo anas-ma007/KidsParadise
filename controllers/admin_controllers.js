@@ -16,9 +16,17 @@ const adminCredential = {
 
 
 module.exports = {
-    admin_homepage: (req, res) => {
+    admin_homepage: async (req, res) => {
         if (req.session.adminLoggedIn) {
-            res.render('admin_view/index', { layout: 'admin_layout' })
+            // let orderDetails= await adminHelpers.getOrderDetails()
+            let categoryCount = await adminHelpers.getCategoryCount()
+            let productsCount = await adminHelpers.getProductCount()
+            let orderCount = await adminHelpers.getOrderCount()
+            let totalRevenue= await adminHelpers.getTotalRevenue()
+            let total=totalRevenue[0].total
+            // console.log(total);
+            // console.log(totalRevenue);
+            res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount , orderCount, total})
         } else {
             res.render('admin_view/admin_login', { layout: 'admin_LogLayout' });
         }
@@ -305,6 +313,13 @@ module.exports = {
             res.redirect('/admin/order-details')
         })
     },
+
+    graphStatics: async (req, res) => {
+        let OrderStatistics = await adminHelpers.getOrderStatistics()
+        let saleStatistics = await adminHelpers.getSaleStatistics()
+        res.json({ OrderStatistics, saleStatistics })
+    },
+  
 
 
 

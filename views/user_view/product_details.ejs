@@ -12,9 +12,9 @@
             <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
             <div class="slick3 gallery-lb">
-              <div class="item-slick3 " data-thumb="<%=product.image[0]%>">
+              <div class="item-slick3 zoomable" data-thumb="<%=product.image[0]%>">
                 <div class="wrap-pic-w pos-relative">
-                  <img class="soom" src="<%=product.image[0]%>" alt="IMG-PRODUCT">
+                  <img src="<%=product.image[0]%>" alt="IMG-PRODUCT">
 
                   <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
                     href="<%=product.image[0]%>">
@@ -23,9 +23,9 @@
                 </div>
               </div>
 
-              <div class="item-slick3 " data-thumb="<%=product.image[1]%>">
+              <div class="item-slick3 zoomable" data-thumb="<%=product.image[1]%>">
                 <div class="wrap-pic-w pos-relative">
-                  <img class="soom" src="<%=product.image[1]%>" alt="IMG-PRODUCT">
+                  <img  src="<%=product.image[1]%>" alt="IMG-PRODUCT">
 
                   <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
                     href="<%=product.image[1]%>">
@@ -145,23 +145,23 @@
 
 
 
-  <!-- <script>
+ <script>
 
     $('.js-addcart-detail').each(function () {
       var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
       $(this).on('click', function () {
         Toastify({
-          text: nameProduct + ' is added to cart !',
+          text: ' Product added to cart !',
           duration: 1500,
-          gravity: "bottom",
+          gravity: "top",
           position: "center",
-          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+          backgroundColor: "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)",
           stopOnFocus: true,
           close: false,
         }).showToast();
       });
     });
-  </script> -->
+  </script> 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
     integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="

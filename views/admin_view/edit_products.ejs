@@ -99,6 +99,7 @@
   </script>
 
   
+
 <script>
   $(document).ready(function () {
     $("#checkout-form").validate({
@@ -107,31 +108,38 @@
           required: true,
           minlength: 6,
         },
+       
         price: {
           required: true,
           number: true,
+          min: 0.01 // Set the minimum value to 0.01
         },
         stock: {
           required: true,
           number: true,
+          min: 0 // Set the minimum value to 0
         },
         description: {
           required: true,
           minlength: 60
         },
       },
+
       messages: {
         name: {
           required: "Please enter a valid product name.",
           minlength: "Name must be atleast 6 characters long.",
         },
+       
         price: {
           required: "Please enter a valid price",
-          number: "Price should be greater than or equal to 0.",
+          number: "Price should be a positive number",
+          min: "Price should be a number greater than 0."
         },
         stock: {
           required: "Please enter a valid number",
-          number: "Stock should be must be positive number",
+          number: "Stock should be a positive number",
+          min: "Stock should be a number greater than or equal to 0."
         },
         description: {
           requierd: "Please enter a valid description",

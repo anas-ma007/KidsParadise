@@ -7,28 +7,6 @@ const { productDetails } = require("../controllers/user_controllers")
 
 module.exports = {
 
-  // doAddToCart: (proId, userId) => {
-  //     return new Promise(async (resolve, reject) => {
-  //         let userCart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
-  //         if (userCart) {
-  //             db.get().collection(collection.CART_COLLECTION).updateOne({ user: ObjectId(userId) },
-  //                 {
-  //                     $push: { products: ObjectId(proId) }
-  //                 }).then((response) => {
-  //                     resolve(response)
-  //                 })
-  //         } else {
-  //             let cartObj = {
-  //                 user: ObjectId(userId),
-  //                 products: [ObjectId(proId)],
-  //             }
-  //             db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response) => {
-  //                 resolve(response)
-  //             })
-
-  //         }
-  //     })
-  // },
   doAddToCart: (proId, userId) => {
     let proObj = {
       item: ObjectId(proId),
@@ -158,62 +136,6 @@ module.exports = {
     })
   },
 
-
-
-
-
-
-  //////////////akhilede code
-  // (userId) => {
-  //     return new Promise(async (resolve, reject) => {
-  //       console.log("");
-  //       try {
-  //         userId = new ObjectId(userId);
-  //         let cartItems = await db.get().collection(collection.CART_COLLECTION)
-  //         .aggregate([
-  //             {
-  //               '$match': {
-  //                 'userId': userId
-  //               }
-  //             }, {
-  //               '$unwind': {
-  //                 'path': '$products', 
-  //                 'preserveNullAndEmptyArrays': true
-  //               }
-  //             }, {
-  //               '$lookup': {
-  //                 'from': 'product', 
-  //                 'localField': 'products.productId', 
-  //                 'foreignField': '_id', 
-  //                 'as': 'proDetails'
-  //               }
-  //             }, {
-  //               '$project': {
-  //                 'proDetails': 1, 
-  //                 'products.quantity': 1, 
-  //                 '_id': 0
-  //               }
-  //             }
-  //           ]).toArray();
-  //         console.log(cartItems)
-  //         console.log("cartitms .length consooooolleeee",cartItems.length);
-  //         if(cartItems.length!=0){
-  //             if(cartItems.length===1){
-  //                 if(cartItems[0].proDetails.length===0){
-  //                     console.log("tst after cartItems[0].proDetails.length===0 ")
-  //                     console.log(`prodetailslength : ${cartItems[0].proDetails.length}`);
-  //                     resolve(null);
-  //                 }
-  //             }
-  //             resolve(cartItems)
-  //         }else{
-  //             resolve(null);
-  //         }
-  //       } catch {
-  //         resolve(null);
-  //         }
-  //     });
-  //   }
 
 
 
