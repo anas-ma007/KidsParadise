@@ -50,6 +50,14 @@ router.get('/renderResetPass', usercontrollers.renderResetPass);
 router.post('/setNewPassword', usercontrollers.setNewPass);
 
 
+router.get('/userprofile/:id', middlewares.checkUserLoggedIn, usercontrollers.getuserprofile)
+router.get('/manageAddress', middlewares.checkUserLoggedIn, usercontrollers.getAddress);
+router.post('/add-address2',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost2);
+router.get("/removeAddress/:id", middlewares.checkUserLoggedIn, usercontrollers.removeAddress)
+
+// router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
+
+
 
 
 

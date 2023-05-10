@@ -17,6 +17,14 @@ const instance = new Razorpay({
 
 
 module.exports = {
+    getUser: (userId) =>{
+        return new Promise(async(resolve, reject) =>{
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({
+                _id : new ObjectId(userId)
+            })
+            resolve(user)
+        }) 
+    },
     doSignup: function (userData) {
         return new Promise(async function (resolve, reject) {
             let mobileExist = await db.get().collection(collection.USER_COLLECTION).findOne({
@@ -354,7 +362,7 @@ module.exports = {
             const {
                 createHmac,
               } = await import('node:crypto');
-            let hmac = createHmac('sha256', 'O70xedTC2mQjy7VCuXXn7lL3');
+            let hmac = createHmac('sha256', 'wnLz6NmDv9fSha53Po4QAQ20');
 
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
             hmac = hmac.digest('hex')
@@ -380,6 +388,61 @@ module.exports = {
             })
             return result
     },
+
+    GetUserDetails : async (userId)=>{
+        const user = await db.get().collection(collection.USER_COLLECTION).findOne({_id: new ObjectId(userId)})
+        return user
+    },
+
+
+    // UpdateProfileInfo:(userId,userData)=>{
+    //     userData.phone = Number(userData.phone);
+    //     return new Promise((resolve,reject)=>{
+    //         db.get().collection(collection.USER_COLLECTION).updateOne({_id: new ObjectId(userId)},
+    //         {
+    //             $set:{
+    //                 name:userData.name,
+    //                 email:userData.email,
+    //                 phone:userData.phone
+    //             }
+    //         }).then((response)=>{
+    //             console.log(response,"11111111111111111111333333333355555555557777777777");
+    //             resolve()
+    //         })
+    //     })
+    // },
+
+    findUser: (userId) => {
+        return new Promise(async(resolve,reject) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({_id: new ObjectId(userId)})
+            resolve(user);
+        })
+    },
+
+    removeAddress:(addressId,userId)=>{
+        
+        console.log(addressId, userId, "addresid, userid");
+        return new Promise( (resolve, reject)=>{
+             db.get().collection(collection.USER_COLLECTION).updateOne({
+                _id : new ObjectId(userId),
+                "address._id": new ObjectId(addressId)
+            },
+            {
+                $pull:{
+                    address : {
+                        _id :new ObjectId(addressId)
+                    }
+                }
+            }).then((response)=>{
+                console.log("adddresss removedddd?????");
+                resolve()
+            }).catch((err)=>{
+                console.log(err);
+            })
+
+        })
+
+    }
 
 
 }

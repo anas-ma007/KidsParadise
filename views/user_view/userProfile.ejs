@@ -1,0 +1,368 @@
+<style>
+    body {
+        background: #F1F3FA;
+        font-family: Poppins-Medium;
+    }
+
+    /* Profile container */
+    .profile {
+        margin: 20px 0;
+    }
+
+    /* Profile sidebar */
+    .profile-sidebar {
+        padding: 20px 0 10px 0;
+        background: #fff;
+    }
+
+    .profile-userpic img {
+        float: none;
+        margin: 0 auto;
+        margin-left: 80px;
+        width: 50%;
+        height: 50%;
+        -webkit-border-radius: 50% !important;
+        -moz-border-radius: 50% !important;
+        border-radius: 50% !important;
+    }
+
+    .profile-usertitle {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+        color: #5a7391;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+        text-transform: uppercase;
+        color: #5b9bd1;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .profile-userbuttons .btn {
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 6px 15px;
+        margin-right: 5px;
+    }
+
+    .profile-userbuttons .btn:last-child {
+        margin-right: 0px;
+    }
+
+    .profile-usermenu {
+        margin-top: 30px;
+    }
+
+    .profile-usermenu ul li {
+        border-bottom: 1px solid #f0f4f7;
+    }
+
+    .profile-usermenu ul li:last-child {
+        border-bottom: none;
+    }
+
+    .profile-usermenu ul li a {
+        color: #93a3b5;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .profile-usermenu ul li a i {
+        margin-right: 8px;
+        font-size: 14px;
+    }
+
+    .profile-usermenu ul li a:hover {
+        background-color: #fafcfd;
+        color: #5b9bd1;
+    }
+
+    .profile-usermenu ul li.active {
+        border-bottom: none;
+    }
+
+    .profile-usermenu ul li.active a {
+        color: #5b9bd1;
+        background-color: #f6f9fb;
+        border-left: 2px solid #5b9bd1;
+        margin-left: -2px;
+    }
+
+    /* Profile Content */
+    .profile-content {
+        padding: 20px;
+        background: #fff;
+        min-height: 460px;
+    }
+
+    a,
+    button,
+    code,
+    div,
+    img,
+    input,
+    label,
+    li,
+    p,
+    pre,
+    select,
+    span,
+    svg,
+    table,
+    td,
+    textarea,
+    th,
+    ul {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    #output {
+        display: block;
+        margin: auto;
+        width: 50%;
+        height: auto;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+
+    /* .dashboard-stat,
+    .portlet {
+        /* -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px; */
+    /* } */
+
+    .portlet {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        border-radius: 4px;
+    }
+
+    .portlet.bordered {
+        border-left: 2px solid #e6e9ec !important;
+    }
+
+    .portlet.light {
+        padding: 12px 20px 15px;
+        background-color: #fff;
+    }
+
+    .portlet.light.bordered {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .list-separated {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    .profile-stat {
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f4f7;
+    }
+
+    .profile-stat-title {
+        color: #7f90a4;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .uppercase {
+        text-transform: uppercase !important;
+    }
+
+    .profile-stat-text {
+        color: #5b9bd1;
+        font-size: 10px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .profile-desc-title {
+        color: #7f90a4;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .profile-desc-text {
+        color: #7e8c9e;
+        font-size: 14px;
+    }
+
+    .margin-top-20 {
+        margin-top: 20px !important;
+    }
+
+    [class*=" fa-"]:not(.fa-stack),
+    [class*=" glyphicon-"],
+    [class*=" icon-"],
+    [class^=fa-]:not(.fa-stack),
+    [class^=glyphicon-],
+    [class^=icon-] {
+        display: inline-block;
+        line-height: 14px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .profile-desc-link i {
+        width: 22px;
+        font-size: 19px;
+        color: #abb6c4;
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="p-b-10">
+        <br><br><br><br>
+    </div>
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <div class="profile-userpic">
+                    <img src="/images/profile6.png" class="img-responsive" id="output" alt="">
+                </div>
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        <%=userDetails.name%>
+                    </div>
+                    <div class="profile-usertitle-job">
+                        Customer
+                    </div>
+                </div>
+                <div class="portlet light bordered">
+                    <div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <a href="/orders">My Orders</a>
+                        </div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-person"></i>
+                            <a href="/userprofile/<%=userDetails._id%>" class="mb-3">Profile
+                                Information</a>
+                        </div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">Manage Address</a>
+                        </div>
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">Change Password</a>
+                        </div> -->
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">My Rewards</a>
+                        </div> -->
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-favorite-outline"></i>
+                            <a href="/wishList">My Wishlist</a>
+                        </div> -->
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-shopping-cart"></i>
+                            <a href="/cart">My Cart</a>
+                        </div>
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <a href="/wallet">&#128179; My Wallet</a>
+                        </div> -->
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-fi-rs-sign-out "></i>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="profile-content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Profile Information</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/profileinformation/<%=userDetails._id%>" method="post">
+                            <div class="form-group">
+                                <label for="inputAddress">Full Name</label>
+                                <input type="text" class="form-control" name="name" id="inputAddress"
+                                    placeholder="first name" value="<%=userDetails.name%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail4">Email</label>
+                                <input type="email" class="form-control" id="inputEmail4" name="email"
+                                    placeholder="Email" value="<%=userDetails.email%>">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Phone No.</label>
+                                    <input type="phone" class="form-control" name="phone" id="inputEmail4"
+                                        placeholder="Phone" value="<%=userDetails.mobile%>">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+                        <input type="submit" class="btn btn-primary" value="Update"
+                            style="background-color: rgb(58, 22, 74);border-color:rgb(58, 22, 74)">
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class=" modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Profile Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/addAddress/{{user._id}}" method="post">
+                    <div class="form-group">
+                        <label for="inputAddress">First Name</label>
+                        <input type="text" class="form-control" id="inputAddress" placeholder="first name">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Phone No.</label>
+                            <input type="phone" class="form-control" id="inputEmail4" placeholder="Phone">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary"
+                    style="background-color: rgb(157,49,102);border-color:rgb(157,49,102)">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

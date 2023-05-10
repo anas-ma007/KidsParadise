@@ -200,7 +200,7 @@
 					</div>
 
 					<hr style="border: 1px dashed;">
-					
+
 
 					<div class="mb-5">
 
@@ -219,28 +219,28 @@
 						</label>
 
 					</div>
-					
+
 
 					<% if ( user.address ) { %>
 
-					<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-						type="submit" onclick="placeOrder() ; event.preventDefault()">Place Order</button>
+						<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+							type="submit" onclick="placeOrder() ; event.preventDefault()">Place Order</button>
 
 						<% } else { %>
 							<button class="btn flex-c-m stext-101 cl0 ml-5 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-						 disabled>Place Order</button>
+								disabled>Place Order</button>
 
-							<h6 class="m-2 text-danger" >
+							<h6 class="m-2 text-danger">
 								Add one delivery addess before placeorder
 							</h6>
 
 
-						<% } %> 
+							<% } %>
 
 
 				</div>
-				
-				
+
+
 
 
 			</div>
@@ -275,7 +275,8 @@
 
 							<div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
 								<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
-									placeholder="Phonenumber" minlength="10" name="phone" style="border-radius: 1rem; width: 70%;" />
+									placeholder="Phonenumber" minlength="10" name="phone"
+									style="border-radius: 1rem; width: 70%;" />
 							</div>
 						</div>
 						<div class="row d-flex">
@@ -398,7 +399,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
-				
+
 
 
 
@@ -410,20 +411,24 @@
 		// 	'success' 
 		// ).then(() => {
 
-			$.ajax({
-				url: '/place-order',
-				data: $('#checkout-form').serialize(),
-				method: 'post',
-				success: (response) => {
-					if (response.codSuccess) {
-						console.log(response);
-						window.location.href = '/orders'
-					} else {
-						razorpayPayment(response)
-					}
+		$.ajax({
+			url: '/place-order',
+			data: $('#checkout-form').serialize(),
+			method: 'post',
+			success: (response) => {
+				if (response.codSuccess) {
+					Swal.fire(
+						"Order Placed Succesfully",
+						"Success"
+					).then(()=>{	console.log(response);
+					window.location.href = '/orders'
+					})
+				} else {
+					razorpayPayment(response)
 				}
-			})
- 
+			}
+		})
+
 		// })
 	}
 
@@ -457,20 +462,20 @@
 		rzp1.open();
 	}
 
-	function verifyPayment(payment,order){
+	function verifyPayment(payment, order) {
 		$.ajax({
-			url:'/verify-payment',
-			data:{
+			url: '/verify-payment',
+			data: {
 				payment,
 				order
 			},
-			method:'post',
-			success:(response)=>{
-				if(response.status){
+			method: 'post',
+			success: (response) => {
+				if (response.status) {
 					console.log("ORDER SUCCESS");
-					location.href = "/"
-				}else{
-					alert("PAYMENT FAILED") 
+					location.href = "/orders"
+				} else {
+					alert("PAYMENT FAILED")
 				}
 			}
 		})

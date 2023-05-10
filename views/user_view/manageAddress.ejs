@@ -1,0 +1,544 @@
+<style>
+    body {
+        background: #F1F3FA;
+        font-family: Poppins-Medium;
+    }
+
+    /* Profile container */
+    .profile {
+        margin: 20px 0;
+    }
+
+    /* Profile sidebar */
+    .profile-sidebar {
+        padding: 20px 0 10px 0;
+        background: #fff;
+    }
+
+    .profile-userpic img {
+        float: none;
+        margin: 0 auto;
+        margin-left: 80px;
+        width: 50%;
+        height: 50%;
+        -webkit-border-radius: 50% !important;
+        -moz-border-radius: 50% !important;
+        border-radius: 50% !important;
+    }
+
+    .profile-usertitle {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+        color: #5a7391;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+        text-transform: uppercase;
+        color: #5b9bd1;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .profile-userbuttons .btn {
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 6px 15px;
+        margin-right: 5px;
+    }
+
+    .profile-userbuttons .btn:last-child {
+        margin-right: 0px;
+    }
+
+    .profile-usermenu {
+        margin-top: 30px;
+    }
+
+    .profile-usermenu ul li {
+        border-bottom: 1px solid #f0f4f7;
+    }
+
+    .profile-usermenu ul li:last-child {
+        border-bottom: none;
+    }
+
+    .profile-usermenu ul li a {
+        color: #93a3b5;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .profile-usermenu ul li a i {
+        margin-right: 8px;
+        font-size: 14px;
+    }
+
+    .profile-usermenu ul li a:hover {
+        background-color: #fafcfd;
+        color: #5b9bd1;
+    }
+
+    .profile-usermenu ul li.active {
+        border-bottom: none;
+    }
+
+    .profile-usermenu ul li.active a {
+        color: #5b9bd1;
+        background-color: #f6f9fb;
+        border-left: 2px solid #5b9bd1;
+        margin-left: -2px;
+    }
+
+    /* Profile Content */
+    .profile-content {
+        padding: 20px;
+        background: #fff;
+        min-height: 460px;
+    }
+
+    a,
+    button,
+    code,
+    div,
+    img,
+    input,
+    label,
+    li,
+    p,
+    pre,
+    select,
+    span,
+    svg,
+    table,
+    td,
+    textarea,
+    th,
+    ul {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .dashboard-stat,
+    .portlet {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
+    }
+
+    .portlet {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        border-radius: 4px;
+    }
+
+    .portlet.bordered {
+        border-left: 2px solid #e6e9ec !important;
+    }
+
+    .portlet.light {
+        padding: 12px 20px 15px;
+        background-color: #fff;
+    }
+
+    .portlet.light.bordered {
+        border: 1px solid #e7ecf1 !important;
+    }
+
+    .list-separated {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    .profile-stat {
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f4f7;
+    }
+
+    .profile-stat-title {
+        color: #7f90a4;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .uppercase {
+        text-transform: uppercase !important;
+    }
+
+    .profile-stat-text {
+        color: #5b9bd1;
+        font-size: 10px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .profile-desc-title {
+        color: #7f90a4;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .profile-desc-text {
+        color: #7e8c9e;
+        font-size: 14px;
+    }
+
+    .margin-top-20 {
+        margin-top: 20px !important;
+    }
+
+    [class*=" fa-"]:not(.fa-stack),
+    [class*=" glyphicon-"],
+    [class*=" icon-"],
+    [class^=fa-]:not(.fa-stack),
+    [class^=glyphicon-],
+    [class^=icon-] {
+        display: inline-block;
+        line-height: 14px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .profile-desc-link i {
+        width: 22px;
+        font-size: 19px;
+        color: #abb6c4;
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="p-b-10">
+        <br><br><br><br>
+    </div>
+    <div class="row profile">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <div class="profile-userpic">
+                    <!-- <img src="/images/profile6.png" class="img-responsive" id="output" alt=""> -->
+                </div>
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        <%=userDetails.name%>
+                    </div>
+                    <div class="profile-usertitle-job">
+                        Customer
+                    </div>
+                </div>
+                <div class="portlet light bordered">
+                    <div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <a href="/orders">My Orders</a>
+                        </div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-person"></i>
+                            <a href="/userprofile/<%=userDetails._id%>" class="mb-3">Profile
+                                Information</a>
+                        </div>
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">Manage Address</a>
+                        </div>
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">Change Password</a>
+                        </div> -->
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="icon material-icons md-store"></i>
+                            <a href="/manageAddress">My Rewards</a>
+                        </div> -->
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-favorite-outline"></i>
+                            <a href="/wishList">My Wishlist</a>
+                        </div> -->
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-shopping-cart"></i>
+                            <a href="/cart">My Cart</a>
+                        </div>
+                        <!-- <div class="margin-top-20 profile-desc-link">
+                            <a href="/wallet">&#128179; My Wallet</a>
+                        </div> -->
+                        <div class="margin-top-20 profile-desc-link">
+                            <i class="zmdi zmdi-fi-rs-sign-out "></i>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="profile-content">
+
+                <% if (user.address) { %>
+                    <% user.address.forEach(address=> { %>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2 border">
+                            <div class="p-3">
+                                <p>
+                                    <b>
+                                        <%= address.name %>
+                                    </b>
+                                    <b class="pl-4 font-weight-normal">
+                                        <%= address.phone %>
+                                    </b>
+                                    <a type="button" onclick="addressRemove('<%= address._id %>')"
+                                        class="text-danger border p-1 float-right">
+                                        <b>DELETE</b>
+                                    </a>
+                                </p>
+                                <p>
+                                    <%= address.housename %>, <%= address.city %>, <%= address.district %>, <%=
+                                                    address.pincode %>
+                                </p>
+                            </div>
+                        </div>
+                        <% }) %>
+                            <% } %>
+
+                                <p>
+                                    <a href="#" data-toggle="modal" data-target="#address123"
+                                        class="btn btn-dark mb-4 hov-btn3 mt-4 ml-4" style="border-radius: 2rem;">Add
+                                        New Address</a>
+                                </p>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade mt-5" id="address123" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content" style="border-radius: 10px; background:rgb(247 247 247) ;">
+            <div class="modal-header ">
+                <h5 class="modal-title " id="exampleModalLongTitle">ADD ADDRESS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/add-address2" method="post" id="addressForm">
+                <div class="modal-body container">
+
+
+                    <fieldset class="p-2">
+                        <div class="row">
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+                                    placeholder="Name" name="name" style="border-radius: 1rem; width: 70%;" />
+                            </div>
+
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
+                                    placeholder="Phonenumber" minlength="10" name="phone"
+                                    style="border-radius: 1rem; width: 70%;" />
+                            </div>
+                        </div>
+                        <div class="row d-flex">
+
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+                                    placeholder="City" name="city" style="border-radius: 1rem; width: 70%;" />
+                            </div>
+
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input placeholder="Address" id="description" required name="housename"
+                                    class="form-control" rows="4" style="border-radius: 1rem; width: 70%;"></input>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
+                                    placeholder="Pincode" name="pincode" style="border-radius: 1rem; width: 70%;" />
+                            </div>
+
+                            <div class=" col-md-6 col-lg-6 col-xl-6 required mb-3">
+                                <input type="text" required class="form-control form-control-md" placeholder="District"
+                                    name="district" style="border-radius: 1rem; width: 70%;" />
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="submit" class=" btn-primary p-2 pl-4 pr-4">Submit</button>
+                </div>
+            </form>
+
+            <!--modal address validation from here-->
+            <!-- <script>
+				$(document).ready(function () {
+					$("#addressForm").validate({
+						rules: {
+							name: {
+								required: true,
+								minlength: 5,
+							},
+							phone: {
+								required: true,
+								minlength: 10,
+								maxlength: 10,
+								number: true,
+							},
+							city: {
+								required: true,
+								minlength: 2,
+								maxlength: 6,
+							},
+							housename: {
+								required: true,
+								minlength: 10,
+							},
+							pincode: {
+								required: true,
+								minlength: 6,
+								maxlength: 6,
+								number: true,
+						
+							},
+							district: {
+								required: true,
+								minlength: 2,
+							},
+							
+						},
+						messages: {
+							name: {
+								required: "Please enter your full name.",
+								minlength: "Name must be at least 5 characters long.",
+							},
+							phone: {
+								required: "Please enter your phone number.",
+								minlength: "Phone number must be 10 digits long.",
+								maxlength: "Phone number must be 10 digits long.",
+								number: "Please enter a valid phone number",
+							},
+							city: {
+								required: "Please enter your city.",
+								minlength: "City name must be at least 6 characters long.",
+							},
+							housename: {
+								required: "Please enter your address.",
+								minlength: "Address must be at least 10 characters long.",
+							},
+							
+							
+							pincode: {
+								required: "Please enter your pin code.",
+								minlength: "Pin code must be at least 6 characters long.",
+								maxlength: "Pin code must not exceed 6 characters.",
+								number: "Pin code must contain only numbers.",
+							},
+							district: {
+								required: "Please enter your district.",
+								minlength: "district name must be at least 3 characters long.",
+
+							},  
+						},
+						errorClass: "text-danger",
+					});
+				});
+			</script> -->
+            <!--modal address validation end here-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- 
+<script>
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.requires-validation')
+        Array.from(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+<script>
+    function addressRemove(addrId) {
+        swal({
+            title: "Are you sure?",
+            text: "Do you want to remove this address from profile?",
+            icon: "warning",
+            buttons: ["Cancel", "Remove"],
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, remove it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+        }).then((willRemove) => {
+            if (willRemove) {
+                $.ajax({
+                    url: `/removeProfileAddress/${addrId}`,
+                    method: 'GET',
+                    success: (response) => {
+                        $(addrId).remove();
+                        let msg = name + " removed";
+                        $('#delete-msg').html(msg);
+                        location.assign('/manageAddress')
+                        console.log("removed");
+                    }
+                });
+            }
+        });
+    }
+</script> -->
+
+<script>
+
+    function addressRemove(addressId) {
+        console.log(addressId);
+        $.ajax({
+            // url : `removeProfileAddress/$<%=address._id%>`
+             url : `/removeAddress/${addressId}`,
+            method: "GET",
+            success: (response) => {
+                location.reload();
+                // $(addressId).remove()
+
+            }
+        })
+    }
+
+
+
+</script>

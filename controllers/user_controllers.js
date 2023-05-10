@@ -79,7 +79,7 @@ module.exports = {
             var skip = (page - 1) * pageSize;
             var filter = req.query.filter
             // console.log(filter);
- 
+
             if (filter) {
                 var category = await productHelpers.getCategory()
                 // console.log(category, "category filter")
@@ -458,7 +458,7 @@ module.exports = {
     },
 
     addAddressPost: (req, res) => {
-        console.log(req.body, "soorajjjj");
+        // console.log(req.body, "soorajjjj");
         try {
             user_helpers.updateAddress(req.body, req.session.user._id);
             user_helpers.findUserId(req.session.user._id).then((user) => {
@@ -469,9 +469,22 @@ module.exports = {
             console.log(error);
         }
     },
+    addAddressPost2: (req, res) => {
+        // console.log(req.body, "soorajjjj");
+        try {
+            user_helpers.updateAddress(req.body, req.session.user._id);
+            user_helpers.findUserId(req.session.user._id).then((user) => {
+                req.session.user = user;
+                res.redirect("/manageAddress");
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
 
     placeOrderPost: async (req, res) => {
+        console.log(req.body.addressId, "req.body.addressId");
         const address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
         let payment = req.body.paymentMethod;
         // console.log(payment,'pppppppppaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyy');
@@ -493,7 +506,7 @@ module.exports = {
                 }
                 else {
                     user_helpers.generateRazorpay(orderId, total).then((response) => {
-                      res.json(response);
+                        res.json(response);
                     });
                 }
             });
@@ -536,31 +549,87 @@ module.exports = {
     returnOrder: async (req, res) => {
         let orderId = req.params.id;
         await productHelpers.returnProduct(orderId).then(() => {
-          res.redirect("/orders");
+            res.redirect("/orders");
         });
-      },
-    
-      cancelOrder: async (req, res) => {
+    },
+
+    cancelOrder: async (req, res) => {
         let orderId = req.params.id;
         await productHelpers.cancelOrder(orderId).then(() => {
-          res.redirect("/orders");
+            res.redirect("/orders");
         });
-      },
+    },
 
 
-      razorpayPayment: (req, res) => {
-        // console.log(req.body);
-        user_helpers.verifyPayment(req.body).then(()=>{
-            user_helpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
-                
-            res.json({status:true})
-          })
-        }).catch((err)=>{
-          console.log(err,"errrooroor");
-          res.json({status:false})
+    razorpayPayment: (req, res) => {
+        console.log(req.body, "req.body in razoerpaymnt");
+        user_helpers.verifyPayment(req.body).then(() => {
+            user_helpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
+
+                res.json({ status: true })
+            })
+        }).catch((err) => {
+            console.log(err, "errrooroor");
+            res.json({ status: false })
         })
-      },
-    
+    },
+
+
+    getuserprofile: async (req, res) => {
+        try {
+            const userId = req.session.user._id
+            const user = req.session.user
+            const userDetails = await user_helpers.GetUserDetails(userId)
+            // let cartcount = null;
+            const cartCount = await productHelpers.getCartCount(user._id)
+            res.render('user_view/userProfile', { user, cartCount, userDetails })
+
+        } catch (error) {
+            console.log(error);
+            next(error)
+        }
+    },
+
+
+    // editprofileinfo: (req, res) => {
+    //     try {
+    //         const userId = req.params.id;
+    //         console.log(userId);
+    //         user_helpers.UpdateProfileInfo(userId, req.body).then((response) => {
+    //             res.redirect('/userprofile/:id')
+    //         })
+    //     }
+    //     catch (error) {
+    //         console.log(error);
+    //         res.redirect('/userprofile/:id')
+    //     }
+    // },
+
+
+    getAddress: async (req,res) => {
+        // console.log(req.body, "reqqq bodyrs");
+        let user = req.session.user;
+        const userId = req.session.user._id;
+        const userDetails = await user_helpers.GetUserDetails(userId)
+        let address = await user_helpers.findUser(userId);
+        // req.session.user = user;
+        const cartCount = await productHelpers.getCartCount(user._id)
+        console.log(address,"address in user profile");
+        res.render('user_view/manageAddress', {user, cartCount,address, userDetails })
+        
+    }, 
+
+    removeAddress : (req, res)=>{
+        console.log(req.params.id, "addresssssss iddddddddddddddddddd");
+        let addressId =req.params.id
+        let userId=req.session.user._id
+        console.log(userId);
+         user_helpers.removeAddress(addressId,userId ).then(()=>{
+            res.json({ status: true})
+        })
+
+    }, 
+
 
 
 
