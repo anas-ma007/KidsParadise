@@ -1,0 +1,137 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order detail</h2>
+            <% order.forEach(order=> { %>
+            <p>Order ID: <%=order._id%></p>
+            <% } ) %>
+        </div>
+    </div>
+    <div class="card">
+        
+        <div class="card-body">
+            <div class="row mb-50 mt-20 order-info-wrap">
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-person"></i>
+                        </span>
+                        <div class="text">
+                            <h6 class="mb-1">User</h6>
+                            <p class="mb-1">
+                               
+                                <%= user.name %> <br>
+                                <%= user.email %> <br>
+                                <%= user.mobile %>
+                            </p>
+                        </div>
+                        
+                    </article>
+                </div> <!-- col// -->
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-local_shipping"></i>
+                        </span>
+                        <% order.forEach(order=> { %>
+                        <div class="text">
+                            <h6 class="mb-1">Order info</h6>
+                            <p class="mb-1">
+                            Payment method: <%= order.paymentmethod%> <br> Status: <%=order.orderstatus%>
+                            </p>
+                            
+                        </div>
+                    </article>
+                </div> <!-- col// -->
+                <div class="col-md-4">
+                    <article class="icontext align-items-start">
+                        <span class="icon icon-sm rounded-circle bg-primary-light">
+                            <i class="text-primary material-icons md-place"></i>
+                        </span>
+                        <div class="text">
+                            <h6 class="mb-1">Deliver to</h6>
+                            <p class="mb-1">
+                                
+
+                                    <p><%=order.deliveryAddress.name%>, 
+                                        <%=order.deliveryAddress.address%>, 
+                                        <%=order.deliveryAddress.city%>, 
+                                        <%=order.deliveryAddress.district%>, 
+                                        <%=order.deliveryAddress.pincode%>, 
+                                        <%=order.deliveryAddress.mobile%></p>
+            
+                                        <% } )%>
+                            </p>
+                            
+                        </div>
+                    </article>
+                </div> <!-- col// -->
+            </div> <!-- row // -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="40%">Product</th>
+                                    <th width="20%">Unit Price</th>
+                                    <th width="20%">Quantity</th>
+                                    <th width="20%" class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                
+                                <% for (var i =0; i < products.length;  i++ ) { %>
+                                <tr>
+                                    
+                                    <td>
+                                       
+                                        <a class="itemside" href="#">
+                                            <div class="left">
+                                                <img src="<%=products[i].product.image[0]%>" width="40" height="40" class="img-xs" alt="Item">
+                                            </div>
+                                            <div class="info"><%=products[i].product.name%></div>
+                                        </a>
+                                    </td>
+                                    <td> Rs. <%=products[i].product.price%> </td>
+                                    <td> <%=products[i].quantity%> </td>
+                                    <td class="text-end">Rs. <%=(products[i].product.price*products[i].quantity)%> </td>
+                                    
+                                </tr>
+                                <% } %>
+                                <tr>
+                                    <td colspan="4">
+                                        <article class="float-end">
+
+                                            <dl class="dlist">
+                                                <dt>Coupon Price :</dt>
+                                                <% order.forEach(order=> { %> 
+                                                <dd class="text-success"> <%=order.coupon%></dd>
+                                                <% } ) %>
+                                                
+                                            </dl>
+                                            <dl class="dlist">
+                                                <dt>Subtotal :</dt>
+                                                
+                                                <dd>Rs <%=totalPrice%></dd>
+                                                
+                                            </dl>
+                                            
+                                            <dl class="dlist">
+                                                <dt>Grand total :</dt>
+                                                <dd> <b class="h5">Rs <%=totalPrice%></b> </dd>
+                                            </dl>
+                                            
+                                        </article>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive// -->
+                </div> <!-- col// -->
+                
+            </div>
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+</section> <!-- content-main end// -->

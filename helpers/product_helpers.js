@@ -101,7 +101,6 @@ module.exports = {
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
             // console.log(category, "category test");
             resolve(category)
-
         })
     },
 
@@ -250,13 +249,11 @@ module.exports = {
                         { category: { $regex: searchkey, $options: 'i' } },
                     ]
                 }
-
             },
             { $skip: skip },
             { $limit: limit }
         ]).toArray()
         return product
-
     },
 
     getCartCount: (userId) => {

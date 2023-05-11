@@ -442,7 +442,13 @@ module.exports = {
 
         })
 
-    }
+    },
+
+    doGetUser: async(userId)=>{
+        let user = await db.get().collection(collection.USER).find({_id: ObjectId(userId)}).toArray()
+        return user
+    },
+
 
 
 }

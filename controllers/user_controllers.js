@@ -395,7 +395,7 @@ module.exports = {
         var user = req.session.user
         var searchkey = req.body.search
         var page = parseInt(req.query.page) || 1;
-        var pageSize = parseInt(req.query.pageSize) || 8;
+        var pageSize = parseInt(req.query.pageSize) || 12;
         var skip = (page - 1) * pageSize;
         var filter = req.query.filter
         // console.log(filter);
@@ -416,8 +416,6 @@ module.exports = {
             category
 
         });
-
-
     },
 
 

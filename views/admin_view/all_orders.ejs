@@ -14,6 +14,7 @@
               <th>Name</th>
               <th>Amount</th>
               <th>Payment Method</th>
+              <th>Order Details</th>
               <th>Status</th>
               <th class="">Action</th>
             </tr>
@@ -40,6 +41,11 @@
                 <td>
                   <%=order.paymentmethod%>
                 </td>
+
+                <td>                  
+                  <a href="ViewOrder_details/<%=order._id%>"> View More</a>
+                </td>
+                
                 <td>
                   <%=order.orderstatus%>
                 </td>

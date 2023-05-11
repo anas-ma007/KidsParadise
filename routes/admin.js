@@ -47,6 +47,8 @@ router.get('/deliver-product/:id',middlewares.checkAdminLoggedIn, adminControlle
 router.get('/return-product/:id',middlewares.checkAdminLoggedIn, adminControllers.returnProduct)
 
 router.get('/graph-statics',middlewares.checkAdminLoggedIn, adminControllers.graphStatics)
+router.get('/ViewOrder_details/:id',middlewares.checkAdminLoggedIn, adminControllers.viewOrderDetails)
+
 
 
 

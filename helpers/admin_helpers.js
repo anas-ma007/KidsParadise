@@ -102,13 +102,16 @@ module.exports = {
     },
 
 
-    getOrderDetails: () => {
+    getOrderDetails: (orderId) => {
+        orderId=new ObjectId(orderId)
+        console.log(orderId,"fgjghihij");
         return new Promise(async (resolve, reject) => {
             let orderDetails = await db.get().collection(collection.ORDERS).aggregate(
                 [
                     {
                         '$match': {
-                            '_id': ObjectId('64524325157605b1e5e18b1f')
+                            '_id': orderId
+                            
                         }
                     }, {
                         '$unwind': {
@@ -122,7 +125,7 @@ module.exports = {
                         }
                     }, {
                         '$lookup': {
-                            'from': 'product',
+                            'from': collection.PRODUCTS_COLLECTION,
                             'localField': 'productId',
                             'foreignField': '_id',
                             'as': 'productDetails'
@@ -141,7 +144,7 @@ module.exports = {
                         }
                     }, {
                         '$lookup': {
-                            'from': 'user',
+                            'from': collection.USER_COLLECTION,
                             'localField': 'userId',
                             'foreignField': '_id',
                             'as': 'userDetails'
