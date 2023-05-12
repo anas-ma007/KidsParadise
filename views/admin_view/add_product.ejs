@@ -19,7 +19,6 @@
             <div class="mb-4">
               <label for="product_name" class="form-label">Product Name</label>
               <input type="text" placeholder="Product Name" required name="name" class="form-control" id="name">
-              <span id="productName-error" class="validation-label text-danger"></span>
             </div>
 
             <div class="mb-4">
@@ -43,7 +42,6 @@
                 <label class="form-label">Price</label>
                 <div class="row gx-2">
                   <input placeholder="₹" type="text" required name="price" class="form-control" id="price">
-                  <span id="price-error" class="validation-label text-danger"></span>
                 </div>
               </div>
             </div>
@@ -54,7 +52,6 @@
                 <label class="form-label">Stock</label>
                 <div class="row gx-2">
                   <input placeholder="0" type="text" required name="stock" class="form-control" id="stock">
-                  <span id="stock-error" class="validation-label text-danger"></span>
                 </div>
               </div>
             </div>
@@ -64,7 +61,6 @@
               <label class="form-label">Description</label>
               <textarea placeholder="Product Description" id="description" required name="description"
                 class="form-control" rows="2"></textarea>
-              <span id="description-error" class="validation-label text-danger"></span>
             </div>
 
             <div class="">
@@ -74,7 +70,7 @@
                 </div>
                 <div class="card-body">
                   <div class="input-upload">
-                    <input class="form-control" name="image" type="file" multiple required>
+                    <input class="form-control" name="  image" type="file" multiple required>
                     <input class="form-control" name="image" type="file" multiple required>
                     <!-- <input class="form-control" name="image" type="file" multiple required> -->
                     <!-- <input class="form-control" name="image" type="file" multiple required> -->
@@ -85,7 +81,6 @@
 
             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
               <input type="submit" value="Add Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg" />
-              <span id="submit-error" class="validation-label text-danger"></span>
               <div>
               </div>
             </div>
@@ -120,6 +115,9 @@
           required: true,
           minlength: 60
         },
+        image : {
+          required : true,
+        }
       },
 
       messages: {
@@ -144,6 +142,10 @@
           requierd: "Please enter a valid description",
           minlength: "Description mubst be contain atleast 60 charactrs long"
         },
+        image :{
+          requierd: "Please select product images",
+
+        }
       },
       errorClass: "text-danger",
     });
@@ -151,4 +153,6 @@
 </script>
 <div>
   <br>
+  
+ 
 </div>
