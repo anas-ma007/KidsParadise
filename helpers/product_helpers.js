@@ -19,9 +19,6 @@ module.exports = {
 
     addCategory: (catDetails) => {
         return new Promise(async (resolve, reject) => {
-            // let categoryExit=await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
-            //     category :catDetails.category
-            // })
             let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
                 category: { $regex: `^${catDetails.category}$`, $options: 'i' }
               });
@@ -31,7 +28,6 @@ module.exports = {
                 catDetails.status = true
             let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
             resolve({status: true, category})
-
             }
         })
     },

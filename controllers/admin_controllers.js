@@ -324,17 +324,17 @@ module.exports = {
         // console.log(req.body, "req.bodyyy");
         console.log(req.params.id, "req.params.id");
              const orderId=req.params.id
-            let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
-            // await productHelpers.findOrder(req.params.id).then(async (order) => {
-            //     let products = await productHelpers.orderProductDetail(req.params.id);
-            //     let totalPrice = order[0].totalPrice
-            //     let user = await user_helpers.getUser(order[0].userId)
+            // let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
+            await productHelpers.findOrder(req.params.id).then(async (order) => {
+                let products = await productHelpers.orderProductDetail(req.params.id);
+                let totalPrice = order[0].totalPrice
+                let user = await user_helpers.getUser(order[0].userId)
                 // console.log(user, "user" );
                 // console.log(totalPrice, "total price");
                 // console.log(products, "productsss");
                 // console.log(order, "orderrrrrr");
-                // res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
-            // })
+                res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
+            })
     },
 
 

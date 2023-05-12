@@ -13,9 +13,14 @@ module.exports = {
         if (req.session.loggedIn) {
             // const user = req.session.user;
             let user = await user_helpers.getUser(req.session.user._id)
-            req.session.user = user;
-            console.log("this is middleware user ------", user )
-            next()
+            if(user.status){
+                req.session.user = user;
+                // console.log("this is middleware user ------", user )bvk
+                next()
+            } else{
+                req.session.destroy()
+                res.redirect("/login")
+            }
         } else {
             res.redirect("/login")
         }
