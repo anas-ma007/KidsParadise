@@ -21,13 +21,13 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
                 category: { $regex: `^${catDetails.category}$`, $options: 'i' }
-              });
-            if(categoryExit){
+            });
+            if (categoryExit) {
                 resolve({ status: false, message: "This category is already exist..!" });
-            }else{
+            } else {
                 catDetails.status = true
-            let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
-            resolve({status: true, category})
+                let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
+                resolve({ status: true, category })
             }
         })
     },
@@ -51,7 +51,7 @@ module.exports = {
     //     })
     // },
     userGetProducts: async (skip, pageSize) => {
-        console.log(skip, pageSize, "hiihihihihihihihihihi");
+        // console.log(skip, pageSize, "hiihihihihihihihihihi");
         let products = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
             {
                 $lookup: {
@@ -125,7 +125,7 @@ module.exports = {
     doEditProduct: (prodId) => {
         return new Promise(async (resolve, reject) => {
             db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: new ObjectId(prodId) }).then((response) => {
-                console.log(response + "poooooooooooooyyyyyyyyyyy");
+                // console.log(response + "poooooooooooooyyyyyyyyyyy");
                 resolve(response)
             })
         })
@@ -401,13 +401,13 @@ module.exports = {
 
     }
     , getSaleStatistics: () => {
-       
+
         return new Promise(async (resolve, reject) => {
             let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
                 { $match: { totalPrice: { $exists: true } } },
                 {
                     $group: {
-                        _id: { $month:{$toDate: "$date" }}, // Group by month of the "date" field
+                        _id: { $month: { $toDate: "$date" } }, // Group by month of the "date" field
                         totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
                     }
                 }, { $sort: { date: 1 } },
@@ -416,10 +416,25 @@ module.exports = {
             resolve(saleStatistics)
 
         })
-
-
     },
 
+
+    // addCategory: (catDetails) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
+    //             category: { $regex: `^${catDetails.category}$`, $options: 'i' }
+    //           });
+    //         if(categoryExit){
+    //             resolve({ status: false, message: "This category is already exist..!" });
+    //         }else{
+    //             catDetails.status = true
+    //         let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
+    //         resolve({status: true, category})
+    //         }
+    //     })
+    // },
+
+ 
 
 
 

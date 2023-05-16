@@ -4,12 +4,14 @@ const bcrypt = require("bcrypt")
 const { sendSms, sendSmsChecking } = require('../twilio')
 const { ObjectId } = require("mongodb")
 const collections = require('../config/collections')
+require('dotenv').config();
+
 // const { sendotp } = require('../controllers/user_controllers')
 // const { response } = require('../app')
 const Razorpay = require('razorpay')
 const instance = new Razorpay({
-    key_id: 'rzp_test_VAYH3mbPterVbs',
-    key_secret: 'wnLz6NmDv9fSha53Po4QAQ20',
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET ,
 });
 
 
@@ -362,7 +364,7 @@ module.exports = {
             const {
                 createHmac,
               } = await import('node:crypto');
-            let hmac = createHmac('sha256', 'wnLz6NmDv9fSha53Po4QAQ20');
+            let hmac = createHmac('sha256', process.env.KEY_SECRET );
 
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
             hmac = hmac.digest('hex')
@@ -447,6 +449,12 @@ module.exports = {
     doGetUser: async(userId)=>{
         let user = await db.get().collection(collection.USER).find({_id: ObjectId(userId)}).toArray()
         return user
+    },
+
+    getBanner : async()=>{
+        let banner= await db.get().collection(collection.BANNERS).find({status :true}).toArray()
+        // console.log(banner, "banner for user home page in user helper function");
+        return banner
     },
 
 

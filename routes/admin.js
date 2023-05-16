@@ -16,7 +16,7 @@ router.post('/login', adminControllers.admin_loginPost)
 router.post('/admin/login', adminControllers.adminLogout)
 
 router.get('/addproducts',middlewares.checkAdminLoggedIn, adminControllers.add_product) 
-router.post('/addproducts',middlewares.checkAdminLoggedIn, upload.array('image'), adminControllers.adminAddProductPost)
+router.post('/addproducts',middlewares.checkAdminLoggedIn, upload.array('productImage'), adminControllers.adminAddProductPost)
 
 router.get('/viewproducts',middlewares.checkAdminLoggedIn, adminControllers.view_products) 
 
@@ -48,6 +48,14 @@ router.get('/return-product/:id',middlewares.checkAdminLoggedIn, adminController
 
 router.get('/graph-statics',middlewares.checkAdminLoggedIn, adminControllers.graphStatics)
 router.get('/ViewOrder_details/:id',middlewares.checkAdminLoggedIn, adminControllers.viewOrderDetails)
+
+router.get("/addbanner", middlewares.checkAdminLoggedIn, adminControllers.addBanner)
+router.get("/viewbanner", middlewares.checkAdminLoggedIn, adminControllers.viewBanner)
+router.post("/addbanner", middlewares.checkAdminLoggedIn,upload.array('image'), adminControllers.postBanner)
+router.get("/unlistbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.unlistBanner)
+router.get("/listbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.listBanner)
+
+
 
 
 

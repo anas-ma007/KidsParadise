@@ -1,7 +1,7 @@
 let db = require("../config/connection")
 let collection = require('../config/collections')
 const { ObjectId } = require("mongodb")
-const { productDetails } = require("../controllers/user_controllers")
+// const { productDetails } = require("../controllers/user_controllers")rs
 
 
 

@@ -70,8 +70,8 @@
                 </div>
                 <div class="card-body">
                   <div class="input-upload">
-                    <input class="form-control" name="  image" type="file" multiple required>
-                    <input class="form-control" name="image" type="file" multiple required>
+                    <input class="form-control" name="productImage" type="file" multiple required>
+                    <!-- <input class="form-control" name="image" type="file" multiple required> -->
                     <!-- <input class="form-control" name="image" type="file" multiple required> -->
                     <!-- <input class="form-control" name="image" type="file" multiple required> -->
                   </div>
@@ -115,9 +115,9 @@
           required: true,
           minlength: 60
         },
-        image : {
-          required : true,
-        }
+        // image : {
+        //   required : true,
+        // }
       },
 
       messages: {
@@ -142,10 +142,10 @@
           requierd: "Please enter a valid description",
           minlength: "Description mubst be contain atleast 60 charactrs long"
         },
-        image :{
-          requierd: "Please select product images",
+        // image :{
+        //   requierd: "Please select product images",
 
-        }
+        // }
       },
       errorClass: "text-danger",
     });

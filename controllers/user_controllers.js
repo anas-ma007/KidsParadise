@@ -8,16 +8,17 @@ const twilioApi = require("../twilio")
 
 module.exports = {
     user_homepage: async (req, res) => {
+        let banner= await user_helpers.getBanner()
         if (req.session.loggedIn) {
             const user = req.session.user;
             if (user) {
                 let cartCount = await productHelpers.getCartCount(user._id)
-                res.render('user_view/index', { user, cartCount });
+                res.render('user_view/index', { user, cartCount,banner });
             } else {
-                res.render('user_view/index')
+                res.render('user_view/index', {banner})
             }
         } else {
-            res.render('user_view/index')
+            res.render('user_view/index',{banner})
         }
     },
 

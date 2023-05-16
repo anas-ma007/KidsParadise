@@ -15,7 +15,7 @@ module.exports = {
             let user = await user_helpers.getUser(req.session.user._id)
             if(user.status){
                 req.session.user = user;
-                // console.log(" pooooy... its user in middleware", user )
+                // console.log(" pooooy...  user in middleware", user )
                 next()
             } else{
                 req.session.destroy()

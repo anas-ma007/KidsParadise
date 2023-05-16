@@ -13,7 +13,10 @@ module.exports = {
         productData.date = new Date()
         productData.price = parseInt(productData.price)
         productData.stock = parseInt(productData.stock)
+        // console.log("api calll 6878989");
         db.get().collection(collection.PRODUCTS_COLLECTION).insertOne(productData).then((data) => {
+            console.log(data, "data from database");
+            console.log(data.insertedId, "data inserted id in add product");
             callback(data.insertedId)
         })
 
@@ -32,6 +35,88 @@ module.exports = {
         }
         );
     },
+
+    // addBanner: (bannerDetails) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         let bannerExit = await db.get().collection(collection.BANNERS).findOne({ name: { $regex: `^${bannerDetails.name}$`, $options: 'i' } });
+
+    // if (bannerExit) {
+    //     resolve({ status: false, message: 'This banner already exists...!' });
+    //         } else {
+    //             bannerDetails.status = true;
+    //             db.get().collection(collection.BANNERS).insertOne({
+    //                 name: bannerDetails.name,
+    //                 subtitle: bannerDetails.subtitle,
+    //                 // bannerUrl: bannerDetails.bannerUrl,
+    //             }).then((data)=>{
+    //                 console.log(data,)
+    //                 console.log(data.insertedId)
+    //                 resolve(data.insertedId);
+    //             })
+    //         }
+    //     });
+    // },
+
+    // addBannerImages : (bannerId, imgUrl)=>{
+    //     return new Promise((resolve, reject)=>{
+    //         db.get().collection(collection.BANNERS).updateOne({_id:new ObjectId(bannerId)}, 
+    //         {
+    //             $set:{
+    //                 image: imgUrl
+    //             }
+    //         }).then((data)=>{
+    //             resolve(data)
+    //         })
+
+    //     })
+    // },
+
+    addBanner: (bannerDetails) => {
+        return new Promise(async (resolve, reject) => {
+            // let bannerExist = await db.get().collection(collection.BANNERS).findOne({
+            //     title: { $regex: `^${bannerDetails.title}$`, $options: 'i' }
+            // });
+
+            // if (bannerExist) {
+            //     reject(new Error('This banner already exists...!'));
+            // } else {
+                bannerDetails.status = true;
+                db.get().collection(collection.BANNERS).insertOne(bannerDetails)
+                    .then((data) => {
+                        resolve(data.insertedId);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            // }
+        });
+    },
+
+    addBannerImages: (bannerId, imgUrl) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNERS).updateOne(
+                { _id: new ObjectId(bannerId) },
+                { $set: { image: imgUrl } }
+            )
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    },
+
+    getBanners : ()=>{
+        return new Promise(async (resolve, reject)=>{
+            let banner=await db.get().collection(collection.BANNERS).find().toArray()
+            console.log(banner, "bannersss ");
+            resolve(banner)
+        })
+
+    },
+
+
 
     editProductDetails: (proId, productdetails) => {
         return new Promise((res, rej) => {
@@ -103,15 +188,15 @@ module.exports = {
 
 
     getOrderDetails: (orderId) => {
-        orderId=new ObjectId(orderId)
-        console.log(orderId,"fgjghihij");
+        orderId = new ObjectId(orderId)
+        console.log(orderId, "fgjghihij");
         return new Promise(async (resolve, reject) => {
             let orderDetails = await db.get().collection(collection.ORDERS).aggregate(
                 [
                     {
                         '$match': {
                             '_id': orderId
-                            
+
                         }
                     }, {
                         '$unwind': {
@@ -185,30 +270,30 @@ module.exports = {
 
     },
 
-    getOrderCount :async ()=>{
-        let orderCount= await db.get().collection(collection.ORDERS).countDocuments()
+    getOrderCount: async () => {
+        let orderCount = await db.get().collection(collection.ORDERS).countDocuments()
         return orderCount
-    }, 
+    },
 
-    getTotalRevenue : async()=>{
+    getTotalRevenue: async () => {
         let total = await db.get().collection(collection.ORDERS).aggregate([
             {
                 $group: {
-                    _id:null,
+                    _id: null,
                     totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
                 }
             },
             {
                 $project: {
-                    _id:0,
-                    "total" : '$totalAmount'
+                    _id: 0,
+                    "total": '$totalAmount'
                 }
             }
 
         ]).toArray()
         // console.log(total);
         return total
-    
+
     },
 
     getOrderStatistics: () => {
@@ -230,13 +315,13 @@ module.exports = {
 
     }
     , getSaleStatistics: () => {
-       
+
         return new Promise(async (resolve, reject) => {
             let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
                 { $match: { totalPrice: { $exists: true } } },
                 {
                     $group: {
-                        _id: { $month:{$toDate: "$date" }}, // Group by month of the "date" field
+                        _id: { $month: { $toDate: "$date" } }, // Group by month of the "date" field
                         totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
                     }
                 }, { $sort: { date: 1 } },
@@ -245,9 +330,26 @@ module.exports = {
             resolve(saleStatistics)
 
         })
-
-
     },
+
+    doUnlistBanner :(bannerId)=>{
+        return new Promise(async (resolve, reject)=>{
+            console.log('wroking');
+            await db.get().collection(collection.BANNERS).updateOne({_id : new ObjectId(bannerId)}, {$set :{status :true}}).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+
+    doListBanner :(bannerId)=>{
+        return new Promise(async (resolve, reject)=>{
+            console.log('wrokinhhhhg');
+            await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId)}, {$set : {status :false}}).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+
 
 
 

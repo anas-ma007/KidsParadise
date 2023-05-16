@@ -22,11 +22,11 @@ module.exports = {
             let categoryCount = await adminHelpers.getCategoryCount()
             let productsCount = await adminHelpers.getProductCount()
             let orderCount = await adminHelpers.getOrderCount()
-            let totalRevenue= await adminHelpers.getTotalRevenue()
-            let total=totalRevenue[0].total
+            let totalRevenue = await adminHelpers.getTotalRevenue()
+            let total = totalRevenue[0].total
             // console.log(total);
             // console.log(totalRevenue);
-            res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount , orderCount, total})
+            res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount, orderCount, total })
         } else {
             res.render('admin_view/admin_login', { layout: 'admin_LogLayout' });
         }
@@ -51,7 +51,6 @@ module.exports = {
     add_product: (req, res) => {
         productHelpers.getCategory().then((category) => {
             // console.log(category, "sooorajjj");
-
             if (req.session.adminLoggedIn) {
                 res.render('admin_view/add_product', { category, layout: 'admin_layout' })
             } else {
@@ -64,13 +63,15 @@ module.exports = {
     adminAddProductPost: async (req, res) => {
         // console.log(req.body, 'pppppppppppppppppppppppppppppppppppp');
         try {
-            console.log(req.files)
+            // console.log(req.files, "req.files from add product post")
             const imgUrl = [];
             for (let i = 0; i < req.files.length; i++) {
                 const result = await cloudinary.uploader.upload(req.files[i].path);
                 imgUrl.push(result.url);
                 // console.log(result.url);
             }
+            console.log(req.body, "productreq body from  add ");
+            // console.log(id,"id from banner");
             adminHelpers.addProduct(req.body, async (id) => {
                 adminHelpers.addProductImages(id, imgUrl).then((response) => {
                     // console.log(response);
@@ -84,36 +85,12 @@ module.exports = {
             res.redirect('/admin/addproducts');
         }
     },
+
     view_products: async (req, res) => {
-        // if (req.session.adminLoggedIn) {
-        //     try {
-        //         const page = parseInt(req.query.page) || 1;
-        //         const pageSize = parseInt(req.query.pageSize) || 5;
-        //         const skip = (page - 1) * pageSize;
 
-        //         const products = await productHelpers.findAllProducts(skip, pageSize)
-
-        //         const count = await productHelpers.productCount()
-
-        //         const totalPages = Math.ceil(count / pageSize);
-        //         const currentPage = page > totalPages ? totalPages : page;
-
-        //         res.render('admin_view/view_products', {
-        //             layout: 'admin_layout',
-        //             products,
-        //             totalPages,
-        //             currentPage,
-        //             pageSize
-        //         });
-        //     } catch (err) {
-        //         // console.log(err, "hhihhihihihihih");
-        //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
-        //     }
-        // }
         adminHelpers.getAllProducts().then((products) => {
             console.log(products, '999999999999999999999999999999');
             res.render('admin_view/view_products', { products, layout: 'admin_layout' })
-
 
         })
     },
@@ -127,38 +104,7 @@ module.exports = {
             })
 
         })
-        // if (req.session.adminLoggedIn) {
-        //     try {
-        //         const page = parseInt(req.query.page) || 1;
-        //         const pageSize = parseInt(req.query.pageSize) || 6;
-        //         const skip = (page - 1) * pageSize;
 
-        //         const allUser = await user_helpers.findAllUser(skip, pageSize)
-        //         const count = await user_helpers.findUserCount()
-
-        //         const totalPages = Math.ceil(count / pageSize);
-        //         const currentPage = page > totalPages ? totalPages : page;
-
-        //         res.render('admin_view/view_users', {
-        //             layout: 'admin_layout',
-        //             allUser,
-        //             totalPages,
-        //             currentPage,
-        //             pageSize
-        //         });
-        //     } catch (err) {
-        //         // console.log(err, "hhihhihihihihih");
-        //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
-        //     }
-        // }
-
-        //     .then((users) => {
-        //         // console.log(products,'999999999999999999999999999999');
-        //         console.log(users, 'oooooooooooooooooooooooooo');
-        //         res.render('admin_view/view_users', { users, layout: 'admin_layout' })
-        //     })
-        // } else {
-        //     res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
 
     },
 
@@ -188,7 +134,7 @@ module.exports = {
 
     getCategory: (req, res) => {
         productHelpers.viewAddCategory().then((category) => {
-            res.render("admin_view/add_category", { category, layout: 'admin_layout', message:"" })
+            res.render("admin_view/add_category", { category, layout: 'admin_layout', message: "" })
         })
     },
 
@@ -320,25 +266,97 @@ module.exports = {
         res.json({ OrderStatistics, saleStatistics })
     },
 
-    viewOrderDetails : async (req, res) => {
+    viewOrderDetails: async (req, res) => {
         // console.log(req.body, "req.bodyyy");
         console.log(req.params.id, "req.params.id");
-             const orderId=req.params.id
-            // let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
-            await productHelpers.findOrder(req.params.id).then(async (order) => {
-                let products = await productHelpers.orderProductDetail(req.params.id);
-                let totalPrice = order[0].totalPrice
-                let user = await user_helpers.getUser(order[0].userId)
-                // console.log(user, "user" );
-                // console.log(totalPrice, "total price");
-                // console.log(products, "productsss");
-                // console.log(order, "orderrrrrr");
-                res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
-            })
+        const orderId = req.params.id
+        // let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
+        await productHelpers.findOrder(req.params.id).then(async (order) => {
+            let products = await productHelpers.orderProductDetail(req.params.id);
+            let totalPrice = order[0].totalPrice
+            let user = await user_helpers.getUser(order[0].userId)
+            // console.log(user, "user" );
+            // console.log(totalPrice, "total price");
+            // console.log(products, "productsss");
+            // console.log(order, "orderrrrrr");
+            res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
+        })
+    },
+
+    addBanner: (req, res) => {
+        console.log(req.body, "req.body from add banner");
+        res.render("admin_view/addbanner", { layout: "admin_layout" })
+    },
+
+    // postBanner : async (req, res)=>{
+    //     const imgUrl = [];
+    //     for (let i = 0; i < req.files.length; i++) {
+    //         const result = await cloudinary.uploader.upload(req.files[i].path);
+    //         imgUrl.push(result.url);
+    //     }
+    //     console.log(imgUrl ,"image url from banner post");
+    //     // let banners = await db.get()
+    //    adminHelpers.addBanner(req.body, async(id)=>{
+    //         adminHelpers.addBannerImages(id, imgUrl).then(()=>{
+    //         })
+    //     }).then((response)=>{
+    //         if(response.status){
+    //             res.redirect("/admin/addbanner")
+    //         } else {
+    //             res.render("admin_view/addbanner", {layout: 'admin_layout', message : response.message})
+    //         }
+    //     })
+    // },
+
+    postBanner: async (req, res) => {
+        const imgUrl = [];
+        for (let i = 0; i < req.files.length; i++) {
+            const result = await cloudinary.uploader.upload(req.files[i].path);
+            imgUrl.push(result.url);
+        }
+        // console.log(imgUrl, "image url from banner post");
+        try {
+            const id = await adminHelpers.addBanner(req.body);
+            await adminHelpers.addBannerImages(id, imgUrl);
+            //   let banner=await adminHelpers.getBanners()
+            // console.log(banner, "bannerrsss  in controller before send render render page");
+            res.render("admin_view/addbanner", { layout: "admin_layout", message: error.message });
+        } catch (error) {
+            res.render("admin_view/addbanner", { layout: "admin_layout", message: error.message });
+        }
+    },
+
+    viewBanner: async (req, res) => {
+        let banner = await adminHelpers.getBanners()
+        console.log(banner, "bannerssssss");
+        res.render("admin_view/view_banners", { layout: "admin_layout", banner });
     },
 
 
-  
+    unlistBanner: async (req, res) => {
+        console.log(req.params.id, "req params id");
+        let bannerId = req.params.id
+        console.log(bannerId, "banner id from req prams");
+        await adminHelpers.doUnlistBanner(bannerId).then(() => {
+            res.redirect("/admin/viewbanner")
+        })
+    },
+
+    listBanner: async (req, res) => {
+        console.log(req.params.id, "req params id");
+        let bannerId = req.params.id
+        console.log(bannerId, "banner id from req prabdzherhnzdnms");
+        await adminHelpers.doListBanner(bannerId).then(() => {
+            res.redirect("/admin/viewbanner")
+        })
+    },
+
+
+
+
+
+
+
 
 
 

@@ -1,12 +1,14 @@
 let MongoClient=require('mongodb').MongoClient
+require('dotenv').config();
+
 let state={
     db:null
 }
 module.exports.connect=function(done){
-    let url='mongodb://0.0.0.0:27017'
-    let dbname= 'Toys'
+    let url= process.env.DB_URL
+    let dbname=process.env.DB_NAME
 
-    MongoClient.connect(url, (err, data)=>{
+    MongoClient.connect(process.env.DB_URL, (err, data)=>{
         if(err) return done(err)
         state.db = data.db(dbname)
         done()
