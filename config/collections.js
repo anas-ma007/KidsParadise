@@ -5,4 +5,6 @@ module.exports={
     CART_COLLECTION : "cart",
     ORDERS : 'orders',
     BANNERS : "banners",
+    COUPONS : 'coupons',
+
 }

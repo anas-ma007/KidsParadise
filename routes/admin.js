@@ -56,6 +56,12 @@ router.get("/unlistbanner/:id", middlewares.checkAdminLoggedIn, adminControllers
 router.get("/listbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.listBanner)
 
 
+router.get("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCoupons)
+router.get("/viewcoupons", middlewares.checkAdminLoggedIn,  adminControllers.viewCoupons)
+
+router.post("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCouponPost)
+
+
 
 
 

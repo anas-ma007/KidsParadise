@@ -434,14 +434,42 @@ module.exports = {
     //     })
     // },
 
- 
 
+    doaddCoupon: (couponDetails) => {
+        return new Promise(async (resolve, reject) => {
+            let couponExit = await db.get().collection(collection.COUPONS).findOne({
+                couponCode: { $regex: `^${couponDetails.couponCode}$`, $options: 'i' } 
 
+            });
+            if (couponExit) {
+                resolve({status : false, message: "This coupon already exists...!"});
+            } else {
+                // couponDetails.status = true
+                couponDetails.user=[]
+                couponDetails.discount = parseInt( couponDetails.discount);
+                let coupon = await db.get().collection(collection.COUPONS).insertOne(couponDetails)
+                resolve({status : true, coupon})
+            }
+        });
+    },
 
+    getCoupons : async()=>{
+        let allCoupons= await db.get().collection(collection.COUPONS).find().toArray()
+        console.log(allCoupons, "all coupons from pro helpers fun");
+        return allCoupons
 
-
-
-
-
+    },
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

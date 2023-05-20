@@ -171,17 +171,17 @@
 						</div>
 					</div>
 
-					<!-- <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+					<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
 						<div class="flex-w flex-m m-r-20 m-tb-5">
 							<input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"
-								name="coupon" placeholder="Coupon Code">
+								name="coupon" placeholder="Coupon Code" id="coupenCode">
 
-							<div
-								class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+							<div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5"
+								onclick="applyCoupon('<%=user._id%>')" type="submit">
 								Apply coupon
 							</div>
 						</div>
-					</div> -->
+					</div>
 					<hr style="border: 1px dashed;">
 
 					<div class="flex-w flex-t p-t-27 p-b-33">
@@ -192,8 +192,8 @@
 						</div>
 
 						<div class="size-209 p-t-1">
-							<span class="mtext-110 cl2" name="total-price">
-								₹ <%= grandTotal[0].total%>
+							<span class="mtext-110 cl2  totalPrice" id="grandTotal" name="total-price">
+								<%= grandTotal[0].total%>
 
 							</span>
 						</div>
@@ -420,8 +420,9 @@
 					Swal.fire(
 						"Order Placed Succesfully",
 						"Success"
-					).then(()=>{	console.log(response);
-					window.location.href = '/orders'
+					).then(() => {
+						console.log(response);
+						window.location.href = '/orders'
 					})
 				} else {
 					razorpayPayment(response)
@@ -479,6 +480,34 @@
 				}
 			}
 		})
+	}
+
+
+	function applyCoupon(userId) {
+		let couponCode = document.getElementById("coupenCode").value
+		// let totalAmount=document.getElementsByName("total-price").value
+		// console.log(couponCode, totalAmount, "couponCode & totalAmount in checkoutpage ");
+		$.ajax({
+			url: '/apply_coupon',
+			data: {
+				userId,
+				couponCode
+			},
+			method: "post",
+			success: (response) => {
+				if (response.status == false) {
+					Swal.fire("Invalid Coupons",
+						"Failed")
+				} else {
+					document.getElementById("grandTotal").innerHTML = response.total
+					Swal.fire("Coupon Applied Succefully",
+						"Success"
+					)
+				}
+			}
+
+		})
+
 	}
 
 

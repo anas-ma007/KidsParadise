@@ -15,8 +15,8 @@ module.exports = {
         productData.stock = parseInt(productData.stock)
         // console.log("api calll 6878989");
         db.get().collection(collection.PRODUCTS_COLLECTION).insertOne(productData).then((data) => {
-            console.log(data, "data from database");
-            console.log(data.insertedId, "data inserted id in add product");
+            // console.log(data, "data from database");
+            // console.log(data.insertedId, "data inserted id in add product");
             callback(data.insertedId)
         })
 
@@ -314,8 +314,9 @@ module.exports = {
 
 
     }
-    , getSaleStatistics: () => {
-
+    ,
+    
+    getSaleStatistics: () => {
         return new Promise(async (resolve, reject) => {
             let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
                 { $match: { totalPrice: { $exists: true } } },
@@ -343,12 +344,15 @@ module.exports = {
 
     doListBanner :(bannerId)=>{
         return new Promise(async (resolve, reject)=>{
-            console.log('wrokinhhhhg');
+            // console.log('wrokinhhhhg');
             await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId)}, {$set : {status :false}}).then((response)=>{
                 resolve(response)
             })
         })
     },
+
+
+    
 
 
 

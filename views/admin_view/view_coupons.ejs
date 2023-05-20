@@ -1,0 +1,59 @@
+
+
+
+<section class="container">
+    <div class="col-9">
+      <div class="content-header">
+        <h2 class="content-title mt-4">Ccoupons</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class=" d-flex"><a href="/admin/addcoupon" class="btn btn-success ms-auto">Add New Coupon</a></div>
+    </div>
+  
+    <div class="mt-4">
+        <table class="table table-hover" id="productsTable">
+            <thead>
+              <tr>
+                <th>Coupon Code</th>
+                <th>Discount</th>
+                <th>Created On</th>
+                <th>Expires On</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+
+                <% coupons.forEach((coupon)=> { %>
+
+              <tr>
+                <td ><%=coupon.couponCode%></td>
+                <td><%=coupon.discount%></td>
+    
+                <td><%=coupon.createdDate%></td>
+                <td><%=coupon.expiryDate%></td>
+                
+                <td class="">
+                  <a href="#"  class="btn btn-sm btn-danger " style="text-decoration: none">Delete</a>
+                </td>
+              </tr>
+
+              <% }) %>
+             
+            </tbody>
+          </table>
+    </div>
+
+  
+  
+    
+</section>
+<br>
+<p style="font-weight:500; padding-left: 20px;">Add more Cupons?  <a href="/admin/addcoupon">click here</a>  </p>
+  
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+  <script>
+      $(document).ready( function () {
+        $('#productsTable').DataTable();
+    } );
+  </script>

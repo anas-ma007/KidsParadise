@@ -352,6 +352,31 @@ module.exports = {
     },
 
 
+    addCoupons: async (req, res) => {
+        // console.log(req.body , "req body from add copuns get/reNDER Pge");
+        res.render("admin_view/addcoupon", { layout: "admin_layout", message: "" })
+    },
+
+
+    addCouponPost: async (req, res) => {
+        console.log(req.body, "req .body from add coupon post in admin controller");
+        await productHelpers.doaddCoupon(req.body).then((response) => {
+            if (response.status) {
+                res.redirect("/admin/addcoupon")
+            } else {
+                res.render("admin_view/addcoupon", { layout: "admin_layout", message: response.message })
+            }
+        })
+    },
+
+    viewCoupons: (async (req, res) => {
+        let coupons = await productHelpers.getCoupons()
+        res.render("admin_view/view_coupons", { layout: "admin_layout", coupons })
+    })
+
+
+
+
 
 
 

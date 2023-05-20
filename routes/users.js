@@ -55,6 +55,8 @@ router.get('/manageAddress', middlewares.checkUserLoggedIn, usercontrollers.getA
 router.post('/add-address2',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost2);
 router.get("/removeAddress/:id", middlewares.checkUserLoggedIn, usercontrollers.removeAddress)
 
+router.post("/apply_coupon", middlewares.checkUserLoggedIn, usercontrollers.applyCoupon )
+
 // router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
 
 

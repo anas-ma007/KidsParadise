@@ -11,7 +11,7 @@ require('dotenv').config();
 const Razorpay = require('razorpay')
 const instance = new Razorpay({
     key_id: process.env.KEY_ID,
-    key_secret: process.env.KEY_SECRET ,
+    key_secret: process.env.KEY_SECRET,
 });
 
 
@@ -19,13 +19,13 @@ const instance = new Razorpay({
 
 
 module.exports = {
-    getUser: (userId) =>{
-        return new Promise(async(resolve, reject) =>{
+    getUser: (userId) => {
+        return new Promise(async (resolve, reject) => {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({
-                _id : new ObjectId(userId)
+                _id: new ObjectId(userId)
             })
             resolve(user)
-        }) 
+        })
     },
     doSignup: function (userData) {
         return new Promise(async function (resolve, reject) {
@@ -337,11 +337,11 @@ module.exports = {
         })
     },
 
-    
-     generateRazorpay: (orderId, total) => {
+
+    generateRazorpay: (orderId, total) => {
         return new Promise((res, rej) => {
             var options = {
-                amount: total*100,  // amount in the smallest currency unit
+                amount: total * 100,  // amount in the smallest currency unit
                 currency: "INR",
                 receipt: "" + orderId
             };
@@ -358,13 +358,13 @@ module.exports = {
     },
 
 
-    
+
     verifyPayment: (details) => {
-        return new Promise(async(res, rej) => {
+        return new Promise(async (res, rej) => {
             const {
                 createHmac,
-              } = await import('node:crypto');
-            let hmac = createHmac('sha256', process.env.KEY_SECRET );
+            } = await import('node:crypto');
+            let hmac = createHmac('sha256', process.env.KEY_SECRET);
 
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
             hmac = hmac.digest('hex')
@@ -377,22 +377,22 @@ module.exports = {
 
     },
 
-    changePaymentStatus: async(orderId)=>{
+    changePaymentStatus: async (orderId) => {
         let result = await db.get().collection(collection.ORDERS)
-        .updateOne(
-            {
-                _id:ObjectId(orderId)
-            },
-            {
-                $set:{
-                    status:'placed'
-                }
-            })
-            return result
+            .updateOne(
+                {
+                    _id: ObjectId(orderId)
+                },
+                {
+                    $set: {
+                        status: 'placed'
+                    }
+                })
+        return result
     },
 
-    GetUserDetails : async (userId)=>{
-        const user = await db.get().collection(collection.USER_COLLECTION).findOne({_id: new ObjectId(userId)})
+    GetUserDetails: async (userId) => {
+        const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: new ObjectId(userId) })
         return user
     },
 
@@ -415,48 +415,92 @@ module.exports = {
     // },
 
     findUser: (userId) => {
-        return new Promise(async(resolve,reject) => {
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({_id: new ObjectId(userId)})
+        return new Promise(async (resolve, reject) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: new ObjectId(userId) })
             resolve(user);
         })
     },
 
-    removeAddress:(addressId,userId)=>{
-        
+    removeAddress: (addressId, userId) => {
+
         console.log(addressId, userId, "addresid, userid");
-        return new Promise( (resolve, reject)=>{
-             db.get().collection(collection.USER_COLLECTION).updateOne({
-                _id : new ObjectId(userId),
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).updateOne({
+                _id: new ObjectId(userId),
                 "address._id": new ObjectId(addressId)
             },
-            {
-                $pull:{
-                    address : {
-                        _id :new ObjectId(addressId)
+                {
+                    $pull: {
+                        address: {
+                            _id: new ObjectId(addressId)
+                        }
                     }
-                }
-            }).then((response)=>{
-                console.log("adddresss removedddd?????");
-                resolve()
-            }).catch((err)=>{
-                console.log(err);
-            })
+                }).then((response) => {
+                    console.log("adddresss removedddd?????");
+                    resolve()
+                }).catch((err) => {
+                    console.log(err);
+                })
 
         })
 
     },
 
-    doGetUser: async(userId)=>{
-        let user = await db.get().collection(collection.USER).find({_id: ObjectId(userId)}).toArray()
+    doGetUser: async (userId) => {
+        let user = await db.get().collection(collection.USER).find({ _id: ObjectId(userId) }).toArray()
         return user
     },
 
-    getBanner : async()=>{
-        let banner= await db.get().collection(collection.BANNERS).find({status :true}).toArray()
+    getBanner: async () => {
+        let banner = await db.get().collection(collection.BANNERS).find({ status: true }).toArray()
         // console.log(banner, "banner for user home page in user helper function");
         return banner
     },
 
+    doapplyCoupon: async (couponCode, userId) => {
+        // console.log(couponCode, userId, total, " couponCode, userId, total");
+        let checkCoupon = await db.get().collection(collection.COUPONS).find({ couponCode: couponCode }).toArray()
+        if (checkCoupon.length>0) {
+            let today = new Date()
+            let expiryDate = new Date(checkCoupon[0].expiryDate)
+            let user = await db.get().collection(collection.COUPONS).aggregate([
+                {
+                    $match: { couponCode: couponCode }
+                },
+                {
+                    $match: { user: { $in: [ObjectId(userId)] } }
+                }
+            ]).toArray();
 
+
+            if (user.length==0) {
+                if (expiryDate >= today) {
+                    db.get().collection(collection.COUPONS).updateOne({ couponCode: couponCode }, { $push: { user: new ObjectId(userId) } })
+                    let discount = checkCoupon[0].discount;
+                    return ({ status: true, discount })
+                } else {
+                    console.log("coupon expiredddd");
+                    return (false)
+                }
+            } else {
+                console.log("user found -----");
+                return(false );
+            }
+        } else {
+            console.log("invalid code -----");
+            return(false );
+        }
+
+    },
+
+    getCoupon : async (couponCode)=>{
+        let Coupon = await db.get().collection(collection.COUPONS).find({couponCode : couponCode}).toArray()
+        console.log(Coupon , "soorajj logg coupon")
+        return Coupon
+    },
+   
 
 }
+
+
+

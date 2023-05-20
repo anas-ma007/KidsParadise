@@ -8,17 +8,17 @@ const twilioApi = require("../twilio")
 
 module.exports = {
     user_homepage: async (req, res) => {
-        let banner= await user_helpers.getBanner()
+        let banner = await user_helpers.getBanner()
         if (req.session.loggedIn) {
             const user = req.session.user;
             if (user) {
                 let cartCount = await productHelpers.getCartCount(user._id)
-                res.render('user_view/index', { user, cartCount,banner });
+                res.render('user_view/index', { user, cartCount, banner });
             } else {
-                res.render('user_view/index', {banner})
+                res.render('user_view/index', { banner })
             }
         } else {
-            res.render('user_view/index',{banner})
+            res.render('user_view/index', { banner })
         }
     },
 
@@ -484,13 +484,22 @@ module.exports = {
 
     placeOrderPost: async (req, res) => {
         console.log(req.body.addressId, "req.body.addressId");
-        const address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
+        let address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
         let payment = req.body.paymentMethod;
         // console.log(payment,'pppppppppaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyy');
         let products = await user_helpers.getCartList(req.session.user._id);
         let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
         // console.log(grandTotal[0].total, "total andTotal[0].tota");
-        let total = grandTotal[0].total
+        let coupon = req.body.coupon
+        let total, discount;
+        if (coupon) {
+            let checkCoupon = await user_helpers.getCoupon(coupon)
+            discount = parseInt(checkCoupon[0].discount)
+            console.log(discount, grandTotal[0].total , "discount, grandTotal[0].total ,");
+            total = grandTotal[0].total - discount
+        } else {
+            total = grandTotal[0].total
+        }
         // console.log(total, "total log");
         user_helpers.placeOrder(
             address,
@@ -498,6 +507,7 @@ module.exports = {
             total,
             payment,
             req.session.user._id,
+            discount
         )
             .then((orderId) => {
                 if (req.body["paymentMethod"] == "Cash on delivery") {
@@ -605,7 +615,7 @@ module.exports = {
     // },
 
 
-    getAddress: async (req,res) => {
+    getAddress: async (req, res) => {
         // console.log(req.body, "reqqq bodyrs");
         let user = req.session.user;
         const userId = req.session.user._id;
@@ -613,21 +623,37 @@ module.exports = {
         let address = await user_helpers.findUser(userId);
         // req.session.user = user;
         const cartCount = await productHelpers.getCartCount(user._id)
-        console.log(address,"address in user profile");
-        res.render('user_view/manageAddress', {user, cartCount,address, userDetails })
-        
-    }, 
+        console.log(address, "address in user profile");
+        res.render('user_view/manageAddress', { user, cartCount, address, userDetails })
 
-    removeAddress : (req, res)=>{
+    },
+
+    removeAddress: (req, res) => {
         console.log(req.params.id, "addresssssss iddddddddddddddddddd");
-        let addressId =req.params.id
-        let userId=req.session.user._id
+        let addressId = req.params.id
+        let userId = req.session.user._id
         console.log(userId);
-         user_helpers.removeAddress(addressId,userId ).then(()=>{
-            res.json({ status: true})
+        user_helpers.removeAddress(addressId, userId).then(() => {
+            res.json({ status: true })
         })
 
-    }, 
+    },
+
+    applyCoupon: async (req, res) => {
+        console.log(req.body, "req bodyyyyy");
+        let couponCode = req.body.couponCode
+        let userId = req.session.user._id
+        let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
+        // let total = grandTotal[0].total
+        console.log(couponCode, userId, "couponCode,userId , in apply coupon ");
+        let discount = await user_helpers.doapplyCoupon(couponCode, userId)
+        console.log(discount, "discount from apply coupon user cntrlr");
+        if (discount) {
+            let total = grandTotal[0].total - discount.discount
+            console.log(total, discount.discount, "total after apply the offer");
+            res.json({ total, discount: discount.discount })
+        }
+    },
 
 
 

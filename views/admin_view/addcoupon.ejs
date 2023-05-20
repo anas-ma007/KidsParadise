@@ -1,0 +1,135 @@
+<section class="content-main">
+  <div class="row">
+    <div class="col-9">
+      <div class="content-header">
+        <h2 class="content-title">Add Coupon</h2>
+      </div>
+    </div>
+    <div class="col-lg-11">
+      <div class="card mb-4">
+        <div class="card-body">
+          <form class="mx-1 mx-md-4 pt-5" action="/admin/addcoupon" method="post" id="coupon-form">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <label class="form-label">Coupon Code</label>
+                  <input type="text" placeholder="Coupon Code" required name="couponCode" class="form-control"
+                    id="coupon">
+                </div>
+                <div class="mb-4">
+                  <label class="form-label">Discount</label>
+                  <input type="number" placeholder="Discount" required name="discount" class="form-control"
+                    id="discount">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <label class="form-label">Created</label>
+                  <input type="date" name="createdDate" class="form-control" id="createdDate">
+                </div>
+                <div class="mb-4">
+                  <label class="form-label">Expiry</label>
+                  <input type="date" name="expiryDate" class="form-control" id="expiryDate">
+                </div>
+              </div>
+            </div>
+
+            <% if(locals.message) { %>
+              <p style="color: red;"><%=message%></p>
+            <% }%>
+
+            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+              <input type="submit" style="border-radius: 1rem;" class="btn btn-primary btn-lg" />
+            </div>
+          </form>
+
+          <script>
+            $(document).ready(function () {
+              $("#coupon-form").validate({
+                rules: {
+                  couponCode: {
+                    required: true,
+                    minlength: 6,
+                    validCouponCode: true
+                  },
+                  discount: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                  },
+                  createdDate: {
+                    required: true,
+                    lessThanOrEqualToToday: true,
+                  },
+                  expiryDate: {
+                    required: true,
+                    greaterThanCreatedDate: true,
+                  },
+                },
+                messages: {
+                  couponCode: {
+                    required: "Please enter a valid coupon code.",
+                    minlength: "Coupon code must be at least 6 characters long.",
+                    validCouponCode: "Coupon code must have at least 3 letters and 3 numbers."
+                  },
+                  discount: {
+                    required: "Please enter a valid discount price.",
+                    number: "Discount should be a positive number.",
+                    min: "Discount should be a number greater than 0."
+                  },
+                  createdDate: {
+                    required: "Please select a created date.",
+                    lessThanOrEqualToToday: "Created date should be today or a future date."
+                  },
+                  expiryDate: {
+                    required: "Please select an expiry date.",
+                    greaterThanCreatedDate: "Expiry date should be a future date of the created date."
+                  },
+                },
+                errorClass: "text-danger",
+              });
+
+
+              // Custom validation method for couponCode (at least 3 letters and 3 numbers)
+              $.validator.addMethod(
+                "validCouponCode",
+                function (value, element) {
+                  var letters = value.match(/[a-zA-Z]/g);
+                  var numbers = value.match(/[0-9]/g);
+                  return letters !== null && numbers !== null && letters.length >= 3 && numbers.length >= 3;
+                },
+                "Coupon code must have at least 3 letters and 3 numbers."
+              );
+
+              // Custom validation rule for created date (should be today or a future date)
+              $.validator.addMethod(
+                "lessThanOrEqualToToday",
+                function (value, element) {
+                  var selectedDate = new Date(value);
+                  var currentDate = new Date();
+                  currentDate.setHours(0, 0, 0, 0);
+                  return selectedDate >= currentDate;
+                },
+                "Created date should be today or a future date."
+              );
+
+              // Custom validation rule for expiry date (should be a future date of the created date)
+              $.validator.addMethod(
+                "greaterThanCreatedDate",
+                function (value, element) {
+                  var selectedDate = new Date(value);
+                  var createdDate = new Date($("#createdDate").val());
+                  return selectedDate > createdDate;
+                },
+                "Expiry date should be a future date of the created date."
+              );
+            });
+          </script>
+        </div>
+      </div>
+
+      <a href="/admin/viewcoupons" style="font-weight: 500;">View coupons</a>
+
+    </div>
+  </div>
+</section>
