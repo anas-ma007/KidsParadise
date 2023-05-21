@@ -505,8 +505,10 @@ module.exports = {
             total = grandTotal[0].total - discount
         } else {
             total = grandTotal[0].total
+            discount=null
         }
         // console.log(total, "total log");
+        // console.log(products, "products,======", discount," discounttttt");
         user_helpers.placeOrder(
             address,
             products,
@@ -517,10 +519,13 @@ module.exports = {
         )
             .then((orderId) => {
                 if (req.body["paymentMethod"] == "Cash on delivery") {
+                    user_helpers.stockDecrement(products)
                     res.json({ codSuccess: true });
                 }
                 else {
                     user_helpers.generateRazorpay(orderId, total).then((response) => {
+                        console.log(products, "products in online payment");
+                        user_helpers.stockDecrement(products)
                         res.json(response);
                     });
                 }
@@ -533,11 +538,6 @@ module.exports = {
         // console.log(orders, "ttoal priced obj");
         res.render("user_view/orders", { user, cartCount, orders })
     },
-
-    // StockCount : async(req, res)=>{
-    //     let user= req.session.user
-    //     let stockCount = await productHelpers.doGetStockCount(user._id)
-    // },
 
 
     orderDetails: async (req, res) => {
@@ -552,14 +552,6 @@ module.exports = {
         res.render("user_view/order_details", { user, cartCount, products, order })
     },
 
-    // returnOrder: (req, res)=>{
-    //     let orderId= req.params.id
-    //     return new Promise(async ()=>{
-    //         await productHelpers.returnProduct(orderId).then(()=>{
-    //             res.redirect("/orders");
-    //         })
-    //     })
-    // },
 
     returnOrder: async (req, res) => {
         let orderId = req.params.id;

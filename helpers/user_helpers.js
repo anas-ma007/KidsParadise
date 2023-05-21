@@ -146,7 +146,7 @@ module.exports = {
 
     },
 
-    
+
 
     /////////////////////// password recovery ///////////////////////
 
@@ -312,7 +312,7 @@ module.exports = {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
             res(cart.products)
         })
-    }, 
+    },
 
     placeOrder: (order, products, grandTotal, payment, userId) => {
         return new Promise((res, rej) => {
@@ -462,7 +462,7 @@ module.exports = {
     doapplyCoupon: async (couponCode, userId) => {
         // console.log(couponCode, userId, total, " couponCode, userId, total");
         let checkCoupon = await db.get().collection(collection.COUPONS).find({ couponCode: couponCode }).toArray()
-        if (checkCoupon.length>0) {
+        if (checkCoupon.length > 0) {
             let today = new Date()
             let expiryDate = new Date(checkCoupon[0].expiryDate)
             let user = await db.get().collection(collection.COUPONS).aggregate([
@@ -474,7 +474,7 @@ module.exports = {
                 }
             ]).toArray();
 
-            if (user.length==0) {
+            if (user.length == 0) {
                 if (expiryDate >= today) {
                     db.get().collection(collection.COUPONS).updateOne({ couponCode: couponCode }, { $push: { user: new ObjectId(userId) } })
                     let discount = checkCoupon[0].discount;
@@ -485,24 +485,38 @@ module.exports = {
                 }
             } else {
                 console.log("user found -----");
-                return(false );
+                return (false);
             }
         } else {
             console.log("invalid code -----");
-            return(false );
+            return (false);
         }
 
     },
 
 
-    getCoupon : async (couponCode)=>{
-        let Coupon = await db.get().collection(collection.COUPONS).find({couponCode : couponCode}).toArray()
+    getCoupon: async (couponCode) => {
+        let Coupon = await db.get().collection(collection.COUPONS).find({ couponCode: couponCode }).toArray()
         // console.log(Coupon , "soorajj logg coupon")
         return Coupon
     },
 
 
-   
+    stockDecrement: async (products) => {
+        for (let i = 0; i < products.length; i++) {
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({
+                _id: products[i].item
+            },
+                {
+                    $inc: {
+                        stock: -(products[i].quantity)
+                    }
+                })
+        }
+    },
+
+
+
 
 }
 
