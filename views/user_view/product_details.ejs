@@ -25,7 +25,7 @@
 
               <div class="item-slick3 zoomable" data-thumb="<%=product.image[1]%>">
                 <div class="wrap-pic-w pos-relative">
-                  <img  src="<%=product.image[1]%>" alt="IMG-PRODUCT">
+                  <img src="<%=product.image[1]%>" alt="IMG-PRODUCT">
 
                   <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
                     href="<%=product.image[1]%>">
@@ -68,7 +68,13 @@
 
           <span class="mtext-106 cl2">
             Rs <%=product.price%>
+      
           </span>
+          <% if ( product.stock==0 ) { %>
+
+            <p class="text-danger m-1 ">Out of stock</p>
+
+            <% } %>
 
           <p class="stext-102 cl3 p-t-23 mb-3``">
             <%=product.description%>
@@ -81,18 +87,30 @@
             <div class="size-204 flex-w flex-m respon6-next">
 
               <% if ( locals.user ) { %>
-                <button
-                  class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3"
-                  type="submit" onclick="addToCart('<%= product._id %>')" id="addToCart"
-                  data-product="<%= product._id %>">
-                  Add to cart
-                </button>
-                <% } else { %>
-                  <a href="/login"
-                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3">
+                <% if ( product.stock==0 ) { %>
+                  <button
+                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04  js-addcart-btn btn-addcart-btn mt-3"
+                    type="submit" onclick="outOfStock('<%= product._id %>')" id="addToCart"
+                    data-product="<%= product._id %>">
                     Add to cart
-                  </a>
-                  <% } %>
+                  </button>
+
+                  <% } else { %>
+                    <button
+                      class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3"
+                      type="submit" onclick="addToCart('<%= product._id %>')" id="addToCart"
+                      data-product="<%= product._id %>">
+                      Add to cart
+
+                    </button>
+                    <% } %>
+
+                <% } else { %>
+                        <a href="/login"
+                          class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3">
+                          Add to cart
+                        </a>
+               <% } %>
 
             </div>
           </div>
@@ -100,25 +118,14 @@
 
         <!--  -->
         <div class="flex-w flex-m p-l-100 p-t-40 respon7">
-          <div class="flex-m bor9 p-r-10 m-r-11">
+          <!-- <div class="flex-m bor9 p-r-10 m-r-11">
             <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
               data-tooltip="Add to Wishlist">
               <i class="zmdi zmdi-favorite"></i>
             </a>
-          </div>
+          </div> -->
 
-          <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
-            <i class="fa fa-facebook"></i>
-          </a>
 
-          <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
-            <i class="fa fa-twitter"></i>
-          </a>
-
-          <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-            data-tooltip="Google Plus">
-            <i class="fa fa-google-plus"></i>
-          </a>
         </div>
       </div>
     </div>
@@ -145,7 +152,7 @@
 
 
 
- <script>
+  <script>
 
     $('.js-addcart-detail').each(function () {
       var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
@@ -161,7 +168,7 @@
         }).showToast();
       });
     });
-  </script> 
+  </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
     integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
@@ -170,6 +177,7 @@
 
     function addToCart(proId) {
       // console.log("api call prod details first page");
+
       $.ajax({
         url: '/addToCart/' + proId,
         method: "get",
@@ -182,6 +190,19 @@
 
           }
         }
+      })
+    }
+
+  </script>
+
+
+
+  <script>
+    function outOfStock() {
+
+      Swal.fire({
+        icon: 'warning',
+        text: 'Out Of Stock'
       })
     }
 

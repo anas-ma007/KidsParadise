@@ -194,12 +194,18 @@ module.exports = {
     },
     sendotp: (req, res) => {
         let phone = req.body.phone
+        console.log(req.body);
+        console.log("apuc,apciasdhcuoabljsdfv68tr08yerhbvananaanbabnabab   anas");
         user_helpers.checkUserOTP(req.body).then(async (userData) => {
             if (userData) {
                 user_helpers.doSendOtp(req.body).then((response) => {
                     if (response) {
+                        console.log(response);
                         req.session.otpphone = phone
-                        res.json(response)
+                        res.json({
+                            success: response,
+                            mobile: req.body.phone
+                        })
                     } else {
                         req.session.user = null;
                         req.session.otpErr = "You were blocked by admin..!!!";
@@ -218,7 +224,7 @@ module.exports = {
 
 
     verifyOtp: (req, res) => {
-        console.log(req.body);
+        console.log(req.body, "otp verifyyyyyyyy req. body");
         let phone = req.session.otpphone
         user_helpers.doVerifyOtp(req.body, phone).then((response) => {
             if (response.sendSms) {
@@ -651,7 +657,11 @@ module.exports = {
         if (discount) {
             let total = grandTotal[0].total - discount.discount
             console.log(total, discount.discount, "total after apply the offer");
-            res.json({ total, discount: discount.discount })
+            res.json({ status:true, total, discount: discount.discount })
+        } else {
+            total= grandTotal[0].total
+            discount=0;
+            res.json({ status:false, total, discount })
         }
     },
 

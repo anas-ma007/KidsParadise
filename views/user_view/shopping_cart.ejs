@@ -222,7 +222,8 @@
 					fill="none"></path>
 			</svg>
 
-			<h3 class="pb-5">Your Cart is Empty... <br> <span><a class="btn btn-warning mt-3" href="/allproducts">Go to SHOP</a></span> </h3>
+			<h3 class="pb-5">Your Cart is Empty... <br> <span><a class="btn btn-warning mt-3" href="/allproducts">Go to
+						SHOP</a></span> </h3>
 
 		</div>
 
@@ -260,20 +261,28 @@
 													<td class="column-3"> Rs <%=pro.productsDetails[0].price%>
 													</td>
 													<td class="column-4">
-														<div class="wrap-num-product flex-w m-l-auto m-r-0">
-															<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m "
-																onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',-1,'<%=pro.productsDetails[0].price%>')">
-																<i class="fs-16 zmdi zmdi-minus"></i>
-															</div>
+														<div id="testDiv">
+															<div class="wrap-num-product flex-w m-l-auto m-r-0 ">
+																<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m "
+																	onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',-1,'<%=pro.productsDetails[0].price%>','<%=pro.productsDetails[0].stock%>', )">
+																	<i class="fs-16 zmdi zmdi-minus"></i>
+																</div>
 
-															<input id="quantityCount<%=pro.productsDetails[0]._id%>"
-																class="mtext-104 cl3 txt-center num-product"
-																type="number" name="num-product1"
-																value="<%=pro.productsDetails[0].quantity%>">
+																<input id="quantityCount<%=pro.productsDetails[0]._id%>"
+																	class="mtext-104 cl3 txt-center num-product"
+																	type="number" name="num-product1"
+																	value="<%=pro.productsDetails[0].quantity%>">
 
-															<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
-																onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',1,'<%=pro.productsDetails[0].price%>')">
-																<i class="fs-16 zmdi zmdi-plus"></i>
+
+
+																<% if ( (pro.productsDetails[0].quantity) <
+																	(pro.productsDetails[0].stock) ) { %>
+																	<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m "
+																		onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',1,'<%=pro.productsDetails[0].price%>', '<%=pro.productsDetails[0].stock%>')">
+																		<i class="fs-16 zmdi zmdi-plus"></i>
+																	</div>
+																	<% }%>
+
 															</div>
 														</div>
 													</td>
@@ -374,7 +383,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
 
 		<script>
-			function changeQuantity(cartId, proId, count, price) {
+			function changeQuantity(cartId, proId, count, price, stock) {
 				let quantity = parseInt(document.getElementById(`quantityCount${proId}`).value);
 				count = parseInt(count)
 				if (count + quantity == 0) {
@@ -400,7 +409,7 @@
 									console.log(response);
 									if (response) {
 										location.reload()
-										// $("#cartTable").load(location.href + " #cartTable");
+										// $("#testDiv").load(location.href + " #testDiv");
 										// $("#bothDiv").load(location.href + " #bothDiv");
 									} else {
 										document.getElementById(proId).innerHTML = quantity + count
@@ -411,42 +420,54 @@
 						}
 					});
 				} else {
-					$.ajax({
-						url: '/change-product-quantity',
-						data: {
-							cart: cartId,
-							product: proId,
-							count: count,
-							quantity: quantity
-						},
-						method: 'post',
-						success: (response) => {
-							console.log(response);
-							console.log(response.response.grandTotal)
-							if (response) {
-								//location.reload()
-								//document.getElementById(proId).innerText = quantity + count
-								//grandTotal = document.getElementById('grandTotal').innerText
-								//grandTotal = parseInt(grandTotal) + price * count
-								document.getElementById('grandTotal').innerText = `₹ ${response.response.grandTotal}`
-								document.getElementById('subTotal').innerText = `₹ ${response.response.grandTotal}`
-								let quantityCount = document.getElementById(`quantityCount${proId}`).value
-								let productprice = document.getElementById(`productTotal${proId}`).innerText
-								console.log(productprice)
-								document.getElementById(`productTotal${proId}`).innerText = parseInt(price) * quantityCount
-								console.log(document.getElementById(proId));
-								//$("#quantityDiv").load(location.href + " #quantityDiv");
+					if (count + quantity > stock) {
+						Swal.fire({
+							icon: "warning",
+							text: "Out of stock..!",
 
-							} else {
-								document.getElementById(proId).innerHTML = quantity + count
+						})	
+						location.reload()
+
+
+					} else {
+						$.ajax({
+							url: '/change-product-quantity',
+							data: {
+								cart: cartId,
+								product: proId,
+								count: count,
+								quantity: quantity
+							},
+							method: 'post',
+							success: (response) => {
+								console.log(response);
+								console.log(response.response.grandTotal)
+								if (response) {
+									//location.reload()
+									//document.getElementById(proId).innerText = quantity + count
+									//grandTotal = document.getElementById('grandTotal').innerText
+									//grandTotal = parseInt(grandTotal) + price * count
+									document.getElementById('grandTotal').innerText = `₹ ${response.response.grandTotal}`
+									document.getElementById('subTotal').innerText = `₹ ${response.response.grandTotal}`
+									let quantityCount = document.getElementById(`quantityCount${proId}`).value
+									let productprice = document.getElementById(`productTotal${proId}`).innerText
+									console.log(productprice)
+									document.getElementById(`productTotal${proId}`).innerText = parseInt(price) * quantityCount
+									console.log(document.getElementById(proId));
+									//$("#quantityDiv").load(location.href + " #quantityDiv");
+
+								} else {
+									document.getElementById(proId).innerHTML = quantity + count
+								}
 							}
+						})
+						// $("#testDiv").load(location.href + " #testDiv");
 
-						}
 					}
-					)
 				}
 
 			}
+
 			function removeProduct(cartId, proId) {
 				console.log(cartId);
 				console.log(proId);

@@ -146,6 +146,8 @@ module.exports = {
 
     },
 
+    
+
     /////////////////////// password recovery ///////////////////////
 
     checkForUser: async (mobile) => {
@@ -215,6 +217,10 @@ module.exports = {
             }
         })
     },
+
+
+
+
     // ///////////////// password recover 
 
     getTotalAmount: (userId) => {
@@ -306,7 +312,7 @@ module.exports = {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: ObjectId(userId) })
             res(cart.products)
         })
-    },
+    }, 
 
     placeOrder: (order, products, grandTotal, payment, userId) => {
         return new Promise((res, rej) => {
@@ -357,8 +363,6 @@ module.exports = {
 
     },
 
-
-
     verifyPayment: (details) => {
         return new Promise(async (res, rej) => {
             const {
@@ -396,7 +400,6 @@ module.exports = {
         return user
     },
 
-
     // UpdateProfileInfo:(userId,userData)=>{
     //     userData.phone = Number(userData.phone);
     //     return new Promise((resolve,reject)=>{
@@ -422,7 +425,6 @@ module.exports = {
     },
 
     removeAddress: (addressId, userId) => {
-
         console.log(addressId, userId, "addresid, userid");
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({
@@ -472,7 +474,6 @@ module.exports = {
                 }
             ]).toArray();
 
-
             if (user.length==0) {
                 if (expiryDate >= today) {
                     db.get().collection(collection.COUPONS).updateOne({ couponCode: couponCode }, { $push: { user: new ObjectId(userId) } })
@@ -493,11 +494,14 @@ module.exports = {
 
     },
 
+
     getCoupon : async (couponCode)=>{
         let Coupon = await db.get().collection(collection.COUPONS).find({couponCode : couponCode}).toArray()
-        console.log(Coupon , "soorajj logg coupon")
+        // console.log(Coupon , "soorajj logg coupon")
         return Coupon
     },
+
+
    
 
 }

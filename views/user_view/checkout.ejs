@@ -153,23 +153,12 @@
 
 			<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
 				<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-					<h4 class="mtext-109 cl2 p-b-30">
+
+					<h4 class="mtext-109 cl2 p-b-30 ">
 						Cart Totals
 					</h4>
+					<hr style="border: 1px dashed;">
 
-					<div class="flex-w flex-t bor12 p-b-13">
-						<div class="size-208">
-							<span class="stext-110 cl2">
-								Subtotal: ₹ <%= grandTotal[0].total%>
-							</span>
-						</div>
-
-						<div class="size-209">
-							<span class="mtext-110 cl2">
-
-							</span>
-						</div>
-					</div>
 
 					<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
 						<div class="flex-w flex-m m-r-20 m-tb-5">
@@ -184,10 +173,28 @@
 					</div>
 					<hr style="border: 1px dashed;">
 
+
+
+					<!-- <div class="flex-w flex-t bor12 p-b-13"> -->
+						<div class="size-209 mt-3 ">
+							<span class="mtext-110 cl2 mt-3">
+							Subtotal:     ₹ <%= grandTotal[0].total%> 
+							</span>
+						</div>
+					<!-- </div> -->
+					<div class="size-208">
+						<span class="stext-110 cl2">
+								Discount/Coupon: ₹ <%= grandTotal[0].total%> 
+						</span>
+					</div>
+
+					<!-- <hr style="border: 1px dashed;"> -->
+					<div class="flex-w flex-t bor12 p-b-13"></div>
+
 					<div class="flex-w flex-t p-t-27 p-b-33">
 						<div class="size-208">
 							<span class="mtext-101 cl2">
-								Total:
+								<strong> Total:</strong>
 							</span>
 						</div>
 
@@ -495,6 +502,7 @@
 			},
 			method: "post",
 			success: (response) => {
+				console.log(response, "response from applu coupon");
 				if (response.status == false) {
 					Swal.fire("Invalid Coupons",
 						"Failed")
