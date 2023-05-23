@@ -67,7 +67,15 @@
           </h4>
 
           <span class="mtext-106 cl2">
-            Rs <%=product.price%>
+            <!-- Rs <%=product.price%> -->
+
+            <% if ( product.offer>0 ) { %>
+              <del class="mr-3"> Rs <%=product.price%> </del>
+              
+              <strong>  Rs <%=(product.price-product.offer)%> </strong>
+              <% } else { %>
+                Rs <%=product.price%> 
+            <% }%>
       
           </span>
           <% if ( product.stock==0 ) { %>

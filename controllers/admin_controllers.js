@@ -16,37 +16,71 @@ const adminCredential = {
 
 
 module.exports = {
+    // admin_homepage: async (req, res) => {
+    //     if (req.session.adminLoggedIn) {
+    //         // let orderDetails= await adminHelpers.getOrderDetails()
+    //         let categoryCount = await adminHelpers.getCategoryCount()
+    //         let productsCount = await adminHelpers.getProductCount()
+    //         let orderCount = await adminHelpers.getOrderCount()
+    //         let totalRevenue = await adminHelpers.getTotalRevenue()
+    //         let total = totalRevenue[0].total
+    //         // console.log(total);
+    //         // console.log(totalRevenue);
+    //         res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount, orderCount, total })
+    //     } else {
+    //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' });
+    //     }
+    // },
     admin_homepage: async (req, res) => {
-        if (req.session.adminLoggedIn) {
-            // let orderDetails= await adminHelpers.getOrderDetails()
-            let categoryCount = await adminHelpers.getCategoryCount()
-            let productsCount = await adminHelpers.getProductCount()
-            let orderCount = await adminHelpers.getOrderCount()
-            let totalRevenue = await adminHelpers.getTotalRevenue()
-            let total = totalRevenue[0].total
-            // console.log(total);
-            // console.log(totalRevenue);
-            res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount, orderCount, total })
-        } else {
+        try {
+          if (req.session.adminLoggedIn) {
+            let categoryCount = await adminHelpers.getCategoryCount();
+            let productsCount = await adminHelpers.getProductCount();
+            let orderCount = await adminHelpers.getOrderCount();
+            let totalRevenue = await adminHelpers.getTotalRevenue();
+            let total = totalRevenue[0].total;
+      
+            res.render('admin_view/index', { layout: 'admin_layout', categoryCount, productsCount, orderCount, total });
+          } else {
             res.render('admin_view/admin_login', { layout: 'admin_LogLayout' });
+          }
+        } catch (error) {
+          res.render('error', { error });
         }
-    },
-
+      },
+      
     admin_login: function (req, res) {
         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
     },
-    admin_loginPost: (req, res) => {
-        console.log(req.body)
-        if (req.body.email == adminCredential.email && req.body.password == adminCredential.password) {
+    // admin_loginPost: (req, res) => {
+    //     console.log(req.body)
+    //     if (req.body.email == adminCredential.email && req.body.password == adminCredential.password) {
+    //         console.log("loggedInAdmin");
+    //         req.session.admin = adminCredential
+    //         req.session.adminLoggedIn = true
+    //         adminStatus = req.session.adminLoggedIn
+    //         res.redirect("/admin")
+    //     } else {
+    //         res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
+    //     }
+    // },
+    admin_loginPost: async (req, res) => {
+        try {
+          console.log(req.body);
+          if (req.body.email == adminCredential.email && req.body.password == adminCredential.password) {
             console.log("loggedInAdmin");
-            req.session.admin = adminCredential
-            req.session.adminLoggedIn = true
-            adminStatus = req.session.adminLoggedIn
-            res.redirect("/admin")
-        } else {
-            res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
+            req.session.admin = adminCredential;
+            req.session.adminLoggedIn = true;
+            adminStatus = req.session.adminLoggedIn;
+            res.redirect("/admin");
+          } else {
+            res.render('admin_view/admin_login', { layout: 'admin_LogLayout' });
+          }
+        } catch (error) {
+          res.render('error', { error });
         }
-    },
+      },
+      
 
     add_product: (req, res) => {
         productHelpers.getCategory().then((category) => {
@@ -78,7 +112,8 @@ module.exports = {
                 })
                 // req.session.submitStatus="product added succesfully"
             })
-        } catch (err) {
+        } catch (error) {
+            res.render('error', { error });
             // console.log(err);
         } finally {
             // req.session.submitStatus = "product Added"
@@ -88,8 +123,8 @@ module.exports = {
 
     view_products: async (req, res) => {
 
-        adminHelpers.getAllProducts().then((products) => {
-            console.log(products, '999999999999999999999999999999');
+        await adminHelpers.getAllProducts().then((products) => {
+            // console.log(products, '999999999999999999999999999999');
             res.render('admin_view/view_products', { products, layout: 'admin_layout' })
 
         })
@@ -208,8 +243,8 @@ module.exports = {
                     })
                 }
             })
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            res.render('error', { error });
         } finally {
             res.redirect('/admin/viewproducts');
         }
@@ -255,8 +290,14 @@ module.exports = {
 
     returnProduct: async (req, res) => {
         let orderId = req.params.id
+        let totalAmount = await user_helpers.totalAmount(orderId)
+        let userId = await user_helpers.orderUser(orderId)
+        let orders = await productHelpers.findOrder(orderId)
         await productHelpers.returnConfirm(orderId).then(() => {
-            res.redirect('/admin/order-details')
+            user_helpers.incWallet(userId,totalAmount)
+            user_helpers.incrementStock(orders[0].products).then(()=>{
+                res.redirect('/admin/order-details')
+            })
         })
     },
 
@@ -266,22 +307,39 @@ module.exports = {
         res.json({ OrderStatistics, saleStatistics })
     },
 
+    // viewOrderDetails: async (req, res) => {
+    //     // console.log(req.body, "req.bodyyy");
+    //     console.log(req.params.id, "req.params.id");
+    //     const orderId = req.params.id
+    //     // let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
+    //     await productHelpers.findOrder(req.params.id).then(async (order) => {
+    //         let products = await productHelpers.orderProductDetail(req.params.id);
+    //         let totalPrice = order[0].totalPrice
+    //         let user = await user_helpers.getUser(order[0].userId)
+    //         // console.log(user, "user" );
+    //         // console.log(totalPrice, "total price");
+    //         // console.log(products, "productsss");
+    //         // console.log(order, "orderrrrrr");
+    //         res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
+    //     })
+    // },
+
     viewOrderDetails: async (req, res) => {
-        // console.log(req.body, "req.bodyyy");
-        console.log(req.params.id, "req.params.id");
-        const orderId = req.params.id
-        // let orderDetails= await adminHelpers.getOrderDetails(orderId)    /////test
-        await productHelpers.findOrder(req.params.id).then(async (order) => {
+        try {
+          console.log(req.params.id, "req.params.id");
+          const orderId = req.params.id;
+          await productHelpers.findOrder(req.params.id).then(async (order) => {
             let products = await productHelpers.orderProductDetail(req.params.id);
-            let totalPrice = order[0].totalPrice
-            let user = await user_helpers.getUser(order[0].userId)
-            // console.log(user, "user" );
-            // console.log(totalPrice, "total price");
-            // console.log(products, "productsss");
-            // console.log(order, "orderrrrrr");
-            res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice })
-        })
-    },
+            let totalPrice = order[0].totalPrice;
+            let user = await user_helpers.getUser(order[0].userId);
+      
+            res.render('admin_view/order_details', { layout: 'admin_layout', order, user, products, totalPrice });
+          });
+        } catch (error) {
+          res.render('error', { error });
+        }
+      },
+      
 
     addBanner: (req, res) => {
         console.log(req.body, "req.body from add banner");
@@ -369,10 +427,31 @@ module.exports = {
         })
     },
 
-    viewCoupons: (async (req, res) => {
+    viewCoupons: async (req, res) => {
         let coupons = await productHelpers.getCoupons()
         res.render("admin_view/view_coupons", { layout: "admin_layout", coupons })
-    })
+    },
+
+    addOffer : async(req, res)=>{
+        let category = await productHelpers.getCategory()
+        res.render("admin_view/addoffer", { layout: "admin_layout", category})
+    },
+
+    addOfferPost : async(req, res)=>{
+        console.log(req.body, "req body from add offer post");
+        let offer= req.body
+        await adminHelpers.addOfferPrice(offer)
+        res.redirect("/admin/addoffer")
+    },
+
+    viewOffer : async(req, res)=>{
+        
+        let products= await adminHelpers.getAllProducts()
+        res.render("admin_view/view_offer", { layout: "admin_layout", products})
+
+
+    },
+
 
 
 

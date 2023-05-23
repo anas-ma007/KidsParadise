@@ -460,6 +460,11 @@ module.exports = {
 
     },
 
+    findOrder: async(orderId)=>{
+        let order = await db.get().collection(collection.ORDERS).find({_id:new ObjectId(orderId)}).sort({date: -1}).toArray()
+        return order
+      },
+
 }
 
 

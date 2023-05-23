@@ -49,7 +49,8 @@
 									<td class="column-2">
 										<%=pro.productsDetails[0].name%>
 									</td>
-									<td class="column-3"> Rs <%=pro.productsDetails[0].price%>
+									<td class="column-3"> Rs
+										<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>
 									</td>
 									<td class="column-4">
 										<input id="quantityCount" class="mtext-104 cl3 txt-center num-product ml-5"
@@ -57,8 +58,10 @@
 											value="<%=pro.productsDetails[0].quantity%>">
 
 									</td>
-									<td class="column-5"> Rs
-										<%=(pro.productsDetails[0].price)*(pro.productsDetails[0].quantity) %>
+									<td class="column-5">
+										Rs
+										<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)*(pro.productsDetails[0].quantity)
+											%>
 									</td>
 
 								</tr>
@@ -176,15 +179,15 @@
 
 
 					<!-- <div class="flex-w flex-t bor12 p-b-13"> -->
-						<div class="size-209 mt-3 ">
-							<span class="mtext-110 cl2 mt-3">
-							Subtotal:     ₹ <%= grandTotal[0].total%> 
-							</span>
-						</div>
+					<div class="size-209 mt-3 ">
+						<span class="mtext-110 cl2 mt-3">
+							Subtotal: ₹ <%= grandTotal[0].total-offerTotal[0].total%>
+						</span>
+					</div>
 					<!-- </div> -->
 					<div class="size-208">
 						<span class="stext-110 cl2">
-								Discount/Coupon: ₹ <%= grandTotal[0].total%> 
+							Discount/Coupon: ₹
 						</span>
 					</div>
 
@@ -200,7 +203,7 @@
 
 						<div class="size-209 p-t-1">
 							<span class="mtext-110 cl2  totalPrice" id="grandTotal" name="total-price">
-								<%= grandTotal[0].total%>
+								<%= grandTotal[0].total-offerTotal[0].total%>
 
 							</span>
 						</div>
@@ -219,11 +222,29 @@
 							<h5><input type="radio" checked required name="paymentMethod" value="Cash on delivery"
 									class="float-left mr-4 mt-1">Cash on delivery</h5>
 						</label>
+						<% if(userData.wallet<(grandTotal[0].total-offerTotal[0].total) ){ %>
 
-						<label class="radio-inline ">
-							<h5><input type="radio" required name="paymentMethod" value="Razorpay"
-									class="float-left mr-4 mt-1">Razorpay</h5>
-						</label>
+							<label class="radio-inline mt-3">
+								<h5><input type="radio" disabled checked required name="paymentMethod" value="Wallet"
+										class="float-left mr-4 mt-1">Wallet</h5>
+								<p class="text-danger "> no sufficient blnce in wallet
+								<p class="mb-3">Wallet Balnce : ₹<%= userData.wallet%>
+								</p>
+								</p>
+
+							</label>
+							<% } else { %>
+								<label class="radio-inline ">
+									<h5><input type="radio" checked required name="paymentMethod" value="Wallet"
+											class="float-left mr-4 mt-1">Wallet</h5>
+								</label>
+
+								<% } %>
+
+									<label class="radio-inline ">
+										<h5><input type="radio" required name="paymentMethod" value="Razorpay"
+												class="float-left mr-4 mt-1">Razorpay</h5>
+									</label>
 
 					</div>
 
@@ -424,7 +445,7 @@
 			method: 'post',
 			success: (response) => {
 				if (response.codSuccess) {
-					
+
 					Swal.fire(
 						"Order Placed Succesfully",
 						"Success"
@@ -432,6 +453,15 @@
 						console.log(response);
 						window.location.href = '/orders'
 					})
+				} else if (response.walletSuccess) {
+					Swal.fire(
+						"Order Placed Succesfully",
+						"Success"
+					).then(() => {
+						console.log(response);
+						window.location.href = '/orders'
+					})
+
 				} else {
 					razorpayPayment(response)
 				}

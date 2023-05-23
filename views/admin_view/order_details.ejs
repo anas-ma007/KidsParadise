@@ -93,9 +93,9 @@
                                             <div class="info"><%=products[i].product.name%></div>
                                         </a>
                                     </td>
-                                    <td> Rs. <%=products[i].product.price%> </td>
+                                    <td> Rs. <%=(products[i].product.price-products[i].product.offer)%> </td>
                                     <td> <%=products[i].quantity%> </td>
-                                    <td class="text-end">Rs. <%=(products[i].product.price*products[i].quantity)%> </td>
+                                    <td class="text-end">Rs. <%=((products[i].product.price-products[i].product.offer)*products[i].quantity)%> </td>
                                     
                                 </tr>
                                 <% } %>

@@ -11,6 +11,7 @@ module.exports = {
     addProduct: (productData, callback) => {
         productData.status = true
         productData.date = new Date()
+        productData.offer = 0
         productData.price = parseInt(productData.price)
         productData.stock = parseInt(productData.stock)
         // console.log("api calll 6878989");
@@ -39,7 +40,6 @@ module.exports = {
     // addBanner: (bannerDetails) => {
     //     return new Promise(async (resolve, reject) => {
     //         let bannerExit = await db.get().collection(collection.BANNERS).findOne({ name: { $regex: `^${bannerDetails.name}$`, $options: 'i' } });
-
     // if (bannerExit) {
     //     resolve({ status: false, message: 'This banner already exists...!' });
     //         } else {
@@ -80,14 +80,14 @@ module.exports = {
             // if (bannerExist) {
             //     reject(new Error('This banner already exists...!'));
             // } else {
-                bannerDetails.status = true;
-                db.get().collection(collection.BANNERS).insertOne(bannerDetails)
-                    .then((data) => {
-                        resolve(data.insertedId);
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
+            bannerDetails.status = true;
+            db.get().collection(collection.BANNERS).insertOne(bannerDetails)
+                .then((data) => {
+                    resolve(data.insertedId);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
             // }
         });
     },
@@ -107,9 +107,9 @@ module.exports = {
         });
     },
 
-    getBanners : ()=>{
-        return new Promise(async (resolve, reject)=>{
-            let banner=await db.get().collection(collection.BANNERS).find().toArray()
+    getBanners: () => {
+        return new Promise(async (resolve, reject) => {
+            let banner = await db.get().collection(collection.BANNERS).find().toArray()
             console.log(banner, "bannersss ");
             resolve(banner)
         })
@@ -147,7 +147,6 @@ module.exports = {
     },
 
     usersLists: async () => {
-
         //() => {
         //     return new Promise(async (resolve, reject) => {
         //         users = await db.get().collection(collection.USER_COLLECTION).find().toArray()
@@ -315,7 +314,7 @@ module.exports = {
 
     }
     ,
-    
+
     getSaleStatistics: () => {
         return new Promise(async (resolve, reject) => {
             let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
@@ -333,23 +332,46 @@ module.exports = {
         })
     },
 
-    doUnlistBanner :(bannerId)=>{
-        return new Promise(async (resolve, reject)=>{
+    doUnlistBanner: (bannerId) => {
+        return new Promise(async (resolve, reject) => {
             console.log('wroking');
-            await db.get().collection(collection.BANNERS).updateOne({_id : new ObjectId(bannerId)}, {$set :{status :true}}).then((response)=>{
+            await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId) }, { $set: { status: true } }).then((response) => {
                 resolve(response)
             })
         })
     },
 
-    doListBanner :(bannerId)=>{
-        return new Promise(async (resolve, reject)=>{
+    doListBanner: (bannerId) => {
+        return new Promise(async (resolve, reject) => {
             // console.log('wrokinhhhhg');
-            await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId)}, {$set : {status :false}}).then((response)=>{
+            await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId) }, { $set: { status: false } }).then((response) => {
                 resolve(response)
             })
         })
     },
+
+    addOfferPrice: async (data) => {
+        return new Promise(async (resolve, reject) => {
+            const category = data.category;
+            const offer = parseInt(data.offer);
+            console.log(category, offer, "category, offer,");
+
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateMany(
+                { category: category },
+                { $set: { offer: offer} }
+            ).then((response) => {
+                resolve(response);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+
+
+
+
+}
 
 
     
@@ -357,4 +379,3 @@ module.exports = {
 
 
 
-}

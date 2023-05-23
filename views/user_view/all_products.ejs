@@ -157,7 +157,14 @@
                                 </a>
 
                                 <span class="stext-105 cl3">
-                                    ₹ <%=pro.price%>
+                                    <% if ( pro.offer>0 ) { %>
+                                     <del class="mr-2"> ₹ <%=pro.price%> </del>
+                                     
+                                     <strong>  ₹ <%=(pro.price-pro.offer)%> </strong>
+                                     <% } else { %>
+                                        ₹ <%=pro.price%> 
+                                   <% }%>
+
                                     <% if ( pro.stock==0 ) { %>
                                         <p class="text-danger font-weight" > Out of Stock</p>
                                    <% }%>

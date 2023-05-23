@@ -58,8 +58,11 @@ router.get("/listbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.l
 
 router.get("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCoupons)
 router.get("/viewcoupons", middlewares.checkAdminLoggedIn,  adminControllers.viewCoupons)
-
 router.post("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCouponPost)
+
+router.get("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOffer)
+router.get("/viewoffer", middlewares.checkAdminLoggedIn,  adminControllers.viewOffer)
+router.post("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOfferPost)
 
 
 

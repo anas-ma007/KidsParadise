@@ -258,13 +258,13 @@
 													<td class="column-2">
 														<%=pro.productsDetails[0].name%>
 													</td>
-													<td class="column-3"> Rs <%=pro.productsDetails[0].price%>
+													<td class="column-3"> Rs <%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>
 													</td>
 													<td class="column-4">
 														<div id="testDiv">
 															<div class="wrap-num-product flex-w m-l-auto m-r-0 ">
 																<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m "
-																	onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',-1,'<%=pro.productsDetails[0].price%>','<%=pro.productsDetails[0].stock%>', )">
+																	onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',-1,'<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>','<%=pro.productsDetails[0].stock%>', )">
 																	<i class="fs-16 zmdi zmdi-minus"></i>
 																</div>
 
@@ -278,7 +278,7 @@
 																<% if ( (pro.productsDetails[0].quantity) <
 																	(pro.productsDetails[0].stock) ) { %>
 																	<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m "
-																		onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',1,'<%=pro.productsDetails[0].price%>', '<%=pro.productsDetails[0].stock%>')">
+																		onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',1,'<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>', '<%=pro.productsDetails[0].stock%>')">
 																		<i class="fs-16 zmdi zmdi-plus"></i>
 																	</div>
 																	<% }%>
@@ -288,7 +288,7 @@
 													</td>
 													<td class="column-5"
 														id="productTotal<%=pro.productsDetails[0]._id%>"> Rs <%=
-															(pro.productsDetails[0].price)*(pro.productsDetails[0].quantity)%>
+															((pro.productsDetails[0].price-pro.productsDetails[0].offer))*(pro.productsDetails[0].quantity)%>
 													</td>
 													<td class="column-6">
 														<a class="text-danger btn" style="cursor: pointer;"
@@ -336,7 +336,7 @@
 
 										<div class="size-209">
 											<span class="mtext-110 cl2" id="subTotal">
-												₹ <%= grandTotal[0].total%>
+												₹ <%=(grandTotal[0].total-offerTotal[0].total)%>
 											</span>
 										</div>
 
@@ -354,7 +354,7 @@
 
 											<div class="size-209 p-t-1">
 												<span class="mtext-110 cl2" id="grandTotal">
-													₹ <%= grandTotal[0].total%>
+													₹ <%=(grandTotal[0].total-offerTotal[0].total)%>
 												</span>
 											</div>
 										</div>

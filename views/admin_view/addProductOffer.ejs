@@ -1,0 +1,84 @@
+<!-- <section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add Offer</h2>
+            </div>
+        </div>
+        <div class="col-lg-11">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form class="mx-1 mx-md-4 pt-5" action="/admin/addoffer" method="post" id="offer-form">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="mb-4">
+                                    <label class="form-label">Offer</label>
+                                    <input type="number" placeholder="Offer Price" required name="offer"
+                                        class="form-control" id="offer">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="mb-4">
+                                    <label class="form-label">Products</label>
+                                    <select class="form-select" required name="category" id="categorySelect">
+                                        <option selected disabled>Select Products</option>
+                                        <% for (var i=0; i < products.length; i++) { %>
+                                            <option value="<%= category[i].category %>">
+                                                <%= products[i].category %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <% if(locals.message) { %>
+                            <p style="color: red;">
+                                <%=message%>
+                            </p>
+                            <% }%>
+
+                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                    <input type="submit" value="ACTIVATE OFFER" class="btn btn-success btn-s" />
+                                </div>
+                    </form>
+
+                    <script>
+                        $(document).ready(function () {
+                            $("#offer-form").validate({
+                                rules: {
+                                    offer: {
+                                        required: true,
+                                        number: true,
+                                        min: 0.01
+                                    },
+                                    category: {
+                                        required: true,
+                                    },
+                                },
+
+                                messages: {
+                                    offer: {
+                                        required: "Please enter a valid discount price.",
+                                        number: "Discount should be a positive number.",
+                                        min: "Discount should be a number greater than 0."
+                                    },
+                                    category: {
+                                        required: "Please Select one category"
+                                    },
+                                },
+                                errorClass: "text-danger",
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+            <a href="/admin/viewoffer" style="font-weight: 300;"> View Offer </a>
+        </div>
+    </div>
+</section> -->

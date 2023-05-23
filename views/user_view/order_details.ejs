@@ -60,7 +60,7 @@
                                 <td class="column-2"><%=pro.product.name%></td>
                                 <td class="column-4"><%=pro.quantity%></td>
                                 <td class="column-5">₹ <%=
-                                    (pro.product.price)*(pro.quantity)%></td>
+                                    (pro.product.price-pro.product.offer)*(pro.quantity)%></td>
                                 
                             </tr>
                             <% }) %>

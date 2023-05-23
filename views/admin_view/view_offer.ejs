@@ -15,30 +15,29 @@
         <table class="table table-hover" id="productsTable">
             <thead>
               <tr>
-                <th>Coupon Code</th>
-                <th>Discount</th>
-                <th>Created On</th>
-                <th>Expires On</th>
-                <th>Remove</th>
+                <th>Offer Price</th>
+                <th>Category</th>
+                <th>Activate/Deactivate</th>
               </tr>
             </thead>
             <tbody>
 
-                <% coupons.forEach((coupon)=> { %>
+                <% products.forEach((products)=> { %>
+                    <% if(products.offer>0){%>
 
               <tr>
-                <td ><%=coupon.couponCode%></td>
-                <td><%=coupon.discount%></td>
-    
-                <td><%=coupon.createdDate%></td>
-                <td><%=coupon.expiryDate%></td>
                 
+                <td ><%=products.offer%></td>
+                <td><%=products.category%></td>
+    
                 <td class="">
                   <a href="#"  class="btn btn-sm btn-danger " style="text-decoration: none">Delete</a>
                 </td>
               </tr>
+              <% }%> 
 
-              <% }) %>
+
+              <% }) %> 
              
             </tbody>
           </table>

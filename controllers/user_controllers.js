@@ -273,10 +273,13 @@ module.exports = {
         let userId = req.session.user._id
         let cartCount = await productHelpers.getCartCount(user._id)
         let products = await cartHelpers.getCartProducts(userId)
-        let grandTotal = await user_helpers.getTotalAmount(userId)
+        
+        let grandTotal = (await user_helpers.getTotalAmount(userId))
+        const offerTotal = await user_helpers.getOfferAmount(userId);
+        // let Total=grandTotal[0].total-offerTotal[0].total
         // console.log(grandTotal.total, "grnd 0 total ");
         // console.log([products, 'hhhhh']);
-        res.render("user_view/shopping_cart", { products, user, cartCount, grandTotal })
+        res.render("user_view/shopping_cart", { products, user, cartCount,  grandTotal, offerTotal  })
     },
 
 
@@ -430,7 +433,8 @@ module.exports = {
         const userId = req.session.user._id;
         cartHelpers.changeProductQuantity(req.body).then(async (response) => {
             const grandTotal = await user_helpers.getTotalAmount(userId);
-            response.grandTotal = grandTotal[0].total
+            const offerTotal = await user_helpers.getOfferAmount(userId);
+            response.grandTotal = grandTotal[0].total-offerTotal[0].total
             res.json({
                 response
             })
@@ -454,10 +458,13 @@ module.exports = {
         let cartCount = await productHelpers.getCartCount(user._id)
         let products = await cartHelpers.getCartProducts(userId)
         let grandTotal = await user_helpers.getTotalAmount(userId)
+        let offerTotal = await user_helpers.getOfferAmount(userId);
+        let userData = await user_helpers.getUser(userId)
+        // let Total=grandTotal[0].total-offerTotal[0].total
 
-        console.log(grandTotal, "total", products, "products", cartCount, "cartcount", userId, "userid", user, "user");
+        console.log("in check out page for orderplaced", "total", products, "products", cartCount, "cartcount", userId, "userid", user, "in check out page for orderplaced");
 
-        res.render("user_view/checkout", { user, grandTotal, cartCount, products })
+        res.render("user_view/checkout", { user, cartCount, products,grandTotal ,offerTotal,userData})
 
 
     },
@@ -490,21 +497,24 @@ module.exports = {
 
     placeOrderPost: async (req, res) => {
         console.log(req.body.addressId, "req.body.addressId");
+        let user=req.session.user
         let address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
         let payment = req.body.paymentMethod;
         // console.log(payment,'pppppppppaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyy');
         let products = await user_helpers.getCartList(req.session.user._id);
         let grandTotal = await user_helpers.getTotalAmount(req.session.user._id);
-        // console.log(grandTotal[0].total, "total andTotal[0].tota");
+        let offerTotal = await user_helpers.getOfferAmount(req.session.user._id);
+        console.log(grandTotal[0].total, "total andTotal[0].tota");
+        console.log(offerTotal[0].total, "offer Total price in place order");
         let coupon = req.body.coupon
         let total, discount;
         if (coupon) {
             let checkCoupon = await user_helpers.getCoupon(coupon)
             discount = parseInt(checkCoupon[0].discount)
             console.log(discount, grandTotal[0].total , "discount, grandTotal[0].total ,");
-            total = grandTotal[0].total - discount
+            total = (grandTotal[0].total-offerTotal[0].total) - discount
         } else {
-            total = grandTotal[0].total
+            total = grandTotal[0].total-offerTotal[0].total
             discount=null
         }
         // console.log(total, "total log");
@@ -521,10 +531,17 @@ module.exports = {
                 if (req.body["paymentMethod"] == "Cash on delivery") {
                     user_helpers.stockDecrement(products)
                     res.json({ codSuccess: true });
+                }else if (req.body["paymentMethod"] == "Wallet") {
+                    user_helpers.stockDecrement(products)
+                    user_helpers.decWallet(user._id, total)
+                    res.json({ walletSuccess: true });
                 }
                 else {
+                    console.log("log in order before razrpay methd");
+                    console.log(orderId, total);
                     user_helpers.generateRazorpay(orderId, total).then((response) => {
                         console.log(products, "products in online payment");
+                        console.log(response, "response after razorpay");
                         user_helpers.stockDecrement(products)
                         res.json(response);
                     });
@@ -655,6 +672,19 @@ module.exports = {
             discount=0;
             res.json({ status:false, total, discount })
         }
+    },
+
+
+    getWallet : async (req, res)=>{
+        let user = req.session.user;
+        const userId = req.session.user._id;
+        const userDetails = await user_helpers.GetUserDetails(userId)
+        let address = await user_helpers.findUser(userId);
+        // req.session.user = user;
+        const cartCount = await productHelpers.getCartCount(user._id)
+        // console.log(address, "address in user profile");
+        res.render('user_view/wallet', { user, cartCount, address, userDetails })
+      
     },
 
 

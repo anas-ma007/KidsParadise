@@ -57,6 +57,9 @@ router.get("/removeAddress/:id", middlewares.checkUserLoggedIn, usercontrollers.
 
 router.post("/apply_coupon", middlewares.checkUserLoggedIn, usercontrollers.applyCoupon )
 
+
+router.get("/wallet",  middlewares.checkUserLoggedIn, usercontrollers.getWallet)
+
 // router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
 
 

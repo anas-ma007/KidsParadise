@@ -42,6 +42,7 @@ module.exports = {
                 resolve({ status: false, message: "This Email is already regsitered with another account..!" });
             } else {
                 userData.status = true;
+                userData.wallet = 0
                 userData.password = await bcrypt.hash(userData.password, 10);
                 db.get().collection(collection.USER_COLLECTION).insertOne(userData).then(function (data) {
                     resolve({ status: true, userData });
@@ -259,9 +260,53 @@ module.exports = {
                     }
                 }
             ]).toArray()
-
-            // console.log(total[0].total, "total from get total amount fn");
+            // console.log("total[0].total is=>", total[0].total, " total is=>", total);
             resolve(total)
+        })
+    },
+
+    getOfferAmount: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
+                {
+                    $match: { user: ObjectId(userId) }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'product',
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+
+                {
+                    $project: {
+                        item: 1, quantity: 1, product: { $arrayElemAt: ["$product", 0] }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: { $multiply: ['$quantity', { $toInt: '$product.offer' }] } }
+                    }
+                }
+            ]).toArray()
+            try{
+                console.log("total[0].total offer price is=>", total[0].total, " total offer price is=>", total);
+                resolve(total)
+            }catch{
+                resolve(total=0)
+            }
         })
     },
 
@@ -515,6 +560,87 @@ module.exports = {
         }
     },
 
+    incrementStock: async (products) => {
+        for (let i = 0; i < products.length; i++) {
+            await db.get().collection(collection.PRODUCT).updateOne(
+                {
+                    _id: products[i].item
+                },
+                {
+                    $inc: {
+                        stock: products[i].quantity
+                    }
+                })
+        }
+    },
+
+
+
+    incWallet: async (userId, amount) => {
+        await db.get().collection(collection.USER_COLLECTION).updateOne({
+            _id: new ObjectId(userId)
+        }, {
+            $inc: {
+                wallet: amount
+            }
+        })
+    },
+
+    decWallet: async (userId, amount) => {
+        console.log(userId, amount, "userId and amount in decermnt wallet in kidsparadise");
+        await db.get().collection(collection.USER_COLLECTION).updateOne({
+            _id: new ObjectId(userId)
+        }, {
+            $inc: {
+                wallet: -(amount)
+            }
+        })
+    },
+
+    totalAmount: async (orderId) => {
+        console.log(orderId, "order iidddd");
+        let total = await db.get().collection(collection.ORDERS).aggregate([
+            {
+                '$match': {
+                    '_id': ObjectId(orderId)
+                }
+            },
+            {
+                '$group': {
+                    '_id': null,
+                    'totalPrice': { $sum: '$totalPrice' }
+                }
+            },
+            {
+                '$project': {
+                    '_id': 0,
+                    'totalPrice': 1
+                }
+            }
+        ]).toArray()
+
+        console.log(total, "total in return product confrim user helpers");
+        return total[0].totalPrice
+
+    },
+
+    orderUser: async (orderId) => {
+        let user = await db.get().collection(collection.ORDERS)
+            .aggregate([
+                {
+                    '$match': {
+                        '_id': ObjectId(orderId)
+                    }
+                },
+                {
+                    '$project': {
+                        '_id': 0,
+                        'userId': 1
+                    }
+                }
+            ]).toArray()
+        return user[0].userId
+    },
 
 
 
