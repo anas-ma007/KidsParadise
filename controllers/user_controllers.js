@@ -273,13 +273,13 @@ module.exports = {
         let userId = req.session.user._id
         let cartCount = await productHelpers.getCartCount(user._id)
         let products = await cartHelpers.getCartProducts(userId)
-        
+
         let grandTotal = (await user_helpers.getTotalAmount(userId))
         const offerTotal = await user_helpers.getOfferAmount(userId);
         // let Total=grandTotal[0].total-offerTotal[0].total
         // console.log(grandTotal.total, "grnd 0 total ");
         // console.log([products, 'hhhhh']);
-        res.render("user_view/shopping_cart", { products, user, cartCount,  grandTotal, offerTotal  })
+        res.render("user_view/shopping_cart", { products, user, cartCount, grandTotal, offerTotal })
     },
 
 
@@ -434,7 +434,7 @@ module.exports = {
         cartHelpers.changeProductQuantity(req.body).then(async (response) => {
             const grandTotal = await user_helpers.getTotalAmount(userId);
             const offerTotal = await user_helpers.getOfferAmount(userId);
-            response.grandTotal = grandTotal[0].total-offerTotal[0].total
+            response.grandTotal = grandTotal[0].total - offerTotal[0].total
             res.json({
                 response
             })
@@ -464,7 +464,7 @@ module.exports = {
 
         console.log("in check out page for orderplaced", "total", products, "products", cartCount, "cartcount", userId, "userid", user, "in check out page for orderplaced");
 
-        res.render("user_view/checkout", { user, cartCount, products,grandTotal ,offerTotal,userData})
+        res.render("user_view/checkout", { user, cartCount, products, grandTotal, offerTotal, userData })
 
 
     },
@@ -497,7 +497,7 @@ module.exports = {
 
     placeOrderPost: async (req, res) => {
         console.log(req.body.addressId, "req.body.addressId");
-        let user=req.session.user
+        let user = req.session.user
         let address = await user_helpers.getUserAddress(req.session.user._id, req.body.addressId);
         let payment = req.body.paymentMethod;
         // console.log(payment,'pppppppppaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyy');
@@ -511,11 +511,11 @@ module.exports = {
         if (coupon) {
             let checkCoupon = await user_helpers.getCoupon(coupon)
             discount = parseInt(checkCoupon[0].discount)
-            console.log(discount, grandTotal[0].total , "discount, grandTotal[0].total ,");
-            total = (grandTotal[0].total-offerTotal[0].total) - discount
+            console.log(discount, grandTotal[0].total, "discount, grandTotal[0].total ,");
+            total = (grandTotal[0].total - offerTotal[0].total) - discount
         } else {
-            total = grandTotal[0].total-offerTotal[0].total
-            discount=null
+            total = grandTotal[0].total - offerTotal[0].total
+            discount = null
         }
         // console.log(total, "total log");
         // console.log(products, "products,======", discount," discounttttt");
@@ -531,7 +531,7 @@ module.exports = {
                 if (req.body["paymentMethod"] == "Cash on delivery") {
                     user_helpers.stockDecrement(products)
                     res.json({ codSuccess: true });
-                }else if (req.body["paymentMethod"] == "Wallet") {
+                } else if (req.body["paymentMethod"] == "Wallet") {
                     user_helpers.stockDecrement(products)
                     user_helpers.decWallet(user._id, total)
                     res.json({ walletSuccess: true });
@@ -578,11 +578,26 @@ module.exports = {
     },
 
     cancelOrder: async (req, res) => {
-        let orderId = req.params.id;
-        await productHelpers.cancelOrder(orderId).then(() => {
-            res.redirect("/orders");
-        });
+        try {
+            let orderId = req.params.id;
+            let totalAmount = await user_helpers.totalAmount(orderId)
+            let userId = await user_helpers.orderUser(orderId)
+            let orders = await productHelpers.findOrder(orderId)
+            await productHelpers.cancelOrder(orderId).then(async () => {
+                await user_helpers.incWallet(userId, totalAmount)
+                console.log("before incermnt stock functions");
+                await user_helpers.incrementStock(orders[0].products).then(() => {
+                    console.log("after incermnt stock functions");
+                    res.redirect("/orders");
+                })
+            });
+        } catch (error) {
+            // Handle the error here
+            console.error("Error occurred:", error);
+            res.status(500).json({ error: "An error occurred while canceling the order." });
+        }
     },
+
 
 
     razorpayPayment: (req, res) => {
@@ -638,7 +653,7 @@ module.exports = {
         let address = await user_helpers.findUser(userId);
         // req.session.user = user;
         const cartCount = await productHelpers.getCartCount(user._id)
-        console.log(address, "address in user profile");
+        // console.log(address, "address in user profile");
         res.render('user_view/manageAddress', { user, cartCount, address, userDetails })
 
     },
@@ -666,16 +681,16 @@ module.exports = {
         if (discount) {
             let total = grandTotal[0].total - discount.discount
             console.log(total, discount.discount, "total after apply the offer");
-            res.json({ status:true, total, discount: discount.discount })
+            res.json({ status: true, total, discount: discount.discount })
         } else {
-            total= grandTotal[0].total
-            discount=0;
-            res.json({ status:false, total, discount })
+            total = grandTotal[0].total
+            discount = 0;
+            res.json({ status: false, total, discount })
         }
     },
 
 
-    getWallet : async (req, res)=>{
+    getWallet: async (req, res) => {
         let user = req.session.user;
         const userId = req.session.user._id;
         const userDetails = await user_helpers.GetUserDetails(userId)
@@ -684,8 +699,65 @@ module.exports = {
         const cartCount = await productHelpers.getCartCount(user._id)
         // console.log(address, "address in user profile");
         res.render('user_view/wallet', { user, cartCount, address, userDetails })
-      
+
     },
+
+    // walletHistory : async(req, res)=>{
+    //     let user = req.session.user
+    //     let cartCount = await productHelpers.getCartCount(user._id)
+    //     let orders = await productHelpers.getOrderDetails(req.session.user._id);
+    //     // console.log(orders, "orders for wallet history");
+
+    //     let walletOrders = [];
+    //     for (let i = 0; i < orders.length; i++) {
+    //       let order = orders[i];
+    //       if (
+    //         (order.paymentmethod === 'Cash on delivery' && order.orderstatus === "order returned") ||
+    //         (order.paymentmethod === 'Razorpay'&& (order.orderstatus === "order returned" || order.orderstatus === "order cancelled") ) || 
+    //         (order.paymentmethod === 'Wallet' && (order.orderstatus === "order returned" || order.orderstatus === "order cancelled")) ||
+    //         (order.paymentmethod === 'Wallet')
+
+    //       ) {
+    //         walletOrders.push(order);
+    //       }
+    //     }
+
+    //     // console.log(walletOrders, "walletOrders from wallet history controller functions");
+
+    //     res.render("user_view/wallet_history", {user, cartCount, walletOrders})
+
+    // },
+
+    walletHistory: async (req, res) => {
+        try {
+            let user = req.session.user;
+            let cartCount = await productHelpers.getCartCount(user._id);
+            let orders = await productHelpers.getOrderDetails(req.session.user._id);
+
+            let walletOrders = [];
+            for (let i = 0; i < orders.length; i++) {
+                let order = orders[i];
+                if (
+                    (order.paymentmethod === 'Cash on delivery' && order.orderstatus === "order returned") ||
+                    (order.paymentmethod === 'Razorpay' && (order.orderstatus === "order returned" || order.orderstatus === "order cancelled")) ||
+                    (order.paymentmethod === 'Wallet' && (order.orderstatus === "order returned" || order.orderstatus === "order cancelled")) ||
+                    (order.paymentmethod === 'Wallet')
+
+                ) {
+                    walletOrders.push(order);
+                }
+            }
+
+            res.render("user_view/wallet_history", { user, cartCount, walletOrders });
+        } catch (error) {
+            // Handle the error here
+            console.error(error);
+            res.render("error", { error });
+        }
+    },
+
+
+
 
 
 

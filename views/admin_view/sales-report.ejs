@@ -1,0 +1,100 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<style>
+  body {
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial,
+      sans-serif;
+  }
+</style>
+
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">Sales Report</h2>
+    <button type="button" class="btn btn-secondary btn_print " value="Download as Pdf"><i
+        class="fas fa-file-pdf"></i> Download as PDF</button>
+  </div>
+  <label for="start-date">Start Date:</label>
+  <input type="date" id="start-date" name="start-date">
+
+  <label for="end-date">End Date:</label>
+  <input type="date" id="end-date" name="end-date">
+
+  <button type="button" class="btn btn-primary btn_filter m-3">Filter</button>
+  <div class="card mb-4">
+
+    <!-- card-header end -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="salesTable">
+          
+          <thead>
+            <tr>
+              <th>Order Id</th>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Payment Method</th>
+
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% allOrders.forEach(order=> { %> <% if (order.orderstatus==="delivered" ) { %>
+                <tr>
+                  <td>
+                    <%=order.orderId%>
+                  </td>
+                  <td>
+                    <%= order.deliveryAddress.name%>
+                  </td>
+                  <td>Rs <%=order.totalPrice%>
+                  </td>
+                  <td>
+                    <%=order.paymentmethod%>
+                  </td>
+
+                  <td>
+                    <%= new Date(order.date).toLocaleDateString('en-GB', { day: '2-digit' , month: '2-digit' ,
+                      year: 'numeric' }).replace(/\//g, '-' )%>
+                  </td>
+                </tr>
+                <% } else { %>
+                  <% } %>
+                    <% } )%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+
+  $(document).ready(function () {
+    $("#salesTable").DataTable();
+  });
+
+
+
+  $(document).ready(function ($) {
+    $(document).on('click', '.btn_print', function (event) {
+      event.preventDefault();
+      var element = document.getElementById('salesTable');
+      let randomNumber = Math.floor(Math.random() * (10000000000 - 1)) + 1;
+      var opt = {
+        margin: 0,
+        filename: 'SalesReport' + randomNumber + '.pdf',
+        html2canvas: { scale: 10 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    });
+  });
+
+
+
+</script>

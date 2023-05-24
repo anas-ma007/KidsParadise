@@ -65,6 +65,13 @@ router.get("/viewoffer", middlewares.checkAdminLoggedIn,  adminControllers.viewO
 router.post("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOfferPost)
 
 
+router.get("/salereport", middlewares.checkAdminLoggedIn,  adminControllers.getSalesReport)
+
+router.post("/deleteImage",  middlewares.checkAdminLoggedIn, adminControllers.doEditImage)
+
+
+
+
 
 
 

@@ -26,6 +26,13 @@
 <form method="post" id="checkout-form" action="/place-order" class="bg0 p-t-75 p-b-85">
 	<div class="container">
 		<div class="row">
+
+
+		
+
+
+
+
 			<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
 				<div class="m-l-25 m-r--38 m-lr-0-xl">
 
@@ -225,7 +232,7 @@
 						<% if(userData.wallet<(grandTotal[0].total-offerTotal[0].total) ){ %>
 
 							<label class="radio-inline mt-3">
-								<h5><input type="radio" disabled checked required name="paymentMethod" value="Wallet"
+								<h5><input type="radio" disabled required name="paymentMethod" value="Wallet"
 										class="float-left mr-4 mt-1">Wallet</h5>
 								<p class="text-danger "> no sufficient blnce in wallet
 								<p class="mb-3">Wallet Balnce : ₹<%= userData.wallet%>
@@ -235,7 +242,7 @@
 							</label>
 							<% } else { %>
 								<label class="radio-inline ">
-									<h5><input type="radio" checked required name="paymentMethod" value="Wallet"
+									<h5><input type="radio" required name="paymentMethod" value="Wallet"
 											class="float-left mr-4 mt-1">Wallet</h5>
 								</label>
 

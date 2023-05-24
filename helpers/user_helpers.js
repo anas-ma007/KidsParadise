@@ -562,7 +562,7 @@ module.exports = {
 
     incrementStock: async (products) => {
         for (let i = 0; i < products.length; i++) {
-            await db.get().collection(collection.PRODUCT).updateOne(
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
                 {
                     _id: products[i].item
                 },
@@ -587,7 +587,7 @@ module.exports = {
     },
 
     decWallet: async (userId, amount) => {
-        console.log(userId, amount, "userId and amount in decermnt wallet in kidsparadise");
+        // console.log(userId, amount, "userId and amount in decermnt wallet in user helpers");
         await db.get().collection(collection.USER_COLLECTION).updateOne({
             _id: new ObjectId(userId)
         }, {

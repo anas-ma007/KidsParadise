@@ -1,30 +1,30 @@
-
 <section class="content-main">
-    <div class="row">
-      <div class="col-9">
-        <div class="content-header">
-          <h2 class="content-title">Edit Product</h2>
-        </div>
+  <div class="row">
+    <div class="col-9">
+      <div class="content-header">
+        <h2 class="content-title">Edit Product</h2>
       </div>
-      <div class="col-lg-6">
-        <div class="card mb-4">
-          
-          <div class="card-body">
-  
-            <form name="myAddProdForm" id="checkout-form" class="mx-1 mx-md-4 pt-5" action="/admin/edit_product/<%=response._id%>"
-              method="post" enctype="multipart/form-data">
-  
-  
-              <div class="mb-4">
-                <label for="product_name" class="form-label">Product Name</label>
-                <input type="text" placeholder="Product Name" required name="name" value="<%=response?.name%>" class="form-control" id="name">
-              </div>
-              <!-- <div class="mb-4 ">
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-4">
+
+        <div class="card-body">
+
+          <form name="myAddProdForm" id="checkout-form" class="mx-1 mx-md-4 pt-5"
+            action="/admin/edit_product/<%=response._id%>" method="post" enctype="multipart/form-data">
+
+
+            <div class="mb-4">
+              <label for="product_name" class="form-label">Product Name</label>
+              <input type="text" placeholder="Product Name" required name="name" value="<%=response?.name%>"
+                class="form-control" id="name">
+            </div>
+            <!-- <div class="mb-4 ">
                 <label for="product_category" class="form-label">Category</label>
                 <input type="text" placeholder="Product Category" required name="category" class="form-control"
                   id="category">
               </div> -->
-              <!-- <div>
+            <!-- <div>
                 <select class="form-select mb-2" name="category" aria-label="Default select example">
                   <option selected >Category</option>
                   
@@ -34,71 +34,98 @@
     
                 </select>
               </div> -->
-  
-              <!-- <div class="row"> -->
-                <div class="col-lg-4">
-                  <div class="mb-4">
-                    <label class="form-label">Price</label>
-                    <div class="row gx-2">
-                      <input placeholder="₹" value="<%=response?.price%>" type="text" required name="price" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="mb-4">
-                    <label class="form-label">Stock</label>
-                    <div class="row gx-2">
-                      <input placeholder="₹0" value="<%=response?.stock%>" type="text" required name="stock" class="form-control">
-                    </div>
-                  </div>
-                </div>
-              <!-- </div> -->
-  
+
+            <!-- <div class="row"> -->
+            <div class="col-lg-4">
               <div class="mb-4">
-                <label class="form-label">Description</label>
-                <textarea placeholder="Product Description" required name="description" class="form-control"
-                  rows="4"> <%=response?.description%></textarea>
+                <label class="form-label">Price</label>
+                <div class="row gx-2">
+                  <input placeholder="₹" value="<%=response?.price%>" type="text" required name="price"
+                    class="form-control">
+                </div>
               </div>
-  
-              
-                <div class="card mb-4">
-                  <div class="card-header">
-                    <h4>Media</h4>
-                  </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="mb-4">
+                <label class="form-label">Stock</label>
+                <div class="row gx-2">
+                  <input placeholder="₹0" value="<%=response?.stock%>" type="text" required name="stock"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+            <!-- </div> -->
+
+            <div class="mb-4">
+              <label class="form-label">Description</label>
+              <textarea placeholder="Product Description" required name="description" class="form-control"
+                rows="4"> <%=response?.description%></textarea>
+            </div>
+
+
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4>Media</h4>
+              </div>
+              <div class="card-body">
+                <div class="input-upload">
+
+                  <input class="form-control" name="image" type="file">
+                  <input class="form-control" name="image" type="file">
+                  <input class="form-control" name="image" type="file">
+                  <input class="form-control" name="image" type="file">
+                </div>
+                <div>
+
+
                   <div class="card-body">
                     <div class="input-upload">
-  
-                      <input class="form-control" name="image" type="file" multiple >
+                      <!-- Existing code for file inputs -->
                     </div>
                     <div>
                       <span>
-                        <img src="<%=response?.image[0]%>" alt="" style="width: 120px; height: 120px;" id="img">
-                        <img src="<%=response?.image[1]%>" alt="" style="width: 60px; height: 60px;" class="img">
-                        <!-- <img src="<%=response?.image[2]%>" alt="" style="width: 60px; height: 60px;" class="img">
-                        <img src="<%=response?.image[3]%>" alt="" style="width: 60px; height: 60px;" class="img"> -->
+                        <% for (let i=0; i < response.image.length; i++) { %>
+                          <img src="<%= response.image[i] %>" style="width: 60px; height: 60px;" class="img m-1">
+                          <button onclick="deleteImage('<%= i %>', '<%= response._id %>')"
+                            type="button"
+                            class="btn btn-danger btn-sm m-1">x</button>
+                        <% } %>
                       </span>
+                      
                     </div>
                   </div>
+
                 </div>
-             
-  
-              <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                <input type="submit" value="Update Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg" onchange="viewImg(event)"/>
               </div>
-  
-            </form>
-          </div>
+            </div>
+
+
+            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+              <input type="submit" value="Update Product" style="border-radius: 1rem;" class="btn btn-primary btn-lg"
+                onchange="viewImg(event)" />
+            </div>
+
+          </form>
         </div>
-  </section>
+      </div>
+</section>
 
 
-  <script>
-    function viewImg(event){
-      document.getElementById("img").src=URL.createObjectURL(event.target.files[0])
-    }
-  </script>
+<script>
+  function deleteImage(index, proId) {
+    console.log(index, proId)
+    $.ajax({
+      url: '/admin/deleteImage',
+      data: { index, proId },
+      type: 'POST',
+      success: (response)=> {
+        console.log('Image deleted successfully');
+        location.reload()
+      }
+    });
+  }
+</script>
 
-  
 
 <script>
   $(document).ready(function () {
@@ -108,7 +135,7 @@
           required: true,
           minlength: 6,
         },
-       
+
         price: {
           required: true,
           number: true,
@@ -130,7 +157,7 @@
           required: "Please enter a valid product name.",
           minlength: "Name must be atleast 6 characters long.",
         },
-       
+
         price: {
           required: "Please enter a valid price",
           number: "Price should be a positive number",

@@ -232,6 +232,7 @@ module.exports = {
             for (let i = 0; i < req.files.length; i++) {
                 const result = await cloudinary.uploader.upload(req.files[i].path);
                 imgUrl.push(result.url);
+
                 // console.log(result.url);
             }
             // console.log(req.params.id, req.body, 'oooooooooooooooooooooooooooo');
@@ -293,9 +294,9 @@ module.exports = {
         let totalAmount = await user_helpers.totalAmount(orderId)
         let userId = await user_helpers.orderUser(orderId)
         let orders = await productHelpers.findOrder(orderId)
-        await productHelpers.returnConfirm(orderId).then(() => {
-            user_helpers.incWallet(userId,totalAmount)
-            user_helpers.incrementStock(orders[0].products).then(()=>{
+        await productHelpers.returnConfirm(orderId).then(async () => {
+            await user_helpers.incWallet(userId,totalAmount)
+            await user_helpers.incrementStock(orders[0].products).then(()=>{
                 res.redirect('/admin/order-details')
             })
         })
@@ -428,7 +429,7 @@ module.exports = {
     },
 
     viewCoupons: async (req, res) => {
-        let coupons = await productHelpers.getCoupons()
+      let coupons = await productHelpers.getCoupons()
         res.render("admin_view/view_coupons", { layout: "admin_layout", coupons })
     },
 
@@ -449,6 +450,34 @@ module.exports = {
         let products= await adminHelpers.getAllProducts()
         res.render("admin_view/view_offer", { layout: "admin_layout", products})
 
+
+    },
+
+    getSalesReport :async (req, res)=>{
+
+        console.log(req, "vijyannanann    ");
+
+        let allOrders = await productHelpers.getAllOrders()
+        res.render("admin_view/sales-report", { allOrders, layout: 'admin_layout' })
+        
+
+
+    },
+
+
+    doEditImage :async(req, res)=>{
+        console.log(req.body, "req.bodyyyy ");
+        let index=req.body.index
+         let proId=req.body.proId
+         console.log(index, proId, "index and proId in delte image");
+
+         await productHelpers.doimageDel(index, proId).then(()=>{
+            // console.log("output in controller ");
+            res.json(true)
+
+         })
+
+        
 
     },
 

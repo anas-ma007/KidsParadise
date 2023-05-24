@@ -59,6 +59,10 @@ router.post("/apply_coupon", middlewares.checkUserLoggedIn, usercontrollers.appl
 
 
 router.get("/wallet",  middlewares.checkUserLoggedIn, usercontrollers.getWallet)
+router.get("/wallethistory",  middlewares.checkUserLoggedIn, usercontrollers.walletHistory)
+
+
+
 
 // router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
 

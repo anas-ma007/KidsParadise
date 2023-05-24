@@ -252,7 +252,7 @@ module.exports = {
         return product
     },
 
-    getCartCount: (userId) => {
+    getCartCount: async (userId) => {
         return new Promise(async (resolve, rejct) => {
             let count = 0
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: new ObjectId(userId) })
@@ -374,8 +374,9 @@ module.exports = {
     },
 
     cancelOrder: (orderId) => {
-        return new Promise(async (res, rej) => {
-            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
+        
+        return new Promise((res, rej) => {
+            db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
                 .then((response) => {
                     res(response)
                 })
@@ -464,6 +465,30 @@ module.exports = {
         let order = await db.get().collection(collection.ORDERS).find({_id:new ObjectId(orderId)}).sort({date: -1}).toArray()
         return order
       },
+
+    //   doimageDel : async (index, proId)=>{
+    //     await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({})
+
+    //   }, 
+
+    doimageDel: async (index, proId) => {
+        try {
+          const productId = new ObjectId(proId);
+          
+          // Delete the specific index from the 'image' array field
+          await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+            { _id: productId },
+            // { $pull: { image: index } }
+            { $unset: { [`image.${index}`]: "" } }
+          );
+          console.log("log in do img delet");
+      
+      
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      
 
 }
 

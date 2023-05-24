@@ -9,6 +9,16 @@
         margin: 20px 0;
     }
 
+    .profile-content {
+        padding: 20px;
+        background: #fff;
+        min-height: 460px;
+        text-align: center;
+        /* Center align the content */
+        margin: 0 auto;
+        /* Center align the container */
+    }
+
     /* Profile sidebar */
     .profile-sidebar {
         padding: 20px 0 10px 0;
@@ -292,24 +302,31 @@
             </div>
         </div>
 
-        <div class="col-md-9">
-            <div class="profile-content">
+        <div class="col-md-9 d-flex justify-content-center" >
+            <div class="">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-4">
-                        <div class="card" style="background-color: #bcb5b8;">
-                          
+                    <div class="col-xs-12 " >
+                        <!-- <div class="card" style="background-color:  #bcb5b8;"> -->
+                        <div class="card"
+                            style="background-color: #bcb5b8; ">
+
+
+
                             <div class="card-content">
-                                <h4 class="card-title m-3"  style="color: rgb(36, 34, 32);">
-                                  <strong> My Wallet  </strong> 
+                                <h4 class="card-title m-3" style="color: rgb(36, 34, 32);">
+                                    <strong> My Wallet </strong>
                                 </h4>
-                                <p class="ml-3"  style="color: rgb(65, 39, 20);">Total Wallet Amount : ₹  <%= userDetails.wallet%></p>
+                                <p class="ml-3" style="color: rgb(65, 39, 20);">Total Wallet Amount :
+
+                                <h4 class=" m-3" style="color: rgb(36, 34, 32);">
+                                    <strong> ₹ <%= userDetails.wallet%></strong>
+                                    </h3>
+                                    </p>
                             </div>
-                            <br><br>
-                            <div class="card-read-more 3-4">
-                                <a href="/" class="btn btn-link btn-block">
-                                    Continue shopping!!!
-                                </a>
-                            </div>
+                            <p class="ml-3  mb-2 mt-5" style="color: rgb(5, 2, 0);">View wallet history <a class=""
+                                    href="/wallethistory"> Click here...</a></p>
+                            <br>
+
                         </div>
                     </div>
                 </div>
