@@ -1,14 +1,14 @@
-<!-- <section class="content-main">
+<section class="content-main">
     <div class="row">
         <div class="col-9">
             <div class="content-header">
-                <h2 class="content-title">Add Offer</h2>
+                <h2 class="content-title">Add Product Offer</h2>
             </div>
         </div>
         <div class="col-lg-11">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form class="mx-1 mx-md-4 pt-5" action="/admin/addoffer" method="post" id="offer-form">
+                    <form class="mx-1 mx-md-4 pt-5" action="/admin/add-product-offer" method="post" id="offer-form">
                         <div class="row">
                             <div class="col-md-6">
 
@@ -22,11 +22,11 @@
 
                                 <div class="mb-4">
                                     <label class="form-label">Products</label>
-                                    <select class="form-select" required name="category" id="categorySelect">
-                                        <option selected disabled>Select Products</option>
+                                    <select class="form-select" required name="products" id="productsSelect">
+                                        <option selected disabled>Select Product</option>
                                         <% for (var i=0; i < products.length; i++) { %>
-                                            <option value="<%= category[i].category %>">
-                                                <%= products[i].category %>
+                                            <option value="<%= products[i]._id %>">
+                                                <%= products[i].name %>
                                             </option>
                                             <% } %>
                                     </select>
@@ -46,11 +46,14 @@
                                 <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                     <input type="submit" value="ACTIVATE OFFER" class="btn btn-success btn-s" />
                                 </div>
+
+            <a href="/admin/addoffer" style="font-weight: 300; float: right">Add Category offer</a>
+
                     </form>
 
-                    <script>
+                    <!-- <script>
                         $(document).ready(function () {
-                            $("#offer-form").validate({
+                            $("#productsSelect").validate({
                                 rules: {
                                     offer: {
                                         required: true,
@@ -75,10 +78,10 @@
                                 errorClass: "text-danger",
                             });
                         });
-                    </script>
+                    </script> -->
                 </div>
             </div>
             <a href="/admin/viewoffer" style="font-weight: 300;"> View Offer </a>
         </div>
     </div>
-</section> -->
+</section>

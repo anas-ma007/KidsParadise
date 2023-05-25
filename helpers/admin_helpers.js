@@ -365,7 +365,63 @@ module.exports = {
                 reject(error);
             });
         });
-    }
+    },
+
+    addProductOffPrice :async (data)=>{
+       
+        return new Promise(async (resolve, reject) => {
+            let proId= data.products
+        let offer = parseInt(data.offer);
+        console.log(proId, offer, "proId and offer price in admin helpers fo pro offer");
+
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+                { _id: new ObjectId(proId) },
+                { $set: { offer: offer} }
+            ).then((response) => {
+                resolve(response);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
+
+
+    deactivateOffPrice :async (data)=>{
+       
+        return new Promise(async (resolve, reject) => {
+            // let proId= data._id
+        // let offer = parseInt(data.offer);
+        console.log(data,  "proId and offer price in admin helpers fo pro offer");
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+                { _id: new ObjectId(data) },
+                { $set: { offer: 0} }
+            ).then((response) => {
+                resolve(response);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
+
+    deactivateCategoryOffer :async (data)=>{
+        return new Promise(async (resolve, reject) => {
+            const category = data.category;
+            // const offer = parseInt(data.offer);
+            console.log(category,  "category off deatvivate");
+
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateMany(
+                { category: category },
+                { $set: { offer: 0} }
+            ).then((response) => {
+                resolve(response);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
+
+        
+
 
 
 

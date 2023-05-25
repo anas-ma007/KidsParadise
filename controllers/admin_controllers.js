@@ -453,6 +453,46 @@ module.exports = {
 
     },
 
+    addProductOffer :async (req, res)=>{
+        
+        let products= await adminHelpers.getAllProducts()
+        res.render("admin_view/addproductoff", { layout: "admin_layout", products})
+
+    },
+
+    addProductOfferPost :async (req, res)=>{
+        console.log(req.body, "req body from add product offer form");
+        let offer=req.body
+        await adminHelpers.addProductOffPrice(offer)
+        res.redirect("/admin/viewoffer")
+
+    },
+
+    deactivateProOffer : async (req, res)=>{
+        console.log(req.params.id, "req body from deactivate offer");
+        let proId =req.params.id
+        await adminHelpers.deactivateOffPrice(proId)
+        res.redirect("/admin/viewoffer")
+
+    },
+    deactivateCategoryOffer:async (req, res)=>{
+        let category = await productHelpers.getCategory()
+        
+        res.render("admin_view/deleteCategoryOffer", { layout: "admin_layout", category})
+
+
+    },
+    deactivateCategoryOfferPost:async (req, res)=>{
+        console.log(req.body, "req bodyyy from  category offer");
+        let proId =req.body
+
+        await adminHelpers.deactivateCategoryOffer(proId)
+        res.redirect("/admin/viewoffer")
+
+
+
+    },
+
     getSalesReport :async (req, res)=>{
 
         console.log(req, "vijyannanann    ");

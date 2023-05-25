@@ -8,15 +8,11 @@
         <div class="col-lg-11">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form class="mx-1 mx-md-4 pt-5" action="/admin/addoffer" method="post" id="offer-form">
+                    <form class="mx-1 mx-md-4 pt-5" action="/admin/deactivateCategoryOffer" method="post" id="offer-form">
                         <div class="row">
                             <div class="col-md-6">
 
-                                <div class="mb-4">
-                                    <label class="form-label">Offer</label>
-                                    <input type="number" placeholder="Offer Price" required name="offer"
-                                        class="form-control" id="offer">
-                                </div>
+    
                             </div>
                             <div class="col-md-6">
 
@@ -52,24 +48,14 @@
                         $(document).ready(function () {
                             $("#offer-form").validate({
                                 rules: {
-                                    offer: {
-                                        required: true,
-                                        number: true,
-                                        min: 0,
-                                        max:2000
-                                    },
+                                   
                                     category: {
                                         required: true,
                                     },
                                 },
 
                                 messages: {
-                                    offer: {
-                                        required: "Please enter a valid discount price.",
-                                        number: "Offer should be a positive number.",
-                                        min: "Offer should be a number greater than or equal to 0.",
-                                        max:"Offer should be a number lessthan than 2000"
-                                    },
+                                    
                                     category: {
                                         required: "Please Select one category"
                                     },  

@@ -15,9 +15,10 @@
         <table class="table table-hover" id="productsTable">
             <thead>
               <tr>
+                <th>Product Offer</th>
                 <th>Offer Price</th>
                 <th>Category</th>
-                <th>Activate/Deactivate</th>
+                <th>Deactivate Offer</th>
               </tr>
             </thead>
             <tbody>
@@ -26,12 +27,14 @@
                     <% if(products.offer>0){%>
 
               <tr>
+                <td ><%=products.name%></td>
                 
                 <td ><%=products.offer%></td>
                 <td><%=products.category%></td>
     
                 <td class="">
-                  <a href="#"  class="btn btn-sm btn-danger " style="text-decoration: none">Delete</a>
+                  <a href="/admin/deactivateProOffer/<%=products._id%>"  class="btn btn-sm btn-danger " >Delete Offer</a>
+
                 </td>
               </tr>
               <% }%> 
@@ -48,7 +51,7 @@
     
 </section>
 <br>
-<p style="font-weight:500; padding-left: 20px;">Add more Cupons?  <a href="/admin/addcoupon">click here</a>  </p>
+<p style="font-weight:500; padding-left: 20px;">Delete Category wise  <a href="/admin/deactivateCategoryOffer">click here</a>  </p>
   
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
   <script>
