@@ -220,15 +220,15 @@ module.exports = {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
                 .find({ status: true, price: { $gte: 15000 } }).toArray();
             return products;
-        } else if (filter === "jeep") {
+        } else if (filter === "Jeep") {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Jeep" }).toArray();
             return products
 
-        } else if (filter === "car") {
+        } else if (filter === "Car") {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Car" }).toArray();
             return products
 
-        } else if (filter === "bike") {
+        } else if (filter === "Bike") {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Bike" }).toArray();
             return products
 
