@@ -54,17 +54,16 @@ router.get('/userprofile/:id', middlewares.checkUserLoggedIn, usercontrollers.ge
 router.get('/manageAddress', middlewares.checkUserLoggedIn, usercontrollers.getAddress);
 router.post('/add-address2',middlewares.checkUserLoggedIn,usercontrollers.addAddressPost2);
 router.get("/removeAddress/:id", middlewares.checkUserLoggedIn, usercontrollers.removeAddress)
+// router.post('/editprofileinfo/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
 
 router.post("/apply_coupon", middlewares.checkUserLoggedIn, usercontrollers.applyCoupon )
-
 
 router.get("/wallet",  middlewares.checkUserLoggedIn, usercontrollers.getWallet)
 router.get("/wallethistory",  middlewares.checkUserLoggedIn, usercontrollers.walletHistory)
 
-
-
-
 // router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
+
+router.post("/review/:id", middlewares.checkUserLoggedIn, usercontrollers.reviewPost)
 
 
 

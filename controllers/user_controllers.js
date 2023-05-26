@@ -241,16 +241,21 @@ module.exports = {
 
         let user = req.session.user
         if (user) {
+            let products = await cartHelpers.getCartProducts(user._id)
+            // console.log(products, products.productsDetails[0],  "products adn products qurnaty check for single product");
+
             let cartCount = await productHelpers.getCartCount(user._id)
-            productHelpers.getProductDetails(req.params.id).then((product) => {
-                console.log(product);
+            await productHelpers.getProductDetails(req.params.id).then((product) => {
+                console.log(product.reviews, "product reviews produtc page");
+                let reviews = product.reviews
                 if (req.session.user) {
-                    res.render('user_view/product_details', { product, user, cartCount })
+                    res.render('user_view/product_details', { product, user, cartCount,reviews })
                 }
             })
         } else {
             productHelpers.getProductDetails(req.params.id).then((product) => {
-                res.render('user_view/product_details', { product })
+                let reviews = product.reviews
+                res.render('user_view/product_details', { product,reviews })
             })
         }
 
@@ -469,28 +474,30 @@ module.exports = {
 
     },
 
-    addAddressPost: (req, res) => {
+    addAddressPost:async (req, res) => {
         // console.log(req.body, "soorajjjj");
         try {
-            user_helpers.updateAddress(req.body, req.session.user._id);
-            user_helpers.findUserId(req.session.user._id).then((user) => {
+           await user_helpers.updateAddress(req.body, req.session.user._id);
+            await user_helpers.findUserId(req.session.user._id).then((user) => {
                 req.session.user = user;
                 res.redirect("/orderplaced");
             });
         } catch (error) {
             console.log(error);
+            render(error)
         }
     },
-    addAddressPost2: (req, res) => {
+    addAddressPost2:async (req, res) => {
         // console.log(req.body, "soorajjjj");
         try {
-            user_helpers.updateAddress(req.body, req.session.user._id);
-            user_helpers.findUserId(req.session.user._id).then((user) => {
+            await user_helpers.updateAddress(req.body, req.session.user._id);
+           await  user_helpers.findUserId(req.session.user._id).then((user) => {
                 req.session.user = user;
                 res.redirect("/manageAddress");
             });
         } catch (error) {
             console.log(error);
+            render(error)
         }
     },
 
@@ -515,7 +522,7 @@ module.exports = {
             total = (grandTotal[0].total - offerTotal[0].total) - discount
         } else {
             total = grandTotal[0].total - offerTotal[0].total
-            discount = null
+            discount = 0
         }
         // console.log(total, "total log");
         // console.log(products, "products,======", discount," discounttttt");
@@ -630,30 +637,27 @@ module.exports = {
     },
 
 
-    // editprofileinfo: (req, res) => {
-    //     try {
-    //         const userId = req.params.id;
-    //         console.log(userId);
-    //         user_helpers.UpdateProfileInfo(userId, req.body).then((response) => {
-    //             res.redirect('/userprofile/:id')
-    //         })
-    //     }
-    //     catch (error) {
-    //         console.log(error);
-    //         res.redirect('/userprofile/:id')
-    //     }
-    // },
+    editprofileinfo: (req, res) => {
+        try {
+            const userId = req.params.id;
+            console.log(userId, "user id in edit profile info");
+            user_helpers.UpdateProfileInfo(userId, req.body).then((response) => {
+                res.redirect('/userprofile/:id')
+            })
+        }
+        catch (error) {
+            console.log(error);
+            res.redirect('/userprofile/:id')
+        }
+    },
 
 
     getAddress: async (req, res) => {
-        // console.log(req.body, "reqqq bodyrs");
         let user = req.session.user;
         const userId = req.session.user._id;
         const userDetails = await user_helpers.GetUserDetails(userId)
         let address = await user_helpers.findUser(userId);
-        // req.session.user = user;
         const cartCount = await productHelpers.getCartCount(user._id)
-        // console.log(address, "address in user profile");
         res.render('user_view/manageAddress', { user, cartCount, address, userDetails })
 
     },
@@ -754,6 +758,21 @@ module.exports = {
             console.error(error);
             res.render("error", { error });
         }
+    },
+
+    reviewPost :async (req, res)=>{
+        let userName = req.session.user.name
+        let review=req.body
+        let proId=req.params
+        console.log(review.length, "lengthhhhhhh");
+      
+        await productHelpers.doReviewPost(review, proId, userName)
+        res.redirect("back")
+        
+        
+    
+        
+
     },
 
 

@@ -192,10 +192,12 @@
 						</span>
 					</div>
 					<!-- </div> -->
-					<div class="size-208">
+					<div class="size-208" id="discountDiv">
+						
 						<span class="stext-110 cl2">
-							Discount/Coupon: ₹
+							Discount/Coupon: ₹ 
 						</span>
+						
 					</div>
 
 					<!-- <hr style="border: 1px dashed;"> -->
@@ -548,7 +550,9 @@
 					document.getElementById("grandTotal").innerHTML = response.total
 					Swal.fire("Coupon Applied Succefully",
 						"Success"
-					)
+						
+						)
+						$("#discountDiv").load(location.href + " #discountDiv");
 				}
 			}
 

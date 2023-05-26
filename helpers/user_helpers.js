@@ -445,22 +445,22 @@ module.exports = {
         return user
     },
 
-    // UpdateProfileInfo:(userId,userData)=>{
-    //     userData.phone = Number(userData.phone);
-    //     return new Promise((resolve,reject)=>{
-    //         db.get().collection(collection.USER_COLLECTION).updateOne({_id: new ObjectId(userId)},
-    //         {
-    //             $set:{
-    //                 name:userData.name,
-    //                 email:userData.email,
-    //                 phone:userData.phone
-    //             }
-    //         }).then((response)=>{
-    //             console.log(response,"11111111111111111111333333333355555555557777777777");
-    //             resolve()
-    //         })
-    //     })
-    // },
+    UpdateProfileInfo:(userId,userData)=>{
+        userData.phone = Number(userData.phone);
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id: new ObjectId(userId)},
+            {
+                $set:{
+                    name:userData.name,
+                    email:userData.email,
+                    mobile:userData.phone
+                }
+            }).then((response)=>{
+                console.log(response,"11111111111111111111333333333355555555557777777777");
+                resolve()
+            })
+        })
+    },
 
     findUser: (userId) => {
         return new Promise(async (resolve, reject) => {

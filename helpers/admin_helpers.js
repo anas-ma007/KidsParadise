@@ -12,6 +12,7 @@ module.exports = {
         productData.status = true
         productData.date = new Date()
         productData.offer = 0
+        productData.reviews =[]
         productData.price = parseInt(productData.price)
         productData.stock = parseInt(productData.stock)
         // console.log("api calll 6878989");

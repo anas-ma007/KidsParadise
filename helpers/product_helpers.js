@@ -488,6 +488,28 @@ module.exports = {
           console.log(error);
         }
       },
+
+      doReviewPost: async (review, proId, userName) => {
+        return new Promise((resolve, rej) => {
+            // Add the userName field to the review object
+            review.userName = userName
+            // review._id =new ObjectId()
+            db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+                { _id: new ObjectId(proId) },
+                {
+                    $push: {
+                        reviews: review,
+                    }
+                }
+            ).then((response) => {
+                resolve(response)
+            })
+        })
+    },
+    
+    
+
+      
       
 
 }

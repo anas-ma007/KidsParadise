@@ -61,11 +61,10 @@ router.get("/viewcoupons", middlewares.checkAdminLoggedIn,  adminControllers.vie
 router.post("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCouponPost)
 
 router.get("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOffer)
+router.post("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOfferPost)
 router.get("/viewoffer", middlewares.checkAdminLoggedIn,  adminControllers.viewOffer)
 router.get("/add-product-offer", middlewares.checkAdminLoggedIn,  adminControllers.addProductOffer)
 router.post("/add-product-offer", middlewares.checkAdminLoggedIn,  adminControllers.addProductOfferPost)
-router.post("/addoffer", middlewares.checkAdminLoggedIn,  adminControllers.addOfferPost)
-
 router.get("/deactivateProOffer/:id", middlewares.checkAdminLoggedIn,  adminControllers.deactivateProOffer )
 router.get("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminControllers.deactivateCategoryOffer )
 router.post("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminControllers.deactivateCategoryOfferPost )

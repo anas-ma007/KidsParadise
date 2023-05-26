@@ -85,10 +85,13 @@
                     <div>
                       <span>
                         <% for (let i=0; i < response.image.length; i++) { %>
+                          <% if(response.image[i]!==null) {%>
                           <img src="<%= response.image[i] %>" style="width: 60px; height: 60px;" class="img m-1">
                           <button onclick="deleteImage('<%= i %>', '<%= response._id %>')"
                             type="button"
                             class="btn btn-danger btn-sm m-1">x</button>
+                          <% }%>
+
                         <% } %>
                       </span>
                       

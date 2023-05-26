@@ -11,50 +11,56 @@
             <div class="wrap-slick3-dots"></div>
             <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
+
             <div class="slick3 gallery-lb">
-              <div class="item-slick3 zoomable" data-thumb="<%=product.image[0]%>">
-                <div class="wrap-pic-w pos-relative">
-                  <img src="<%=product.image[0]%>" alt="IMG-PRODUCT">
-
-                  <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                    href="<%=product.image[0]%>">
-                    <i class="fa fa-expand"></i>
-                  </a>
+              <% if(product.image[0]!==null) {%>
+                <div class="item-slick3 zoomable" data-thumb="<%=product.image[0]%>">
+                  <div class="wrap-pic-w pos-relative">
+                    <img src="<%=product.image[0]%>" alt="IMG-PRODUCT">
+                    <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                      href="<%=product.image[0]%>">
+                      <i class="fa fa-expand"></i>
+                    </a>
+                  </div>
                 </div>
-              </div>
+                <%}%>
 
-              <div class="item-slick3 zoomable" data-thumb="<%=product.image[1]%>">
-                <div class="wrap-pic-w pos-relative">
-                  <img src="<%=product.image[1]%>" alt="IMG-PRODUCT">
 
-                  <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                    href="<%=product.image[1]%>">
-                    <i class="fa fa-expand"></i>
-                  </a>
-                </div>
-              </div>
+                  <% if(product.image[1]!==null) {%>
+                    <div class="item-slick3 zoomable" data-thumb="<%=product.image[1]%>">
+                      <div class="wrap-pic-w pos-relative">
+                        <img src="<%=product.image[1]%>" alt="IMG-PRODUCT">
+                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                          href="<%=product.image[1]%>">
+                          <i class="fa fa-expand"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <%}%>
 
-              <div class="item-slick3" data-thumb="<%=product.image[2]%>">
-                <div class="wrap-pic-w pos-relative">
-                  <img src="<%=product.image[2]%>" alt="IMG-PRODUCT">
+                      <% if(product.image[2]!==null) {%>
+                        <div class="item-slick3 zoomable" data-thumb="<%=product.image[2]%>">
+                          <div class="wrap-pic-w pos-relative">
+                            <img src="<%=product.image[2]%>" alt="IMG-PRODUCT">
+                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                              href="<%=product.image[2]%>">
+                              <i class="fa fa-expand"></i>
+                            </a>
+                          </div>
+                        </div>
+                        <%}%>
 
-                  <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                    href="<%=product.image[2]%>">
-                    <i class="fa fa-expand"></i>
-                  </a>
-                </div>
-              </div>
-
-              <div class="item-slick3" data-thumb="<%=product.image[3]%>">
-                <div class="wrap-pic-w pos-relative">
-                  <img src="<%=product.image[3]%>" alt="IMG-PRODUCT">
-
-                  <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                    href="<%=product.image[3]%>">
-                    <i class="fa fa-expand"></i>
-                  </a>
-                </div>
-              </div>
+                          <% if(product.image[3]!==null) {%>
+                            <div class="item-slick3 zoomable" data-thumb="<%=product.image[3]%>">
+                              <div class="wrap-pic-w pos-relative">
+                                <img src="<%=product.image[3]%>" alt="IMG-PRODUCT">
+                                <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                  href="<%=product.image[3]%>">
+                                  <i class="fa fa-expand"></i>
+                                </a>
+                              </div>
+                            </div>
+                            <%}%>
             </div>
           </div>
         </div>
@@ -71,12 +77,12 @@
 
             <% if ( product.offer>0 ) { %>
               <del class="mr-3"> Rs <%=product.price%> </del>
-              
-              <strong>  Rs <%=(product.price-product.offer)%> </strong>
+
+              <strong> Rs <%=(product.price-product.offer)%> </strong>
               <% } else { %>
-                Rs <%=product.price%> 
-            <% }%>
-      
+                Rs <%=product.price%>
+                  <% }%>
+
           </span>
           <% if ( product.stock==0 ) { %>
 
@@ -84,44 +90,44 @@
 
             <% } %>
 
-          <p class="stext-102 cl3 p-t-23 mb-3``">
-            <%=product.description%>
-          </p>
+              <p class="stext-102 cl3 p-t-23 mb-3``">
+                <%=product.description%>
+              </p>
 
-          <!--  -->
+              <!--  -->
 
 
-          <div class="flex-w flex-r-m p-b-10">
-            <div class="size-204 flex-w flex-m respon6-next">
+              <div class="flex-w flex-r-m p-b-10">
+                <div class="size-204 flex-w flex-m respon6-next">
 
-              <% if ( locals.user ) { %>
-                <% if ( product.stock==0 ) { %>
-                  <button
-                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04  js-addcart-btn btn-addcart-btn mt-3"
-                    type="submit" onclick="outOfStock('<%= product._id %>')" id="addToCart"
-                    data-product="<%= product._id %>">
-                    Add to cart
-                  </button>
+                  <% if ( locals.user ) { %>
+                    <% if ( product.stock==0 || product.stock==0) { %>
+                      <button
+                        class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04  js-addcart-btn btn-addcart-btn mt-3"
+                        type="submit" onclick="outOfStock('<%= product._id %>')" id="addToCart"
+                        data-product="<%= product._id %>">
+                        Add to cart
+                      </button>
 
-                  <% } else { %>
-                    <button
-                      class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3"
-                      type="submit" onclick="addToCart('<%= product._id %>')" id="addToCart"
-                      data-product="<%= product._id %>">
-                      Add to cart
-
-                    </button>
-                    <% } %>
-
-                <% } else { %>
-                        <a href="/login"
-                          class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3">
+                      <% } else { %>
+                        <button
+                          class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3"
+                          type="submit" onclick="addToCart('<%= product._id %>')" id="addToCart"
+                          data-product="<%= product._id %>">
                           Add to cart
-                        </a>
-               <% } %>
 
-            </div>
-          </div>
+                        </button>
+                        <% } %>
+
+                          <% } else { %>
+                            <a href="/login"
+                              class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail js-addcart-btn btn-addcart-btn mt-3">
+                              Add to cart
+                            </a>
+                            <% } %>
+
+                </div>
+              </div>
         </div>
 
         <!--  -->
@@ -136,9 +142,78 @@
 
         </div>
       </div>
+
+      <div class="bor16 p-l-29 p-b-9 m-t-22">
+        <P class="m-2"> <strong> Product Reviews</strong> </P>
+
+        <form method="post" action="/review/<%= product._id %>" id="reviewform">
+          <div class="bor16 p-l-29 p-b-9 m-t-22">
+            <span class="stext-111 cl8">
+              - Hi
+            </span>
+            <input type="text" name="review" id="review" class="stext-114 cl6 p-r-40 p-b-11 mb-5"
+              placeholder="Type your review in here...">
+            <button type="submit" class="stext-114 cl6 p-r-40 p-b-11 mb-5" style="color: brown;">Submit your
+              review</button>
+            <% if(locals.message) { %>
+              <p style="color: red;">
+                <%=message%>
+              </p>
+              <% }%>
+          </div>
+        </form>
+
+
+
+
+
+        <div class="bor16 p-l-29 p-b-9 m-t-22 ">
+          <% for(let i=0; i<product.reviews.length; i++) {%>
+            <span class="stext-100 cl8 mt-5">
+              - <%=product.reviews[i].userName%>
+            </span>
+            <p class="stext-114 cl6 p-r-40 p-b-11 mb-5">
+              - <%=product.reviews[i].review%>
+
+            </p>
+            <% }%>
+        </div>
+
+
+
+      </div>
+
     </div>
+
+
   </div>
-  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+
+  <script>
+    $(document).ready(function () {
+      $("#reviewform").validate({
+        rules: {
+          review: {
+            required: true,
+            minlength: 6,
+          },
+
+        },
+
+        messages: {
+          review: {
+            required: "Please enter a valid product name.",
+            minlength: "Name must be atleast 6 characters long.",
+          },
+
+        },
+        errorClass: "text-danger",
+      });
+    });
+  </script>
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="path/to/jquery.zoom.min.js"></script>
