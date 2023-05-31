@@ -88,23 +88,21 @@ module.exports = {
             res.render("error", { error });
         }
     },
-
-
-
     viewProducts: async (req, res) => {
-
-        var user = req.session.user
+        var user = req.session.user;
         try {
-            var cartCount = await productHelpers.getCartCount(user._id)
+            var cartCount;
+            if (user) {
+                cartCount = await productHelpers.getCartCount(user._id);
+            }
             var page = parseInt(req.query.page) || 1;
             var pageSize = parseInt(req.query.pageSize) || 12;
             var skip = (page - 1) * pageSize;
-            var filter = req.query.filter
+            var filter = req.query.filter;
             if (filter) {
-                var category = await productHelpers.getCategory()
-                var cartCount = await productHelpers.getCartCount(user._id)
-                let products = await productHelpers.filterGetProducts(skip, pageSize, filter)
-                var count = await productHelpers.userProductCount()
+                var category = await productHelpers.getCategory();
+                let products = await productHelpers.filterGetProducts(skip, pageSize, filter);
+                var count = await productHelpers.userProductCount(filter); // Pass the filter to count only filtered products
                 var totalPages = Math.ceil(count / pageSize);
                 var currentPage = page > totalPages ? totalPages : page;
                 res.render("user_view/all_products", {
@@ -114,15 +112,12 @@ module.exports = {
                     currentPage,
                     pageSize,
                     category,
-                    cartCount
+                    cartCount,
                 });
-
             } else {
-
-                var products = await productHelpers.userGetProducts(skip, pageSize)
-                var cartCount = await productHelpers.getCartCount(user._id)
-                var category = await productHelpers.getCategory()
-                var count = await productHelpers.userProductCount()
+                var products = await productHelpers.userGetProducts(skip, pageSize);
+                var category = await productHelpers.getCategory();
+                var count = await productHelpers.userProductCount();
                 var totalPages = Math.ceil(count / pageSize);
                 var currentPage = page > totalPages ? totalPages : page;
                 res.render("user_view/all_products", {
@@ -132,21 +127,17 @@ module.exports = {
                     currentPage,
                     pageSize,
                     category,
-                    cartCount
                 });
             }
-
-
         } catch (err) {
-            let cartCount
             var page = parseInt(req.query.page) || 1;
             var pageSize = parseInt(req.query.pageSize) || 12;
-            var count = await productHelpers.userProductCount()
-            var category = await productHelpers.getCategory()
+            var count = await productHelpers.userProductCount();
+            var category = await productHelpers.getCategory();
             var skip = (page - 1) * pageSize;
             var totalPages = Math.ceil(count / pageSize);
             var currentPage = page > totalPages ? totalPages : page;
-            var products = await productHelpers.userGetProducts(skip, pageSize)
+            var products = await productHelpers.userGetProducts(skip, pageSize);
             res.render("user_view/all_products", {
                 products,
                 totalPages,
@@ -155,17 +146,85 @@ module.exports = {
                 category,
             });
         }
-
-
-        // productHelpers.getProducts().then((products) => {
-        //     if (req.session.user) {
-        //         res.render("user_view/all_products", { user, products })
-        //     } else {
-        //         res.render("user_view/all_products", { products })
-        //     }
-        // })
-
     },
+    
+
+
+    // viewProducts: async (req, res) => {
+
+    //     var user = req.session.user
+    //     try {
+    //         var cartCount = await productHelpers.getCartCount(user._id)
+    //         var page = parseInt(req.query.page) || 1;
+    //         var pageSize = parseInt(req.query.pageSize) || 12;
+    //         var skip = (page - 1) * pageSize;
+    //         var filter = req.query.filter
+    //         if (filter) {
+    //             var category = await productHelpers.getCategory()
+    //             var cartCount = await productHelpers.getCartCount(user._id)
+    //             let products = await productHelpers.filterGetProducts(skip, pageSize, filter)
+    //             var count = await productHelpers.userProductCount()
+    //             var totalPages = Math.ceil(count / pageSize);
+    //             var currentPage = page > totalPages ? totalPages : page;
+    //             res.render("user_view/all_products", {
+    //                 user,
+    //                 products,
+    //                 totalPages,
+    //                 currentPage,
+    //                 pageSize,
+    //                 category,
+    //                 cartCount
+    //             });
+
+    //         } else {
+
+    //             var products = await productHelpers.userGetProducts(skip, pageSize)
+    //             var cartCount = await productHelpers.getCartCount(user._id)
+    //             var category = await productHelpers.getCategory()
+    //             var count = await productHelpers.userProductCount()
+    //             var totalPages = Math.ceil(count / pageSize);
+    //             var currentPage = page > totalPages ? totalPages : page;
+    //             res.render("user_view/all_products", {
+    //                 user,
+    //                 products,
+    //                 totalPages,
+    //                 currentPage,
+    //                 pageSize,
+    //                 category,
+    //                 cartCount
+    //             });
+    //         }
+
+
+    //     } catch (err) {
+    //         let cartCount
+    //         var page = parseInt(req.query.page) || 1;
+    //         var pageSize = parseInt(req.query.pageSize) || 12;
+    //         var count = await productHelpers.userProductCount()
+    //         var category = await productHelpers.getCategory()
+    //         var skip = (page - 1) * pageSize;
+    //         var totalPages = Math.ceil(count / pageSize);
+    //         var currentPage = page > totalPages ? totalPages : page;
+    //         var products = await productHelpers.userGetProducts(skip, pageSize)
+    //         res.render("user_view/all_products", {
+    //             products,
+    //             totalPages,
+    //             currentPage,
+    //             pageSize,
+    //             category,
+    //         });
+    //     }
+
+
+        
+    // },
+    // productHelpers.getProducts().then((products) => {
+    //     if (req.session.user) {
+    //         res.render("user_view/all_products", { user, products })
+    //     } else {
+    //         res.render("user_view/all_products", { products })
+    //     }
+    // })
 
 
 

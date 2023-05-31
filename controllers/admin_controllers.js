@@ -401,13 +401,16 @@ module.exports = {
 
     postBanner: async (req, res) => {
         const imgUrl = [];
-        for (let i = 0; i < req.files.length; i++) {
-            const result = await cloudinary.uploader.upload(req.files[i].path);
-            imgUrl.push(result.url);
-        }
+        
         try {
+            for (let i = 0; i < req.files?.length; i++) {
+                const result = await cloudinary.uploader.upload(req.files[i].path);
+                imgUrl.push(result.url);
+            }
+            
             const id = await adminHelpers.addBanner(req.body);
             await adminHelpers.addBannerImages(id, imgUrl);
+
             res.render("admin_view/addbanner", { layout: "admin_layout", message: error.message });
         } catch (error) {
             res.render("admin_view/addbanner", { layout: "admin_layout", message: error.message });

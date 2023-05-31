@@ -63,7 +63,7 @@ module.exports = {
         }
     },
 
-    addBannerImages: (bannerId, imgUrl) => {
+    addBannerImages : (bannerId, imgUrl) => {
 
         try {
             return new Promise((resolve, reject) => {
