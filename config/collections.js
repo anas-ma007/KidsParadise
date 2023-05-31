@@ -6,5 +6,5 @@ module.exports = {
     ORDERS: 'orders',
     BANNERS: "banners",
     COUPONS: 'coupons',
-    // WALLET: 'wallet'            //// ===>> changed to user collection, wallet field
+    // WALLET: 'wallet'            //// ===>> changed to a field in under user collection
 }

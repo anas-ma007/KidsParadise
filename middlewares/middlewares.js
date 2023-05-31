@@ -11,11 +11,9 @@ module.exports = {
 
     checkUserLoggedIn: async(req, res, next) => {
         if (req.session.loggedIn) {
-            // const user = req.session.user;
             let user = await user_helpers.getUser(req.session.user._id)
             if(user.status){
                 req.session.user = user;
-                // console.log(" pooooy...  user in middleware", user )
                 next()
             } else{
                 req.session.destroy()

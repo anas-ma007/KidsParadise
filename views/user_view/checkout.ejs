@@ -194,8 +194,8 @@
 					<!-- </div> -->
 					<div class="size-208" id="discountDiv">
 						
-						<span class="stext-110 cl2">
-							Discount/Coupon: ₹ 
+						<span class="stext-110 cl2"  >
+							Discount/Coupon: ₹ <p id="discount"></p>
 						</span>
 						
 					</div>
@@ -355,81 +355,6 @@
 				</div>
 			</form>
 
-			<!--modal address validation from here-->
-			<!-- <script>
-				$(document).ready(function () {
-					$("#addressForm").validate({
-						rules: {
-							name: {
-								required: true,
-								minlength: 5,
-							},
-							phone: {
-								required: true,
-								minlength: 10,
-								maxlength: 10,
-								number: true,
-							},
-							city: {
-								required: true,
-								minlength: 2,
-								maxlength: 6,
-							},
-							housename: {
-								required: true,
-								minlength: 10,
-							},
-							pincode: {
-								required: true,
-								minlength: 6,
-								maxlength: 6,
-								number: true,
-						
-							},
-							district: {
-								required: true,
-								minlength: 2,
-							},
-							
-						},
-						messages: {
-							name: {
-								required: "Please enter your full name.",
-								minlength: "Name must be at least 5 characters long.",
-							},
-							phone: {
-								required: "Please enter your phone number.",
-								minlength: "Phone number must be 10 digits long.",
-								maxlength: "Phone number must be 10 digits long.",
-								number: "Please enter a valid phone number",
-							},
-							city: {
-								required: "Please enter your city.",
-								minlength: "City name must be at least 6 characters long.",
-							},
-							housename: {
-								required: "Please enter your address.",
-								minlength: "Address must be at least 10 characters long.",
-							},
-							
-							
-							pincode: {
-								required: "Please enter your pin code.",
-								minlength: "Pin code must be at least 6 characters long.",
-								maxlength: "Pin code must not exceed 6 characters.",
-								number: "Pin code must contain only numbers.",
-							},
-							district: {
-								required: "Please enter your district.",
-								minlength: "district name must be at least 3 characters long.",
-
-							},  
-						},
-						errorClass: "text-danger",
-					});
-				});
-			</script> -->
-			<!--modal address validation end here-->
 		</div>
 	</div>
 </div>
@@ -532,8 +457,7 @@
 
 	function applyCoupon(userId) {
 		let couponCode = document.getElementById("coupenCode").value
-		// let totalAmount=document.getElementsByName("total-price").value
-		// console.log(couponCode, totalAmount, "couponCode & totalAmount in checkoutpage ");
+		
 		$.ajax({
 			url: '/apply_coupon',
 			data: {
@@ -542,17 +466,16 @@
 			},
 			method: "post",
 			success: (response) => {
-				console.log(response, "response from applu coupon");
+				console.log(response, "response from apply coupon");
 				if (response.status == false) {
 					Swal.fire("Invalid Coupons",
 						"Failed")
 				} else {
+					document.getElementById('discount').innerHTML = response.discount
 					document.getElementById("grandTotal").innerHTML = response.total
 					Swal.fire("Coupon Applied Succefully",
 						"Success"
-						
-						)
-						$("#discountDiv").load(location.href + " #discountDiv");
+					)
 				}
 			}
 

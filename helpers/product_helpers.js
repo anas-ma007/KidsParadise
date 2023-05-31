@@ -3,514 +3,636 @@ const db = require("../config/connection")
 const { ObjectId } = require("mongodb")
 const cloudinary = require("../utils/cloudinary")
 const path = require("path")
-// let adminHelpers = require("../helpers/admin_helpers")
 const user_helpers = require('../helpers/user_helpers')
-// const { response } = require('../app')
 
 
 
 module.exports = {
     viewAddCategory: () => {
-        return new Promise(async (resolve, reject) => {
-            let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find().toArray()
-            resolve(category)
-        })
+
+        try {
+            return new Promise(async (resolve, reject) => {
+                let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find().toArray()
+                resolve(category)
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     addCategory: (catDetails) => {
-        return new Promise(async (resolve, reject) => {
-            let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
-                category: { $regex: `^${catDetails.category}$`, $options: 'i' }
-            });
-            if (categoryExit) {
-                resolve({ status: false, message: "This category is already exist..!" });
-            } else {
-                catDetails.status = true
-                let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
-                resolve({ status: true, category })
-            }
-        })
+        try {
+            return new Promise(async (resolve, reject) => {
+                let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
+                    category: { $regex: `^${catDetails.category}$`, $options: 'i' }
+                });
+                if (categoryExit) {
+                    resolve({ status: false, message: "This category is already exist..!" });
+                } else {
+                    catDetails.status = true
+                    let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
+                    resolve({ status: true, category })
+                }
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     doGetEditCategory: async () => {
-        let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find().toArray()
-        return (category)
+        try {
+            let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find().toArray()
+            return (category)
+
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
     doPostEditCategory: (catId) => {
-        return new Promise(async (resolve, reject) => {
-            let category = await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catId) }, { $set: { name: category.category } })
-            resolve(category)
-        })
+        try {
+            return new Promise(async (resolve, reject) => {
+                let category = await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catId) }, { $set: { name: category.category } })
+                resolve(category)
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
-    // getProducts: () => {
-    //     return new Promise(async (resolve, reject) => {
-    //         let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).toArray()
-    //         resolve(products)
-    //     })
-    // },
+
     userGetProducts: async (skip, pageSize) => {
-        // console.log(skip, pageSize, "hiihihihihihihihihihi");
-        let products = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
-            {
-                $lookup: {
-                    from: collection.PRODUCTS_CATEGORY,
-                    localField: "category",
-                    foreignField: "category",
-                    as: "category"
+        try {
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
+                {
+                    $lookup: {
+                        from: collection.PRODUCTS_CATEGORY,
+                        localField: "category",
+                        foreignField: "category",
+                        as: "category"
+                    }
+                },
+                {
+                    $unwind: "$category"
+                },
+                {
+                    $match: {
+                        "status": true,
+                        "category.status": true
+                    }
+                },
+                {
+                    $skip: skip
+                },
+                {
+                    $limit: pageSize
                 }
-            },
-            {
-                $unwind: "$category"
-            },
-            {
-                $match: {
-                    "status": true,
-                    "category.status": true
-                }
-            },
-            {
-                $skip: skip
-            },
-            {
-                $limit: pageSize
-            }
-        ]).toArray();
+            ]).toArray();
+            return products
 
-        // console.log(products, "products only from status true");
-
-        return products
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
 
     userProductCount: async () => {
-        // console.log( "sgzsxbg");
-        let count = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments({ status: true })
-        // console.log(count, "sgzsg");
-        return count
+        try {
+            let count = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments({ status: true })
+            return count
+
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
 
     getCategory: () => {
-        return new Promise(async (resolve, reject) => {
-            let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
-            // console.log(category, "category test");
-            resolve(category)
-        })
+        try {
+            return new Promise(async (resolve, reject) => {
+                let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find({ status: true }).toArray()
+                resolve(category)
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     blockProduct: (proId) => {
-        return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: false } })
-                .then((response) => {
-                    resolve(response)
-                    console.log(response);
-                })
-        })
+        try {
+            return new Promise(async (resolve, reject) => {
+                await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: false } })
+                    .then((response) => {
+                        resolve(response)
+                        console.log(response);
+                    })
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
 
     unblockProduct: (proId) => {
-        return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: true } })
-                .then((response) => {
-                    resolve(response)
-                    console.log(response);
-                })
-        })
+        try {
+            return new Promise(async (resolve, reject) => {
+                await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: true } })
+                    .then((response) => {
+                        resolve(response)
+                        console.log(response);
+                    })
+            })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
 
     doEditProduct: (prodId) => {
-        return new Promise(async (resolve, reject) => {
-            db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: new ObjectId(prodId) }).then((response) => {
-                // console.log(response + "poooooooooooooyyyyyyyyyyy");
-                resolve(response)
+        try {
+            return new Promise(async (resolve, reject) => {
+                db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: new ObjectId(prodId) }).then((response) => {
+                    resolve(response)
+                })
             })
-        })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
     getProductDetails: (proId) => {
-        return new Promise((resolve, rejection) => {
-            db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: ObjectId(proId) }).then((product) => {
-                console.log(product, "get productdetails in product heplers");
-                resolve(product)
+        try {
+            return new Promise((resolve, rejection) => {
+                db.get().collection(collection.PRODUCTS_COLLECTION).findOne({ _id: ObjectId(proId) }).then((product) => {
+                    resolve(product)
+                })
             })
-        })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     doUnlistCategory: (catgId) => {
-        console.log("catorgory 5285828282")
-        return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catgId) }, { $set: { status: false } }).then((response) => {
-                resolve(response)
-                // console.log(response);
+        try {
+            return new Promise(async (resolve, reject) => {
+                await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catgId) }, { $set: { status: false } }).then((response) => {
+                    resolve(response)
+                })
             })
-        })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     doListCategory: (catgId) => {
-        return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catgId) }, { $set: { status: true } }).then((response) => {
-                resolve(response)
-                // console.log(response);
+        try {
+            return new Promise(async (resolve, reject) => {
+                await db.get().collection(collection.PRODUCTS_CATEGORY).updateOne({ _id: new ObjectId(catgId) }, { $set: { status: true } }).then((response) => {
+                    resolve(response)
+                })
             })
-        })
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     findAllProducts: async (skip, pageSize) => {
-        const allProducts = await db.get().collection(collection.PRODUCTS_COLLECTION).find().skip(skip).limit(pageSize).toArray()
-        return allProducts
+        try {
+            const allProducts = await db.get().collection(collection.PRODUCTS_COLLECTION).find().skip(skip).limit(pageSize).toArray()
+            return allProducts
+
+        } catch (error) {
+            res.render('error', { error });
+        }
     },
 
     productCount: async () => {
-        const productsCount = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments()
-        return productsCount
+        try {
+            const productsCount = await db.get().collection(collection.PRODUCTS_COLLECTION).countDocuments()
+            return productsCount
+
+        } catch (error) {
+            res.render('error', { error });
+        }
 
     },
 
-    //vijay search products page
+
     searchProducts: async (name) => {
-        let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, name: name }).toArray()
-        return products
+        try{
+            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, name: name }).toArray()
+            return products
+
+        } catch (error) {
+          res.render('error', { error });
+      }
 
     },
 
     doSearch: (details) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const searchValue = details.search;
-                const products = await db.get().collection(collection.PRODUCTS_COLLECTION)
-                    .find({
-                        'name': { $regex: `.*${searchValue}.*`, $options: 'i' }
-                    }).toArray();
-                resolve(products);
-            } catch (err) {
-                reject(err);
-            }
-        })
+        try{
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const searchValue = details.search;
+                    const products = await db.get().collection(collection.PRODUCTS_COLLECTION)
+                        .find({
+                            'name': { $regex: `.*${searchValue}.*`, $options: 'i' }
+                        }).toArray();
+                    resolve(products);
+                } catch (err) {
+                    reject(err);
+                }
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
 
 
 
     filterGetProducts: async (skip, pageSize, filter) => {
-        if (filter === "high") {
-            filter = -1;
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
-            return products
-        } else if (filter === 'low') {
-            filter = 1
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
-            return products
-        }
-        else if (filter === "newness") {
-            filter = -1
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ date: filter }).skip(skip).limit(pageSize).toArray()
-            return products
-        } else if (filter === '6k') {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
-                .find({ status: true, price: { $gte: 0, $lte: 6000 } }).toArray();
-            return products;
-        } else if (filter === '15k') {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
-                .find({ status: true, price: { $gte: 6000, $lte: 15000 } }).toArray();
-            return products;
-        } else if (filter === '15kabove') {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
-                .find({ status: true, price: { $gte: 15000 } }).toArray();
-            return products;
-        } else if (filter === "Jeep") {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Jeep" }).toArray();
-            return products
+        try{
+            if (filter === "high") {
+                filter = -1;
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
+                return products
+            } else if (filter === 'low') {
+                filter = 1
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
+                return products
+            }
+            else if (filter === "newness") {
+                filter = -1
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ date: filter }).skip(skip).limit(pageSize).toArray()
+                return products
+            } else if (filter === '6k') {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
+                    .find({ status: true, price: { $gte: 0, $lte: 6000 } }).toArray();
+                return products;
+            } else if (filter === '15k') {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
+                    .find({ status: true, price: { $gte: 6000, $lte: 15000 } }).toArray();
+                return products;
+            } else if (filter === '15kabove') {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION)
+                    .find({ status: true, price: { $gte: 15000 } }).toArray();
+                return products;
+            } else if (filter === "Jeep") {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Jeep" }).toArray();
+                return products
+    
+            } else if (filter === "Car") {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Car" }).toArray();
+                return products
+    
+            } else if (filter === "Bike") {
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Bike" }).toArray();
+                return products
+    
+            }
 
-        } else if (filter === "Car") {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Car" }).toArray();
-            return products
-
-        } else if (filter === "Bike") {
-            let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Bike" }).toArray();
-            return products
-
-        }
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     findAllSearchProduct: async (skip, limit, searchkey) => {
-        const product = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
+        try{
+            const product = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
+    
+                {
+                    $match: {
+                        $or: [
+                            { name: { $regex: searchkey, $options: 'i' } },
+                            { category: { $regex: searchkey, $options: 'i' } },
+                        ]
+                    }
+                },
+                { $skip: skip },
+                { $limit: limit }
+            ]).toArray()
+            return product
 
-            {
-                $match: {
-                    $or: [
-                        { name: { $regex: searchkey, $options: 'i' } },
-                        { category: { $regex: searchkey, $options: 'i' } },
-                    ]
-                }
-            },
-            { $skip: skip },
-            { $limit: limit }
-        ]).toArray()
-        return product
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     getCartCount: async (userId) => {
-        return new Promise(async (resolve, rejct) => {
-            let count = 0
-            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: new ObjectId(userId) })
-            if (cart) {
-                count = cart.products.length
-            }
-            resolve(count)
-        })
+        try{
+            return new Promise(async (resolve, rejct) => {
+                let count = 0
+                let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: new ObjectId(userId) })
+                if (cart) {
+                    count = cart.products.length
+                }
+                resolve(count)
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
 
     },
 
     getOrderDetails: async (userid) => {
-        let order = await db.get().collection(collection.ORDERS).aggregate(
-            [
-                {
-                    $match: {
-                        userId: new ObjectId(userid)
+        try{
+            let order = await db.get().collection(collection.ORDERS).aggregate(
+                [
+                    {
+                        $match: {
+                            userId: new ObjectId(userid)
+                        }
+                    },
+                    {
+                        $sort: { date: -1 }
                     }
-                },
-                {
-                    $sort: { date: -1 }
-                }
-            ]
-        ).toArray()
-        return order
+                ]
+            ).toArray()
+            return order
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
-    // doGetStockCount : async (userId)=>{
-    //     let count=
-
-    // }
 
     getAllOrders: () => {
-        return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.ORDERS).find().toArray().then((orders) => {
-                resolve(orders)
+        try{
+            return new Promise(async (resolve, reject) => {
+                await db.get().collection(collection.ORDERS).find().toArray().then((orders) => {
+                    resolve(orders)
+                })
             })
-        })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
 
     },
 
     orderProductDetail: async (orderId) => {
-        let cartItems = await db.get().collection(collection.ORDERS)
-            .aggregate([
-                {
-                    $match: { _id: ObjectId(orderId) }
-                },
-                {
-                    $unwind: '$products'
-                },
-                {
-                    $project: {
-                        item: '$products.item',
-                        quantity: '$products.quantity'
+        try{
+            let cartItems = await db.get().collection(collection.ORDERS)
+                .aggregate([
+                    {
+                        $match: { _id: ObjectId(orderId) }
+                    },
+                    {
+                        $unwind: '$products'
+                    },
+                    {
+                        $project: {
+                            item: '$products.item',
+                            quantity: '$products.quantity'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: collection.PRODUCTS_COLLECTION,
+                            localField: 'item',
+                            foreignField: '_id',
+                            as: 'product'
+                        }
+                    },
+                    {
+                        $project: {
+                            item: 1,
+                            quantity: 1,
+                            product: { $arrayElemAt: ['$product', 0] }
+                        }
                     }
-                },
-                {
-                    $lookup: {
-                        from: collection.PRODUCTS_COLLECTION,
-                        localField: 'item',
-                        foreignField: '_id',
-                        as: 'product'
-                    }
-                },
-                {
-                    $project: {
-                        item: 1,
-                        quantity: 1,
-                        product: { $arrayElemAt: ['$product', 0] }
-                    }
-                }
-            ]).toArray()
-        // console.log(cartItems, "Cartitems ingggggggggggggggggggggggggggggggg ");
-        return cartItems
+                ]).toArray()
+            return cartItems
+
+        } catch (error) {
+          res.render('error', { error });
+      }
 
     },
 
     findOrder: async (orderId) => {
-        let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).toArray()
-        // console.log(order,"orderssssss from helper"); 
-        return order
+        try{
+            let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).toArray()
+            return order
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
 
     shipproduct: (orderId) => {
-        return new Promise(async (res, rej) => {
-            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "shipped" } })
-                .then((response) => {
-                    res(response)
-                })
-        })
+        try{
+            return new Promise(async (res, rej) => {
+                await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "shipped" } })
+                    .then((response) => {
+                        res(response)
+                    })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     deliverProduct: (orderId) => {
-        return new Promise(async (res, rej) => {
-            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "delivered" } })
-                .then((response) => {
-                    res(response)
-                })
-        })
+        try{
+            return new Promise(async (res, rej) => {
+                await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "delivered" } })
+                    .then((response) => {
+                        res(response)
+                    })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     returnProduct: (orderId) => {
-        return new Promise(async (res, rej) => {
-            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "return pending" } })
-                .then((response) => {
-                    res(response)
-                })
-        })
+        try{
+            return new Promise(async (res, rej) => {
+                await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "return pending" } })
+                    .then((response) => {
+                        res(response)
+                    })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     returnConfirm: (orderId) => {
-        return new Promise(async (res, rej) => {
-            await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order returned" } })
-                .then((response) => {
-                    res(response)
-                })
-        })
+        try{
+            return new Promise(async (res, rej) => {
+                await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order returned" } })
+                    .then((response) => {
+                        res(response)
+                    })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     cancelOrder: (orderId) => {
-        
-        return new Promise((res, rej) => {
-            db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
-                .then((response) => {
-                    res(response)
-                })
-        })
+        try{
+            return new Promise((res, rej) => {
+                db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
+                    .then((response) => {
+                        res(response)
+                    })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
     getOrderStatistics: () => {
-        return new Promise(async (resolve, reject) => {
-            let orderStatistics = await db.get().collection(collection.ORDERS).aggregate([
-                {
-                    $group: {
-                        _id: "$orderstatus",
-                        count: { $sum: 1 },
+        try{
+            return new Promise(async (resolve, reject) => {
+                let orderStatistics = await db.get().collection(collection.ORDERS).aggregate([
+                    {
+                        $group: {
+                            _id: "$orderstatus",
+                            count: { $sum: 1 },
+                        }
+    
                     }
+    
+                ]).toArray()
+                resolve(orderStatistics)
+    
+            })
 
-                }
-
-            ]).toArray()
-            resolve(orderStatistics)
-
-        })
+        } catch (error) {
+          res.render('error', { error });
+      }
 
 
-    }
-    , getSaleStatistics: () => {
+    }    ,
+    
+    getSaleStatistics: () => {
 
-        return new Promise(async (resolve, reject) => {
-            let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
-                { $match: { totalPrice: { $exists: true } } },
-                {
-                    $group: {
-                        _id: { $month: { $toDate: "$date" } }, // Group by month of the "date" field
-                        totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
-                    }
-                }, { $sort: { date: 1 } },
+        try{
+            return new Promise(async (resolve, reject) => {
+                let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
+                    { $match: { totalPrice: { $exists: true } } },
+                    {
+                        $group: {
+                            _id: { $month: { $toDate: "$date" } }, // Group by month of the "date" field
+                            totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
+                        }
+                    }, { $sort: { date: 1 } },
+    
+                ]).toArray()
+                resolve(saleStatistics)
+    
+            })
 
-            ]).toArray()
-            resolve(saleStatistics)
-
-        })
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
-
-
-    // addCategory: (catDetails) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         let categoryExit = await db.get().collection(collection.PRODUCTS_CATEGORY).findOne({
-    //             category: { $regex: `^${catDetails.category}$`, $options: 'i' }
-    //           });
-    //         if(categoryExit){
-    //             resolve({ status: false, message: "This category is already exist..!" });
-    //         }else{
-    //             catDetails.status = true
-    //         let category = await db.get().collection(collection.PRODUCTS_CATEGORY).insertOne(catDetails)
-    //         resolve({status: true, category})
-    //         }
-    //     })
-    // },
 
 
     doaddCoupon: (couponDetails) => {
-        return new Promise(async (resolve, reject) => {
-            let couponExit = await db.get().collection(collection.COUPONS).findOne({
-                couponCode: { $regex: `^${couponDetails.couponCode}$`, $options: 'i' } 
-
+        try{
+            return new Promise(async (resolve, reject) => {
+                let couponExit = await db.get().collection(collection.COUPONS).findOne({
+                    couponCode: { $regex: `^${couponDetails.couponCode}$`, $options: 'i' }
+    
+                });
+                if (couponExit) {
+                    resolve({ status: false, message: "This coupon already exists...!" });
+                } else {
+                    couponDetails.user = []
+                    couponDetails.discount = parseInt(couponDetails.discount);
+                    let coupon = await db.get().collection(collection.COUPONS).insertOne(couponDetails)
+                    resolve({ status: true, coupon })
+                }
             });
-            if (couponExit) {
-                resolve({status : false, message: "This coupon already exists...!"});
-            } else {
-                // couponDetails.status = true
-                couponDetails.user=[]
-                couponDetails.discount = parseInt( couponDetails.discount);
-                let coupon = await db.get().collection(collection.COUPONS).insertOne(couponDetails)
-                resolve({status : true, coupon})
-            }
-        });
+
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
-    getCoupons : async()=>{
-        let allCoupons= await db.get().collection(collection.COUPONS).find().toArray()
-        console.log(allCoupons, "all coupons from pro helpers fun");
-        return allCoupons
+    getCoupons: async () => {
+        
+        try{
+            let allCoupons = await db.get().collection(collection.COUPONS).find().toArray()
+            console.log(allCoupons, "all coupons from pro helpers fun");
+            return allCoupons
 
+        } catch (error) {
+          res.render('error', { error });
+      }
     },
 
-    findOrder: async(orderId)=>{
-        let order = await db.get().collection(collection.ORDERS).find({_id:new ObjectId(orderId)}).sort({date: -1}).toArray()
-        return order
-      },
+    findOrder: async (orderId) => {
+        try{
+            let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).sort({ date: -1 }).toArray()
+            return order
 
-    //   doimageDel : async (index, proId)=>{
-    //     await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({})
-
-    //   }, 
+        } catch (error) {
+          res.render('error', { error });
+      }
+    },
 
     doimageDel: async (index, proId) => {
         try {
-          const productId = new ObjectId(proId);
-          
-          // Delete the specific index from the 'image' array field
-          await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
-            { _id: productId },
-            // { $pull: { image: index } }
-            { $unset: { [`image.${index}`]: "" } }
-          );
-          console.log("log in do img delet");
-      
-      
+            const productId = new ObjectId(proId);
+            await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+                { _id: productId },
+                { $unset: { [`image.${index}`]: "" } }
+            );
         } catch (error) {
-          console.log(error);
-        }
-      },
-
-      doReviewPost: async (review, proId, userName) => {
-        return new Promise((resolve, rej) => {
-            // Add the userName field to the review object
-            review.userName = userName
-            // review._id =new ObjectId()
-            db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
-                { _id: new ObjectId(proId) },
-                {
-                    $push: {
-                        reviews: review,
-                    }
-                }
-            ).then((response) => {
-                resolve(response)
-            })
-        })
+          res.render('error', { error });
+      }
     },
-    
-    
 
-      
-      
+    doReviewPost: async (review, proId, userName) => {
+        
+        try{
+            return new Promise((resolve, rej) => {
+                review.userName = userName
+                db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
+                    { _id: new ObjectId(proId) },
+                    {
+                        $push: {
+                            reviews: review,
+                        }
+                    }
+                ).then((response) => {
+                    resolve(response)
+                })
+            })
+
+        } catch (error) {
+          res.render('error', { error });
+      }
+    },
+
+
+
+
+
 
 }
 

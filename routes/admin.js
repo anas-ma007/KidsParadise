@@ -55,7 +55,6 @@ router.post("/addbanner", middlewares.checkAdminLoggedIn,upload.array('image'), 
 router.get("/unlistbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.unlistBanner)
 router.get("/listbanner/:id", middlewares.checkAdminLoggedIn, adminControllers.listBanner)
 
-
 router.get("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCoupons)
 router.get("/viewcoupons", middlewares.checkAdminLoggedIn,  adminControllers.viewCoupons)
 router.post("/addcoupon", middlewares.checkAdminLoggedIn,  adminControllers.addCouponPost)
@@ -69,18 +68,8 @@ router.get("/deactivateProOffer/:id", middlewares.checkAdminLoggedIn,  adminCont
 router.get("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminControllers.deactivateCategoryOffer )
 router.post("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminControllers.deactivateCategoryOfferPost )
 
-
-
 router.get("/salereport", middlewares.checkAdminLoggedIn,  adminControllers.getSalesReport)
-
 router.post("/deleteImage",  middlewares.checkAdminLoggedIn, adminControllers.doEditImage)
-
-
-
-
-
-
-
 
 router.get("/")
 

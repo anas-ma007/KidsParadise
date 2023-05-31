@@ -1,0 +1,142 @@
+
+<body class="animsition">
+    <br>
+    <br>
+    <br>
+
+
+	<form action="/editaddress/<%=userAddress?._id%>" method="post" id="addressForm">
+		<div class="container">
+	
+	
+			<fieldset class="p-2">
+				<div class="row">
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-5 mb-3">
+						<input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+							placeholder="Name"  value="<%=userAddress?.name%>" name="name" style="border-radius: 1rem; width: 70%;" />
+					</div>
+	
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-5 mb-3">
+						<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
+							placeholder="Phonenumber" value="<%=userAddress?.phone%>" minlength="10" name="phone"
+							style="border-radius: 1rem; width: 70%;" />
+					</div>
+				</div>
+				<div class="row d-flex">
+	
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-3  mb-3">
+						<input type="text" id="typeUsernameX-2" required class="form-control form-control-md"
+							placeholder="City" name="city" value="<%=userAddress?.city%>" style="border-radius: 1rem; width: 70%;" />
+					</div>
+	
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-3  mb-3">
+						<input placeholder="Address" id="description" required name="housename"
+							class="form-control" value="<%=userAddress?.housename%>" rows="4" style="border-radius: 1rem; width: 70%;"></input>
+					</div>
+	
+				</div>
+	
+	
+				<div class="row">
+	
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-3  mb-3">
+						<input type="tel" id="typeUsernameX-2" required class="form-control form-control-md"
+							placeholder="Pincode" name="pincode" value="<%=userAddress?.pincode%>" style="border-radius: 1rem; width: 70%;" />
+					</div>
+	
+					<div class=" col-md-6 col-lg-6 col-xl-6 required mt-3 mb-3">
+						<input type="text" required class="form-control form-control-md" value="<%=userAddress?.district%>" placeholder="District"
+							name="district" style="border-radius: 1rem; width: 70%;" />
+					</div>
+				</div>
+				<div class="row">
+	
+				</div>
+			</fieldset>
+		</div>
+	
+		<div class="col-md-12 ">
+			<button type="submit" class="btn btn-primary submit ">Save</button>
+		</div>
+	</form>
+	
+	<!--modal address validation from here-->
+	<!-- <script>
+		$(document).ready(function () {
+			$("#addressForm").validate({
+				rules: {
+					name: {
+						required: true,
+						minlength: 5,
+					},
+					phone: {
+						required: true,
+						minlength: 10,
+						maxlength: 10,
+						number: true,
+					},
+					city: {
+						required: true,
+						minlength: 2,
+						maxlength: 6,
+					},
+					housename: {
+						required: true,
+						minlength: 10,
+					},
+					pincode: {
+						required: true,
+						minlength: 6,
+						maxlength: 6,
+						number: true,
+				
+					},
+					district: {
+						required: true,
+						minlength: 2,
+					},
+					
+				},
+				messages: {
+					name: {
+						required: "Please enter your full name.",
+						minlength: "Name must be at least 5 characters long.",
+					},
+					phone: {
+						required: "Please enter your phone number.",
+						minlength: "Phone number must be 10 digits long.",
+						maxlength: "Phone number must be 10 digits long.",
+						number: "Please enter a valid phone number",
+					},
+					city: {
+						required: "Please enter your city.",
+						minlength: "City name must be at least 6 characters long.",
+					},
+					housename: {
+						required: "Please enter your address.",
+						minlength: "Address must be at least 10 characters long.",
+					},
+					
+					
+					pincode: {
+						required: "Please enter your pin code.",
+						minlength: "Pin code must be at least 6 characters long.",
+						maxlength: "Pin code must not exceed 6 characters.",
+						number: "Pin code must contain only numbers.",
+					},
+					district: {
+						required: "Please enter your district.",
+						minlength: "district name must be at least 3 characters long.",
+	
+					},  
+				},
+				errorClass: "text-danger",
+			});
+		});
+	</script> -->
+	
+
+
+</body>
+
+

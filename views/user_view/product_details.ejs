@@ -101,7 +101,7 @@
                 <div class="size-204 flex-w flex-m respon6-next">
 
                   <% if ( locals.user ) { %>
-                    <% if ( product.stock==0 || product.stock==0) { %>
+                    <% if ( product.stock==0) { %>
                       <button
                         class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04  js-addcart-btn btn-addcart-btn mt-3"
                         type="submit" onclick="outOfStock('<%= product._id %>')" id="addToCart"
@@ -145,7 +145,7 @@
 
       <div class="bor16 p-l-29 p-b-9 m-t-22">
         <P class="m-2"> <strong> Product Reviews</strong> </P>
-
+      
         <form method="post" action="/review/<%= product._id %>" id="reviewform">
           <div class="bor16 p-l-29 p-b-9 m-t-22">
             <span class="stext-111 cl8">
@@ -155,18 +155,19 @@
               placeholder="Type your review in here...">
             <button type="submit" class="stext-114 cl6 p-r-40 p-b-11 mb-5" style="color: brown;">Submit your
               review</button>
-            <% if(locals.message) { %>
-              <p style="color: red;">
-                <%=message%>
-              </p>
-              <% }%>
+        
           </div>
         </form>
 
 
 
+<% if(product.reviews.length===0){%>
+  <p class="stext-114 cl6 p-r-40 p-b-11 mb-5">
+    - No review for this product yet
 
+  </p>
 
+  <% } else {%>
         <div class="bor16 p-l-29 p-b-9 m-t-22 ">
           <% for(let i=0; i<product.reviews.length; i++) {%>
             <span class="stext-100 cl8 mt-5">
@@ -176,6 +177,7 @@
               - <%=product.reviews[i].review%>
 
             </p>
+            <% }%>
             <% }%>
         </div>
 
@@ -187,8 +189,7 @@
 
 
   </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
 
 
   <script>
@@ -232,6 +233,18 @@
       });
     });
   </script>
+
+  <!-- <script>
+    function getReviewBox(productId){
+      console.log(productId);
+      $.ajax({
+        url :"/user/getReviewBox",
+        data : productId,
+        method : "post",
+      })
+    }
+
+  </script> -->
 
 
 

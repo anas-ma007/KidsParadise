@@ -297,8 +297,15 @@
                                     </b>
                                     <a type="button" onclick="addressRemove('<%= address._id %>')"
                                         class="text-danger border p-1 float-right">
-                                        <b>DELETE</b>
+                                        <b>REMOVE</b>
                                     </a>
+                                    <a href="/editaddress/<%= address._id %>"  
+                                        class="text-danger border pr-1 float-right">
+                                        <b>EDIT</b>
+                                    </a>
+                                </p>
+                                <p>
+                                    
                                 </p>
                                 <p>
                                     <%= address.housename %>, <%= address.city %>, <%= address.district %>, <%=
@@ -474,55 +481,6 @@
 
 
 
-<!-- 
-<script>
-    (function () {
-        'use strict'
-        const forms = document.querySelectorAll('.requires-validation')
-        Array.from(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script>
-
-<script>
-    function addressRemove(addrId) {
-        swal({
-            title: "Are you sure?",
-            text: "Do you want to remove this address from profile?",
-            icon: "warning",
-            buttons: ["Cancel", "Remove"],
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "Yes, remove it!",
-            cancelButtonText: "Cancel",
-            closeOnConfirm: false,
-            closeOnCancel: true,
-        }).then((willRemove) => {
-            if (willRemove) {
-                $.ajax({
-                    url: `/removeProfileAddress/${addrId}`,
-                    method: 'GET',
-                    success: (response) => {
-                        $(addrId).remove();
-                        let msg = name + " removed";
-                        $('#delete-msg').html(msg);
-                        location.assign('/manageAddress')
-                        console.log("removed");
-                    }
-                });
-            }
-        });
-    }
-</script> -->
-
 <script>
 
     function addressRemove(addressId) {
@@ -542,3 +500,22 @@
 
 
 </script>
+<!-- 
+<script>
+
+    function editAddress(addressId) {
+        console.log(addressId);
+        $.ajax({
+             url : `/editaddress/${addressId}`,
+            method: "GET",
+            success: (response) => {
+                location.reload();
+                // $(addressId).remove()
+
+            }
+        })
+    }
+
+
+
+</script> -->
