@@ -66,7 +66,8 @@
 
                         <% if (order.orderstatus==="delivered" ) { %>
 
-                          <td><button class="btn-info btn-sm">Order Details</button>
+                          <td><a class="btn-info text-white btn-sm"
+                            href="/order-product-details/<%=order._id%>">Order Details</a>
                             <button class="btn-danger btn-sm text-light"
                               onclick="returnOrder('<%=order._id%>'); event.preventDefault();">Return</button>
                           </td>
