@@ -550,7 +550,8 @@ module.exports = {
 
     addAddressPost: async (req, res) => {
         try {
-            await user_helpers.updateAddress(req.body, req.session.user._id);
+            console.log(req.body, "req.body call here");
+            await user_helpers.addNewAddress(req.body, req.session.user._id);
             await user_helpers.findUserId(req.session.user._id).then((user) => {
                 req.session.user = user;
                 res.redirect("/orderplaced");
@@ -561,7 +562,7 @@ module.exports = {
     },
     addAddressPost2: async (req, res) => {
         try {
-            await user_helpers.updateAddress(req.body, req.session.user._id);
+            await user_helpers.addNewAddress(req.body, req.session.user._id);
             await user_helpers.findUserId(req.session.user._id).then((user) => {
                 req.session.user = user;
                 res.redirect("/manageAddress");

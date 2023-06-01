@@ -368,7 +368,7 @@ module.exports = {
         })
     },
 
-    updateAddress: (addressData, userId) => {
+    addNewAddress: (addressData, userId) => {
         try {
             return new Promise((resolve, rej) => {
                 addressData._id = new ObjectId()
