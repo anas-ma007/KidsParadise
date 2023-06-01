@@ -258,18 +258,19 @@
 													<td class="column-2">
 														<%=pro.productsDetails[0].name%>
 													</td>
-													<td class="column-3"> Rs <%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>
+													<td class="column-3"> Rs
+														<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>
 													</td>
 													<td class="column-4">
 														<div id="testDiv">
 															<div class="wrap-num-product flex-w m-l-auto m-r-0 ">
 
-																
+
 																<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m "
 																	onclick="changeQuantity('<%=pro._id%>','<%=pro.productsDetails[0]._id%>',-1,'<%=(pro.productsDetails[0].price-pro.productsDetails[0].offer)%>','<%=pro.productsDetails[0].stock%>', )">
 																	<i class="fs-16 zmdi zmdi-minus"></i>
-															</div>
-																
+																</div>
+
 
 
 																<input id="quantityCount<%=pro.productsDetails[0]._id%>"
@@ -391,45 +392,31 @@
 				let quantity = parseInt(document.getElementById(`quantityCount${proId}`).value);
 				count = parseInt(count)
 				if (count + quantity == 0) {
-					// console.log("anssss ", count, quantity);
-					Swal.fire({
-						title: "Remove Product",
-						text: `Do you want to remove this product?`,
-						showCancelButton: true,
-						confirmButtonText: "Remove",
-						cancelButtonText: "Cancel",
-						// timer: 5000
-					}).then((result) => {
-						console.log(result);
-						if (result.isConfirmed) {
-							$.ajax({
-								url: '/remove-product',
-								data: {
-									cart: cartId,
-									product: proId
-								},
-								method: 'post',
-								success: (response) => {
-									console.log(response);
-									if (response) {
-										location.reload()
-										// $("#testDiv").load(location.href + " #testDiv");
-										// $("#bothDiv").load(location.href + " #bothDiv");
-									} else {
-										document.getElementById(proId).innerHTML = quantity + count
-									}
-
-								}
-							})
+					$.ajax({
+						url: '/remove-product',
+						data: {
+							cart: cartId,
+							product: proId
+						},
+						method: 'post',
+						success: (response) => {
+							console.log(response);
+							if (response) {
+								location.reload();
+								
+							} else {
+								document.getElementById(proId).innerHTML = quantity + count;
+							}
 						}
 					});
-				} else {
+				}
+				else {
 					if (count + quantity > stock) {
 						Swal.fire({
 							icon: "warning",
 							text: "Out of stock..!",
 
-						})	
+						})
 						location.reload()
 
 

@@ -69,6 +69,7 @@ router.get("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminCon
 router.post("/deactivateCategoryOffer", middlewares.checkAdminLoggedIn,  adminControllers.deactivateCategoryOfferPost )
 
 router.get("/salereport", middlewares.checkAdminLoggedIn,  adminControllers.getSalesReport)
+router.post("/salereport", middlewares.checkAdminLoggedIn,  adminControllers.salesreportfiler)
 router.post("/deleteImage",  middlewares.checkAdminLoggedIn, adminControllers.doEditImage)
 
 router.get("/")

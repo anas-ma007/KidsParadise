@@ -14,25 +14,29 @@
     <h2 class="content-title">SALES REPORT</h2>
     <div class="buttons">
 
-      <button id="pdfPrint" class="mb-4 btn btn-sm" style="background-color: rgb(157, 49, 102); border-color: rgb(157, 49, 102); color: white;">
+      <button id="pdfPrint" class="mb-4 btn btn-sm"
+        style="background-color: rgb(157, 49, 102); border-color: rgb(157, 49, 102); color: white;">
         Download PDF
       </button>
-      <button id="download"  onclick="export_data()" class="mb-4 btn btn-sm" style="background-color: rgb(157, 49, 102); border-color: rgb(157, 49, 102); color: white;">
-          Download EXCEL
-        </button>
-  </div>
+      <button id="download" onclick="export_data()" class="mb-4 btn btn-sm"
+        style="background-color: rgb(157, 49, 102); border-color: rgb(157, 49, 102); color: white;">
+        Download EXCEL
+      </button>
+    </div>
 
     <!-- <button type="button" class="btn btn-secondary btn_print" id="pdfPrint" value="Download as Pdf">
       <i class="fas fa-file-pdf"></i> Download as PDF
     </button> -->
   </div>
-  <label for="start-date">Start Date:</label>
-  <input type="date" id="start-date" name="start-date">
-
-  <label for="end-date">End Date:</label>
-  <input type="date" id="end-date" name="end-date">
-
-  <button type="button" class="btn btn-primary btn_filter m-3">Filter</button>
+  <form action="/admin/salereport", method="post">
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date" name="startDate">
+  
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date" name="endDate">
+  
+    <button type="submit" class="btn btn-primary btn_filter m-3">Filter</button>
+</form>
   <div class="card mb-4">
 
     <!-- card-header end -->

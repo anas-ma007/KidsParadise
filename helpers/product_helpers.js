@@ -228,18 +228,18 @@ module.exports = {
 
 
     searchProducts: async (name) => {
-        try{
+        try {
             let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, name: name }).toArray()
             return products
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
 
     },
 
     doSearch: (details) => {
-        try{
+        try {
             return new Promise(async (resolve, reject) => {
                 try {
                     const searchValue = details.search;
@@ -254,15 +254,15 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
 
 
 
     filterGetProducts: async (skip, pageSize, filter) => {
-        try{
+        try {
             if (filter === "high") {
                 filter = -1;
                 let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
@@ -291,26 +291,26 @@ module.exports = {
             } else if (filter === "Jeep") {
                 let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Jeep" }).toArray();
                 return products
-    
+
             } else if (filter === "Car") {
                 let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Car" }).toArray();
                 return products
-    
+
             } else if (filter === "Bike") {
                 let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true, category: "Bike" }).toArray();
                 return products
-    
+
             }
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
-    findAllSearchProduct: async (skip, limit, searchkey) => {
-        try{
+    findAllSearchProduct: async (searchkey) => {
+        try {
             const product = await db.get().collection(collection.PRODUCTS_COLLECTION).aggregate([
-    
+
                 {
                     $match: {
                         $or: [
@@ -319,18 +319,18 @@ module.exports = {
                         ]
                     }
                 },
-                { $skip: skip },
-                { $limit: limit }
+                // { $skip: skip },
+                // { $limit: limit }
             ]).toArray()
             return product
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     getCartCount: async (userId) => {
-        try{
+        try {
             return new Promise(async (resolve, rejct) => {
                 let count = 0
                 let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: new ObjectId(userId) })
@@ -341,13 +341,13 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
 
     },
 
     getOrderDetails: async (userid) => {
-        try{
+        try {
             let order = await db.get().collection(collection.ORDERS).aggregate(
                 [
                     {
@@ -363,13 +363,13 @@ module.exports = {
             return order
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
 
     getAllOrders: () => {
-        try{
+        try {
             return new Promise(async (resolve, reject) => {
                 await db.get().collection(collection.ORDERS).find().toArray().then((orders) => {
                     resolve(orders)
@@ -377,13 +377,33 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
 
     },
 
+   
+    salesreportfilterpost: (startDate, endDate) => {
+        console.log(startDate, endDate, "startDate, endDate in sales report filter helper function");
+        return new Promise(async (resolve, reject) => {
+          try {
+            const orders = await db.get().collection(collection.ORDERS).aggregate([
+              { $match: { orderstatus: "delivered" } },
+              { $match: { $and: [{ date: { $gte: startDate } }, { date: { $lte: endDate } }] } },
+              { $sort: { date: -1 } }
+            ]).toArray();
+            resolve(orders);
+          } catch (err) {
+            console.error(err);
+            reject(err);
+          }
+        });
+      },
+
+
+
     orderProductDetail: async (orderId) => {
-        try{
+        try {
             let cartItems = await db.get().collection(collection.ORDERS)
                 .aggregate([
                     {
@@ -417,24 +437,24 @@ module.exports = {
             return cartItems
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
 
     },
 
     findOrder: async (orderId) => {
-        try{
+        try {
             let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).toArray()
             return order
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
 
     shipproduct: (orderId) => {
-        try{
+        try {
             return new Promise(async (res, rej) => {
                 await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "shipped" } })
                     .then((response) => {
@@ -443,12 +463,12 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     deliverProduct: (orderId) => {
-        try{
+        try {
             return new Promise(async (res, rej) => {
                 await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "delivered" } })
                     .then((response) => {
@@ -457,12 +477,12 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     returnProduct: (orderId) => {
-        try{
+        try {
             return new Promise(async (res, rej) => {
                 await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "return pending" } })
                     .then((response) => {
@@ -471,12 +491,12 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     returnConfirm: (orderId) => {
-        try{
+        try {
             return new Promise(async (res, rej) => {
                 await db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order returned" } })
                     .then((response) => {
@@ -485,12 +505,12 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     cancelOrder: (orderId) => {
-        try{
+        try {
             return new Promise((res, rej) => {
                 db.get().collection(collection.ORDERS).updateOne({ _id: new ObjectId(orderId) }, { $set: { orderstatus: "order cancelled" } })
                     .then((response) => {
@@ -499,12 +519,12 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     getOrderStatistics: () => {
-        try{
+        try {
             return new Promise(async (resolve, reject) => {
                 let orderStatistics = await db.get().collection(collection.ORDERS).aggregate([
                     {
@@ -512,24 +532,24 @@ module.exports = {
                             _id: "$orderstatus",
                             count: { $sum: 1 },
                         }
-    
+
                     }
-    
+
                 ]).toArray()
                 resolve(orderStatistics)
-    
+
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
 
 
-    }    ,
-    
+    },
+
     getSaleStatistics: () => {
 
-        try{
+        try {
             return new Promise(async (resolve, reject) => {
                 let saleStatistics = await db.get().collection(collection.ORDERS).aggregate([
                     { $match: { totalPrice: { $exists: true } } },
@@ -539,24 +559,24 @@ module.exports = {
                             totalAmount: { $sum: "$totalPrice" } // Calculate the sum of the "amount" field
                         }
                     }, { $sort: { date: 1 } },
-    
+
                 ]).toArray()
                 resolve(saleStatistics)
-    
+
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
 
     doaddCoupon: (couponDetails) => {
-        try{
+        try {
             return new Promise(async (resolve, reject) => {
                 let couponExit = await db.get().collection(collection.COUPONS).findOne({
                     couponCode: { $regex: `^${couponDetails.couponCode}$`, $options: 'i' }
-    
+
                 });
                 if (couponExit) {
                     resolve({ status: false, message: "This coupon already exists...!" });
@@ -569,30 +589,30 @@ module.exports = {
             });
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     getCoupons: async () => {
-        
-        try{
+
+        try {
             let allCoupons = await db.get().collection(collection.COUPONS).find().toArray()
             console.log(allCoupons, "all coupons from pro helpers fun");
             return allCoupons
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     findOrder: async (orderId) => {
-        try{
+        try {
             let order = await db.get().collection(collection.ORDERS).find({ _id: new ObjectId(orderId) }).sort({ date: -1 }).toArray()
             return order
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     doimageDel: async (index, proId) => {
@@ -603,13 +623,13 @@ module.exports = {
                 { $unset: { [`image.${index}`]: "" } }
             );
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
     doReviewPost: async (review, proId, userName) => {
-        
-        try{
+
+        try {
             return new Promise((resolve, rej) => {
                 review.userName = userName
                 db.get().collection(collection.PRODUCTS_COLLECTION).updateOne(
@@ -625,8 +645,8 @@ module.exports = {
             })
 
         } catch (error) {
-          res.render('error', { error });
-      }
+            res.render('error', { error });
+        }
     },
 
 

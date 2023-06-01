@@ -100,6 +100,7 @@ module.exports = {
             var skip = (page - 1) * pageSize;
             var filter = req.query.filter;
             if (filter) {
+                
                 var category = await productHelpers.getCategory();
                 let products = await productHelpers.filterGetProducts(skip, pageSize, filter);
                 var count = await productHelpers.userProductCount(filter); // Pass the filter to count only filtered products
@@ -115,6 +116,9 @@ module.exports = {
                     cartCount,
                 });
             } else {
+                
+            let cartCount = await productHelpers.getCartCount(user._id)
+                
                 var products = await productHelpers.userGetProducts(skip, pageSize);
                 var category = await productHelpers.getCategory();
                 var count = await productHelpers.userProductCount();
@@ -127,6 +131,7 @@ module.exports = {
                     currentPage,
                     pageSize,
                     category,
+                    cartCount,
                 });
             }
         } catch (err) {
@@ -382,54 +387,6 @@ module.exports = {
 
 
 
-    search: async (req, res) => {
-        const searchValue = req.query.search;
-        // let cartCount = 0;
-        // let wishlistCount = 0;
-        // if(req.session.loggedIn) {
-        let user = req.session.user;
-        // cartCount = await userHelpers.getCartCountNew(req.session.user._id);
-        // req.session.cartCount = parseInt(cartCount);
-        // wishlistCount = await userHelpers.wishlistCount(req.session.user._id);
-        // req.session.wishlistCount = parseInt(wishlistCount);
-        // productHelpers.doSearch({ search: searchValue }).then((products) => {
-        // if (products.length > 0) {
-        //   res.render('user/shop', {admin:false,userHeader:true,products,user,cartCount,wishlistCount})
-        // res.render("user_view/all_products", { user, products, });
-        //         } else {
-        //           res.json({
-        //             status: 'error',
-        //             message: 'No matching products found'
-        //           });
-        //         }
-        //       }).catch((err) => {
-        //         res.json({
-        //           status: 'error',
-        //           message: err.message
-        //         });
-        //       });
-        // }else{
-
-        productHelpers.doSearch({ search: searchValue }).then((products) => {
-            if (products.length > 0) {
-                res.render("user_view/all_products", { user, products, });
-
-            } else {
-                res.json({
-                    status: 'error',
-                    message: 'No matching products found'
-                });
-            }
-        }).catch((err) => {
-            res.json({
-                status: 'error',
-                message: err.message
-            });
-        });
-
-    },
-
-
     ///forgot password /////
     getForgotPassword: (req, res) => {
         try {
@@ -534,24 +491,11 @@ module.exports = {
         try {
             var user = req.session.user
             var searchkey = req.body.search
-            var page = parseInt(req.query.page) || 1;
-            var pageSize = parseInt(req.query.pageSize) || 12;
-            var skip = (page - 1) * pageSize;
-            var filter = req.query.filter
-            var products = await productHelpers.findAllSearchProduct(skip, pageSize, searchkey)
+            var products = await productHelpers.findAllSearchProduct( searchkey)
             var category = await productHelpers.getCategory()
-            var count = await productHelpers.userProductCount()
-            var totalPages = Math.ceil(count / pageSize);
-            var currentPage = page > totalPages ? totalPages : page;
-            res.render("user_view/all_products", {
-                user,
-                products,
-                totalPages,
-                currentPage,
-                pageSize,
-                category
+            let cartCount = await productHelpers.getCartCount(user._id)
 
-            });
+            res.render("user_view/search", { user, products, category,cartCount });
 
         } catch (error) {
             res.render("error", { error });

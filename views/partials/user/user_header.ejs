@@ -22,16 +22,12 @@
                             <a href="/allproducts">Shop</a>
                         </li>
 
-                        <li>
-                            <a href="/">About</a>
-                        </li>
+                      
                         <li>
                             <a href="/orders">My Orders</a>
                         </li>
 
-                        <li>
-                            <a href="/">Contact</a>
-                        </li>
+                       
                     </ul>
                 </div>
 
@@ -68,31 +64,7 @@
                             <% } %>
                                 <ul>
                                     <li>
-                                        <!--                             
-                            <% if(locals.loggedIn){%>
-                            
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle ml-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                </button>
-                                <%=loggedIn.name%>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="/logout">Logout</a>
-                                 
-                                </div>
-                            </div>
-
-                            <% } else { %>
-
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle ml-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                   User
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                  <a class="dropdown-item" href="/login">Login</a>
-                                  <a class="dropdown-item" href="/signup">SignUp</a>
-                                </div>
-                            </div>
-                            <% } %> -->
+                                       
 
 
                                         <% if ( locals.user ) { %>
@@ -178,12 +150,10 @@
             </li>
 
             <li>
-                <a href="#">About</a>
+                <a href="/orders">My Orders</a>
             </li>
 
-            <li>
-                <a href="#">Contact</a>
-            </li>
+         
         </ul>
     </div>
 

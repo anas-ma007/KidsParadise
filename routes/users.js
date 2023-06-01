@@ -42,7 +42,7 @@ router.get("/orders", middlewares.checkUserLoggedIn, usercontrollers.viewOrders 
 router.get("/order-product-details/:id",  middlewares.checkUserLoggedIn, usercontrollers.orderDetails)
 router.post("/apply_coupon", middlewares.checkUserLoggedIn, usercontrollers.applyCoupon )
 
-// USER RETURN & CACNCE
+// USER RETURN & CACNCL
 router.get('/return-order/:id',middlewares.checkUserLoggedIn, usercontrollers.returnOrder)
 router.get('/cancel-order/:id',middlewares.checkUserLoggedIn, usercontrollers.cancelOrder)
 router.post("/search", usercontrollers.postSearch) 
