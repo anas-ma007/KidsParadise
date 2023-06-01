@@ -438,7 +438,7 @@ module.exports = {
         }
     },
 
-    placeOrder: (order, products, grandTotal, payment, userId) => {
+    placeOrder: (order, products, grandTotal, payment, userId, couponDiscount) => {
         try {
             return new Promise((res, rej) => {
                 let orderObj = {
@@ -455,7 +455,9 @@ module.exports = {
                     products: products,
                     orderstatus: 'placed',
                     totalPrice: grandTotal,
-                    date: Date.now()
+                    date: Date.now(),
+                    discount : couponDiscount
+                    
                 }
 
                 db.get().collection(collection.ORDERS).insertOne(orderObj).then((response) => {

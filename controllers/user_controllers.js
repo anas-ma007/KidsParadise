@@ -584,6 +584,7 @@ module.exports = {
             let offerTotal = await user_helpers.getOfferAmount(req.session.user._id);
             let coupon = req.body.coupon
             let total, discount;
+
             if (coupon) {
                 let checkCoupon = await user_helpers.getCoupon(coupon)
 
@@ -595,6 +596,7 @@ module.exports = {
                 total = grandTotal[0].total - offerTotal[0].total
                 discount = 0
             }
+            // console.log(discount, "discount in place order fns");
             user_helpers.placeOrder(
                 address,
                 products,

@@ -73,17 +73,20 @@
                       </tr>
                       <% } else if (order.orderstatus==="order returned" ) { %>
 
-                        <td><button class="btn-info btn-sm">Order Details</button></td>
+                        <td><a class="btn-info text-white btn-sm"
+                          href="/order-product-details/<%=order._id%>">Order Details</a></td>
                         </tr>
 
                         <% } else if (order.orderstatus==="return pending" ) { %>
 
-                          <td><button class="btn-info btn-sm">Order Details</button></td>
+                          <td><a class="btn-info text-white btn-sm"
+                            href="/order-product-details/<%=order._id%>">Order Details</a></td>
                           </tr>
 
                           <% } else if (order.orderstatus==="order cancelled" ) { %>
 
-                            <td><button class="btn-info btn-sm">Order Details</button></td>
+                            <td><a class="btn-info text-white btn-sm"
+                              href="/order-product-details/<%=order._id%>">Order Details</a></td>
                             </tr>
 
                             <% } else { %>

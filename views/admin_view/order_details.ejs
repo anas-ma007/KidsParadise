@@ -124,26 +124,22 @@
                                                 <td colspan="4">
                                                     <article class="float-end">
 
+                                                      
+
                                                         <dl class="dlist">
-                                                            <dt>Coupon Price :</dt>
+                                                            <dt>Coupon/Discount :</dt>
                                                             <% order.forEach(order=> { %>
                                                                 <dd class="text-success">
-                                                                    <%=order.coupon%>
+                                                                    <%=order.discount%>.00
                                                                 </dd>
                                                                 <% } ) %>
 
                                                         </dl>
-                                                        <dl class="dlist">
-                                                            <dt>Subtotal :</dt>
-
-                                                            <dd>Rs <%=totalPrice%>
-                                                            </dd>
-
-                                                        </dl>
+                                                    
 
                                                         <dl class="dlist">
-                                                            <dt>Grand total :</dt>
-                                                            <dd> <b class="h5">Rs <%=totalPrice%></b> </dd>
+                                                            <dt class="h5"> <strong> Grand total :</strong> </dt>
+                                                            <dd> <b class="h5"> <strong>Rs <%=totalPrice%>.00 </strong>  </b> </dd>
                                                         </dl>
 
                                                     </article>
