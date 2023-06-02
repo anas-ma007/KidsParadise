@@ -1,0 +1,74 @@
+
+
+
+<section class="container">
+  <div class="col-9">
+    <div class="content-header">
+      <h2 class="content-title mt-4">BAnners</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class=" d-flex"><a href="/admin/addbanner" class="btn btn-success ms-auto">Add New Banner</a></div>
+  </div>
+
+  <div class="mt-4">
+    <table class="table mt-4 display"  id="productsTable"  >
+      <!-- <table class="table table-hover"> -->
+        <thead>
+          <tr>
+            <th>Banner</th>
+            <th>Title</th>
+            <th>Subtitle</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <% for(var i=0; i < banner.length; i++) { %>
+            <tr>
+              <td>
+                <img src="<%= banner[i].image %>" alt="" srcset="" style=" height: 55x; width: 55px;">
+                
+              </td>
+              <td>
+                <%= banner[i].title %>
+              </td>
+              <td>
+                <%= banner[i].subtitle %>
+              </td>
+              <td>
+                <% if ( banner[i].status ) { %>
+                  <span class="badge rounded-pill alert-success">Active</span>
+                  <% } else { %>
+                    <span class="badge rounded-pill alert-danger">Inactive</span>
+                    <% } %>
+              </td>
+              
+
+              <td>
+                <!-- <a href="#" class="btn btn-primary "> Edit</a> -->
+                <% if (banner[i].status) { %>
+                  <a href="/admin/listbanner/<%=banner[i]._id%>" class="btn btn-danger"> unlist</a>
+                  <% } else { %>
+                    <a href="/admin/unlistbanner/<%=banner[i]._id%>" class="btn btn-success"> List</a>
+                    <% } %>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
+     
+
+    </table>
+  </div>
+
+
+
+</section>
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready( function () {
+      $('#productsTable').DataTable();
+  } );
+</script>
