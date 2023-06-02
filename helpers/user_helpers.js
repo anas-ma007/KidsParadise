@@ -562,7 +562,6 @@ module.exports = {
                             mobile: userData.phone
                         }
                     }).then((response) => {
-                        console.log(response, "11111111111111111111333333333355555555557777777777");
                         resolve()
                     })
             })

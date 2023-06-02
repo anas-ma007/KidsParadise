@@ -717,6 +717,14 @@ module.exports = {
             res.render("error", { error });
         }
     },
+    geteditprofileinfo :async (req, res)=>{
+        const userId = req.session.user._id
+        const user = req.session.user
+        const userDetails = await user_helpers.GetUserDetails(userId)
+        const cartCount = await productHelpers.getCartCount(user._id)
+        res.render('user_view/edit_userprofile', { user, cartCount, userDetails })
+
+    },
 
 
     editprofileinfo: (req, res) => {

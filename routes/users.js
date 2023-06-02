@@ -65,7 +65,8 @@ router.post("/editaddress/:id", middlewares.checkUserLoggedIn, usercontrollers.e
 // USER WALLET 
 router.get("/wallet",  middlewares.checkUserLoggedIn, usercontrollers.getWallet)
 router.get("/wallethistory",  middlewares.checkUserLoggedIn, usercontrollers.walletHistory)
-// router.post('/profileinformation/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
+router.get('/userprofile', middlewares.checkUserLoggedIn, usercontrollers.geteditprofileinfo)
+router.post('/userprofile/:id', middlewares.checkUserLoggedIn, usercontrollers.editprofileinfo)
 
 router.post("/review/:id", middlewares.checkUserLoggedIn, usercontrollers.reviewPost)
 // router.post("/getReviewBox", middlewares.checkUserLoggedIn, usercontrollers.accessReviewBox)

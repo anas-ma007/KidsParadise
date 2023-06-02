@@ -287,72 +287,32 @@
                         <h5 class="modal-title" id="exampleModalLongTitle">Profile Information</h5>
                     </div>
                     <div class="modal-body">
-                        <form action="/profileinformation/<%=userDetails._id%>" method="post">
+                        <form action="/userprofile/<%=userDetails._id%>" method="post">
                             <div class="form-group">
                                 <label for="inputAddress">Full Name</label>
-                                <input type="text"  disabled class="form-control" name="name" id="inputAddress"
-                                    placeholder="first name" value="<%=userDetails.name%>">
+                                <input type="text"  class="form-control" name="name" id="inputAddress"
+                                    placeholder="first name" value="<%=userDetails?.name%>">
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail4">Email</label>
-                                <input type="email"  disabled class="form-control" id="inputEmail4" name="email"
-                                    placeholder="Email" value="<%=userDetails.email%>">
+                                <input type="email" class="form-control" id="inputEmail4" name="email"
+                                    placeholder="Email" value="<%=userDetails?.email%>">
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="inputEmail4" >Phone No.</label>
-                                    <input type="phone" disabled class="form-control" name="phone" id="inputEmail4"
-                                        placeholder="Phone" value="<%=userDetails.mobile%>">
+                                    <input type="phone" class="form-control" name="phone" id="inputEmail4"
+                                        placeholder="Phone" value="<%=userDetails?.mobile%>">
                                 </div>
                             </div>
                     </div>
                     <!-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
-                        <input type="submit" class="btn btn-primary" value="Update"
-                            style="background-color: rgb(58, 22, 74);border-color:rgb(58, 22, 74)">
                     </div> -->
-                    
-                </form>
-                <a href="/userprofile" class="btn btn-warning ml-auto mr-5"> Edit</a> <br>
+                    <input type="submit" class="btn btn-primary ml-auto mr-5" value="Update"
+                        style="background-color: rgb(58, 22, 74);border-color:rgb(58, 22, 74)"> <br>
+                    </form>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class=" modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Profile Information</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/admin/addAddress/{{user._id}}" method="post">
-                    <div class="form-group">
-                        <label for="inputAddress">First Name</label>
-                        <input type="text" class="form-control" id="inputAddress" placeholder="first name">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail4">Email</label>
-                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inputEmail4">Phone No.</label>
-                            <input type="phone" class="form-control" id="inputEmail4" placeholder="Phone">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary"
-                    style="background-color: rgb(157,49,102);border-color:rgb(157,49,102)">Save changes</button>
             </div>
         </div>
     </div>
