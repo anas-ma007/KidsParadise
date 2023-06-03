@@ -55,7 +55,8 @@
                   discount: {
                     required: true,
                     number: true,
-                    min: 0.01
+                    min: 0.01,
+                    max : 2000
                   },
                   createdDate: {
                     required: true,
@@ -71,11 +72,14 @@
                     required: "Please enter a valid coupon code.",
                     minlength: "Coupon code must be at least 6 characters long.",
                     validCouponCode: "Coupon code must have at least 3 letters and 3 numbers."
+
                   },
                   discount: {
                     required: "Please enter a valid discount price.",
                     number: "Discount should be a positive number.",
-                    min: "Discount should be a number greater than 0."
+                    min: "Discount should be a number greater than 0.",
+                    max: "Dsicount cannot exceed 2000...!" 
+                    
                   },
                   createdDate: {
                     required: "Please select a created date.",
