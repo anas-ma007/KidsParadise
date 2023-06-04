@@ -18,7 +18,9 @@ module.exports = {
             .create({ to: "+91" + phone_number, channel: 'sms' })
             .then(verification => console.log(verification.sid))
             .catch((error) => {
-                console.log(error);
+
+                res.render('error', { error });
+
             })
     },
 
@@ -51,12 +53,12 @@ module.exports = {
             .then((verification) => {
             })
             .catch((error) => {
-                console.log('otp send error');
-                console.log(error);
+
+                res.render('error', { error });
+
             })
     },
     verifyOtpForForgotPass(phone_number, otp) {
-        console.log(phone_number);
         return client.verify.v2.services(verifySid)
             .verificationChecks
             .create({ to: "+91" + phone_number, code: otp })
@@ -70,7 +72,9 @@ module.exports = {
                 }
             })
             .catch((error) => {
-                console.error(error);
+
+                res.render('error', { error });
+
             })
     }
 }

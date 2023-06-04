@@ -392,7 +392,6 @@ module.exports = {
             res.redirect('/');
         })
             .catch((error) => {
-                console.log(error);
                 res.render("error", { error });
 
             })

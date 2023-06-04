@@ -288,7 +288,6 @@ module.exports = {
     doUnlistBanner: (bannerId) => {
         try {
             return new Promise(async (resolve, reject) => {
-                console.log('wroking');
                 await db.get().collection(collection.BANNERS).updateOne({ _id: new ObjectId(bannerId) }, { $set: { status: true } }).then((response) => {
                     resolve(response)
                 })

@@ -619,8 +619,10 @@ module.exports = {
             res.render("admin_view/sales-report", { allOrders, layout: 'admin_layout' })
             
         }
-        catch(err){
-            console.log(err);
+        catch(error){
+            
+            res.render('error', { error });
+
         }
     },
 
@@ -640,17 +642,6 @@ module.exports = {
             res.render('error', { error });
         }
     },
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
