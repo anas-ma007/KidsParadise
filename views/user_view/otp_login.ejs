@@ -146,12 +146,8 @@
         data: $('#send-otp').serialize(),
         success: (res) => {
           if (res) {
-            console.log(res);
-            console.log("api call back")
-            console.log(res.mobile)
+           
             document.getElementById('mobile2').value = res.mobile;
-            // verifyOtp.style.display = 'none';
-            // verifyButton.style.visibility = 'visible'
           }
           else {
             location.reload()
@@ -164,7 +160,6 @@
     // testing
     function resendOTP() {
       const mobile = document.getElementById('mobile2').value
-      console.log("btn clicked");
       $.ajax({
         url: '/send-otp',
         method: 'POST',
@@ -173,11 +168,8 @@
         },
         success: (res) => {
           if (res) {
-            console.log("api call back");
-            console.log(res);
+           
             verifyOtp.style.display = 'none';
-            console.log("perfect");
-            // verifyButton.style.visibility = 'visible'
           } else {
             location.reload();
           }
@@ -186,14 +178,12 @@
     } 
 
     $('#otp-verify').submit((e) => {
-      console.log("otpp verify calllled ");
       e.preventDefault();
       $.ajax({
         url: '/otp-verify',
         method: 'post',
         data: $('#otp-verify').serialize(),
         success: (res) => {
-          console.log(`response top verfiy:  ${res}`)
           if (res) {
             location.href = '/'
           }
@@ -224,11 +214,8 @@
         clearInterval(intervalId);
         verifyOtp.style.display = "block";
         timerElement.style.display = "none";
-        // Disable the form inputs and button
         const formInputs = document.querySelectorAll("form input");
-        // formInputs.forEach(input => input.disabled = true);
         const submitButton = document.querySelector("form button[type=submit]");
-        // submitButton.disabled = true;
       }
     }, 1000);
   </script>

@@ -104,13 +104,12 @@
 		dataType: "json",
 		success: function (response) {
 
-			console.log('this is respons2', response);
+		
 
 			const ctx = document.getElementById('myChart');
 
 			let status2 = response.saleStatistics
 
-			// let salesStatus = [0,0,0,0,0,0,0,0,0,0,0,0]
 			let salesStatus = []
 
 			status2.forEach((item) => {

@@ -90,7 +90,7 @@
       </div>
 </section>
 
-
+<!-- 
 <script>
   $(document).ready(function () {
     $("#checkout-form").validate({
@@ -151,7 +151,84 @@
       errorClass: "text-danger",
     });
   });
+</script> -->
+
+<script>
+  $(document).ready(function () {
+    $("#checkout-form").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 6,
+          maxlength :60,
+        },
+        category: {
+          required: true,
+        },
+        price: {
+          required: true,
+          number: true,
+          min: 0.01
+        },
+        stock: {
+          required: true,
+          number: true,
+          min: 0
+        },
+        description: {
+          required: true,
+          minlength: 80,
+          maxlength :160,
+        },
+        productImage: {
+          required: true,
+          filesize: 101000 // Set the maximum file size to 101 KB
+        }
+      },
+      messages: {
+        name: {
+          required: "Please enter a valid product name.",
+          minlength: "Name must be at least 6 characters long.",
+          maxlength : "Name maximum up to 60 characters long."
+        },
+        category: {
+          required: "Please select a category."
+        },
+        price: {
+          required: "Please enter a valid price.",
+          number: "Price should be a positive number.",
+          min: "Price should be a number greater than 0."
+        },
+        stock: {
+          required: "Please enter a valid number.",
+          number: "Stock should be a positive number.",
+          min: "Stock should be a number greater than or equal to 0."
+        },
+        description: {
+          required: "Please enter a valid description.",
+          minlength: "Description must be at least 80 characters long.",
+          maxlength : "Description maximum up to 160 characters long."
+
+        },
+        productImage: {
+          required: "Please select a file.",
+          filesize: "File size should be less than 100 KB."
+        }
+      },
+      errorClass: "text-danger"
+    });
+
+    // Custom file size validation method
+    $.validator.addMethod('filesize', function (value, element, param) {
+      // Convert file size to bytes
+      var fileSize = element.files[0].size;
+      // Convert maximum file size in bytes (101 KB)
+      var maxSize = param;
+      return fileSize <= maxSize;
+    }, "File size should be less than 100 KB.");
+  });
 </script>
+
 
 <div>
   <br>

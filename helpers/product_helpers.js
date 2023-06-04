@@ -128,7 +128,6 @@ module.exports = {
                 await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: false } })
                     .then((response) => {
                         resolve(response)
-                        console.log(response);
                     })
             })
 
@@ -144,7 +143,6 @@ module.exports = {
                 await db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, { $set: { status: true } })
                     .then((response) => {
                         resolve(response)
-                        console.log(response);
                     })
             })
 
@@ -384,7 +382,6 @@ module.exports = {
 
    
     salesreportfilterpost: (startDate, endDate) => {
-        console.log(startDate, endDate, "startDate, endDate in sales report filter helper function");
         return new Promise(async (resolve, reject) => {
           try {
             const orders = await db.get().collection(collection.ORDERS).aggregate([
@@ -597,7 +594,6 @@ module.exports = {
 
         try {
             let allCoupons = await db.get().collection(collection.COUPONS).find().toArray()
-            console.log(allCoupons, "all coupons from pro helpers fun");
             return allCoupons
 
         } catch (error) {

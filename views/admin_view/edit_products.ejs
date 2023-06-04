@@ -114,13 +114,11 @@
 
 <script>
   function deleteImage(index, proId) {
-    console.log(index, proId)
     $.ajax({
       url: '/admin/deleteImage',
       data: { index, proId },
       type: 'POST',
       success: (response)=> {
-        console.log('Image deleted successfully');
         location.reload()
       }
     });

@@ -78,7 +78,6 @@ module.exports = {
                     req.session.user = response.user
                     res.redirect("/");
                 } else {
-                    console.log(response.status, response.message);
                     req.session.loginErr = response.message;
                     res.redirect("/login");
                 }
@@ -154,85 +153,6 @@ module.exports = {
     },
     
 
-
-    // viewProducts: async (req, res) => {
-
-    //     var user = req.session.user
-    //     try {
-    //         var cartCount = await productHelpers.getCartCount(user._id)
-    //         var page = parseInt(req.query.page) || 1;
-    //         var pageSize = parseInt(req.query.pageSize) || 12;
-    //         var skip = (page - 1) * pageSize;
-    //         var filter = req.query.filter
-    //         if (filter) {
-    //             var category = await productHelpers.getCategory()
-    //             var cartCount = await productHelpers.getCartCount(user._id)
-    //             let products = await productHelpers.filterGetProducts(skip, pageSize, filter)
-    //             var count = await productHelpers.userProductCount()
-    //             var totalPages = Math.ceil(count / pageSize);
-    //             var currentPage = page > totalPages ? totalPages : page;
-    //             res.render("user_view/all_products", {
-    //                 user,
-    //                 products,
-    //                 totalPages,
-    //                 currentPage,
-    //                 pageSize,
-    //                 category,
-    //                 cartCount
-    //             });
-
-    //         } else {
-
-    //             var products = await productHelpers.userGetProducts(skip, pageSize)
-    //             var cartCount = await productHelpers.getCartCount(user._id)
-    //             var category = await productHelpers.getCategory()
-    //             var count = await productHelpers.userProductCount()
-    //             var totalPages = Math.ceil(count / pageSize);
-    //             var currentPage = page > totalPages ? totalPages : page;
-    //             res.render("user_view/all_products", {
-    //                 user,
-    //                 products,
-    //                 totalPages,
-    //                 currentPage,
-    //                 pageSize,
-    //                 category,
-    //                 cartCount
-    //             });
-    //         }
-
-
-    //     } catch (err) {
-    //         let cartCount
-    //         var page = parseInt(req.query.page) || 1;
-    //         var pageSize = parseInt(req.query.pageSize) || 12;
-    //         var count = await productHelpers.userProductCount()
-    //         var category = await productHelpers.getCategory()
-    //         var skip = (page - 1) * pageSize;
-    //         var totalPages = Math.ceil(count / pageSize);
-    //         var currentPage = page > totalPages ? totalPages : page;
-    //         var products = await productHelpers.userGetProducts(skip, pageSize)
-    //         res.render("user_view/all_products", {
-    //             products,
-    //             totalPages,
-    //             currentPage,
-    //             pageSize,
-    //             category,
-    //         });
-    //     }
-
-
-        
-    // },
-    // productHelpers.getProducts().then((products) => {
-    //     if (req.session.user) {
-    //         res.render("user_view/all_products", { user, products })
-    //     } else {
-    //         res.render("user_view/all_products", { products })
-    //     }
-    // })
-
-
-
     logout: (req, res) => {
         try {
             req.session.destroy();
@@ -286,7 +206,6 @@ module.exports = {
                 if (userData) {
                     user_helpers.doSendOtp(req.body).then((response) => {
                         if (response) {
-                            console.log(response);
                             req.session.otpphone = phone
                             res.json({
                                 success: response,
@@ -400,9 +319,7 @@ module.exports = {
 
         try {
             req.session.mobile = req.body.mobile;
-            console.log("sesion mobile: ", req.session.mobile)
             user_helpers.checkForUser(req.body.mobile).then(async (user) => {
-                console.log("user exist : ", user);
                 if (user) {
                     req.session.user = user;
                     await twilioApi.sendOtpForForgotPass(req.body.mobile);
@@ -550,7 +467,6 @@ module.exports = {
 
     addAddressPost: async (req, res) => {
         try {
-            console.log(req.body, "req.body call here");
             await user_helpers.addNewAddress(req.body, req.session.user._id);
             await user_helpers.findUserId(req.session.user._id).then((user) => {
                 req.session.user = user;
@@ -589,14 +505,12 @@ module.exports = {
                 let checkCoupon = await user_helpers.getCoupon(coupon)
 
                 discount = parseInt(checkCoupon[0].discount)
-                console.log(discount, "discount price");
                 total = (grandTotal[0].total - offerTotal[0].total) - discount
 
             } else {
                 total = grandTotal[0].total - offerTotal[0].total
                 discount = 0
             }
-            // console.log(discount, "discount in place order fns");
             user_helpers.placeOrder(
                 address,
                 products,

@@ -27,7 +27,6 @@ module.exports = {
     addProductImages: (proId, imgUrl) => {
         try {
             return new Promise(async (resolve, reject) => {
-                console.log(imgUrl);
                 db.get().collection(collection.PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) },
                     {
                         $set: {
@@ -88,7 +87,6 @@ module.exports = {
         try {
             return new Promise(async (resolve, reject) => {
                 let banner = await db.get().collection(collection.BANNERS).find().toArray()
-                console.log(banner, "bannersss ");
                 resolve(banner)
             })
 

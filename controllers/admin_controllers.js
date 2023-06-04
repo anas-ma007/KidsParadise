@@ -242,7 +242,9 @@ module.exports = {
 
     adminLogout: (req, res) => {
         req.session.destroy();
-        res.redirect("/")
+        // res.redirect("/")
+        res.render('admin_view/admin_login', { layout: 'admin_LogLayout' })
+
     },
 
     editProduct: async (req, res) => {
@@ -250,7 +252,6 @@ module.exports = {
         try {
             let prodId = req.params.id;
             await productHelpers.doEditProduct(prodId).then((response) => {
-                console.log(response);
                 res.render("admin_view/edit_products", { layout: 'admin_layout', response })
             })
 
@@ -612,11 +613,9 @@ module.exports = {
     },
     salesreportfiler:async(req,res)=>{
         try{
-            console.log(req.body.startDate, req.body.endDate, "req body date");
             let strtDate=Date.parse(req.body.startDate)
             let enDate = Date.parse(req.body.endDate)
             let allOrders = await productHelpers.salesreportfilterpost(strtDate,enDate)
-            // res.redirect('/salereport')
             res.render("admin_view/sales-report", { allOrders, layout: 'admin_layout' })
             
         }

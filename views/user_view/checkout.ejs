@@ -385,7 +385,6 @@
 						"Order Placed Succesfully",
 						"Success"
 					).then(() => {
-						console.log(response);
 						window.location.href = '/orders'
 					})
 				} else if (response.walletSuccess) {
@@ -393,7 +392,6 @@
 						"Order Placed Succesfully",
 						"Success"
 					).then(() => {
-						console.log(response);
 						window.location.href = '/orders'
 					})
 
@@ -406,9 +404,7 @@
 		// })
 	}
 
-	// console.log("razorpamynt");
 	function razorpayPayment(order) {
-		// console.log(order, "ordersss");
 		var options = {
 			"key": "rzp_test_VAYH3mbPterVbs", // Enter the Key ID generated from the Dashboard
 			"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -446,7 +442,6 @@
 			method: 'post',
 			success: (response) => {
 				if (response.status) {
-					console.log("ORDER SUCCESS");
 					location.href = "/orders"
 				} else {
 					alert("PAYMENT FAILED")
@@ -467,7 +462,6 @@
 			},
 			method: "post",
 			success: (response) => {
-				console.log(response, "response from apply coupon");
 				if (response.status == false) {
 					Swal.fire("Invalid Coupons",
 						"Failed")

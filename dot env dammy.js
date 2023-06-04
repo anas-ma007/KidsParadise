@@ -1,0 +1,17 @@
+// # twilio-creds
+TWILIO_ACCOUNT_SID = 'ABa7a1a1cc910dammy07a5cc4e9d8f873d'
+TWILIO_AUTH_TOKEN = 'eb685fc70ce9f0dammy09fd0716fc5a8'
+TWILIO_VERIFYSID  = 'VAb1a79e713570dammy0c6d31935dc5f4'
+
+//  cloudinary-creds
+CLOUDINARY_NAME = 'dammey022'
+CLOUDINARY_API_KEY = '012345678912345'
+CLOUDINARY_SECRET_KEY = 'DsP5ghTEtZ3W_JUDrwLl0S0bq4k'
+
+// #connections
+DB_URL = 'mongodb://0.0.0.0:12345'
+DB_NAME = 'Toys'
+
+// #razorpay-credentials
+KEY_ID = 'rzp_test_VAYH3mb0dammy0'
+KEY_SECRET = 'wnLz6NmDv9fSha53P0dammy0'

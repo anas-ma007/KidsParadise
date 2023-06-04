@@ -72,21 +72,17 @@ module.exports = {
                     if (user.status) {
                         bcrypt.compare(userData.password, user.password).then((passCheck) => {
                             if (passCheck) {
-                                console.log("Login Success");
                                 response.user = user
                                 response.status = true
                                 resolve(response)
                             } else {
-                                console.log("password error");
                                 resolve({ status: false, message: "Password is incorrect..!" })
                             }
                         })
                     } else {
-                        console.log("user blocked");
                         resolve({ status: false, message: " You were blocked..!" })
                     }
                 } else {
-                    console.log("user not found !!!");
                     resolve({ status: false, message: "User not found..." })
                 }
             })
@@ -262,17 +258,14 @@ module.exports = {
                         }
                     )
                     .then((response) => {
-                        console.log(response);
                         resolve(response);
                     })
             } catch (err) {
-                console.log(err);
                 reject();
             }
 
         })
     },
-    // ///////////////// password recover 
 
 
 
@@ -360,7 +353,6 @@ module.exports = {
                 }
             ]).toArray()
             try {
-                console.log("total[0].total offer price is=>", total[0].total, " total offer price is=>", total);
                 resolve(total)
             } catch {
                 resolve(total = 0)
@@ -484,9 +476,7 @@ module.exports = {
                 };
                 instance.orders.create(options, function (err, order) {
                     if (err) {
-                        console.log(err);
                     } else {
-                        console.log(order);
                         res(order)
                     }
                 });
@@ -596,12 +586,12 @@ module.exports = {
                         }
                     }
                 }).then((response) => {
-                    console.log("adddresss removedddd?????");
                     resolve()
-                }).catch((err) => {
-                    console.log(err);
-                })
+                }).catch((error) => {
+                    res.render('error', { error });
 
+                })
+               
         })
 
     },
@@ -647,15 +637,12 @@ module.exports = {
                         let discount = checkCoupon[0].discount;
                         return ({ status: true, discount })
                     } else {
-                        console.log("coupon expiredddd");
                         return (false)
                     }
                 } else {
-                    console.log("user found -----");
                     return (false);
                 }
             } else {
-                console.log("invalid code -----");
                 return (false);
             }
 
@@ -748,7 +735,6 @@ module.exports = {
 
     totalAmount: async (orderId) => {
         try {
-            console.log(orderId, "order iidddd");
             let total = await db.get().collection(collection.ORDERS).aggregate([
                 {
                     '$match': {
@@ -820,7 +806,6 @@ module.exports = {
                         }
                     }
                 ).then((response) => {
-                    console.log(response, "response in in edit address");
                     resolve(response)
                 })
 

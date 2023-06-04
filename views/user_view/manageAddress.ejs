@@ -484,14 +484,11 @@
 <script>
 
     function addressRemove(addressId) {
-        console.log(addressId);
         $.ajax({
-            // url : `removeProfileAddress/$<%=address._id%>`
              url : `/removeAddress/${addressId}`,
             method: "GET",
             success: (response) => {
                 location.reload();
-                // $(addressId).remove()
 
             }
         })
@@ -500,22 +497,3 @@
 
 
 </script>
-<!-- 
-<script>
-
-    function editAddress(addressId) {
-        console.log(addressId);
-        $.ajax({
-             url : `/editaddress/${addressId}`,
-            method: "GET",
-            success: (response) => {
-                location.reload();
-                // $(addressId).remove()
-
-            }
-        })
-    }
-
-
-
-</script> -->
