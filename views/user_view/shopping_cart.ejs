@@ -471,10 +471,6 @@
 							success: (response) => {
 								if (response.removeProduct) {
 									location.reload()
-
-									// $("#cartTable").load(location.href + " #cartTable");
-									// $("#fulldiv").load(location.href + " #fulldiv");
-
 								} else {
 									document.getElementById(proId).innerHTML = quantity + count
 								}

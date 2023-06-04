@@ -99,7 +99,7 @@ module.exports = {
             var skip = (page - 1) * pageSize;
             var filter = req.query.filter;
             if (filter) {
-                
+
                 var category = await productHelpers.getCategory();
                 let products = await productHelpers.filterGetProducts(skip, pageSize, filter);
                 var count = await productHelpers.userProductCount(filter); // Pass the filter to count only filtered products
@@ -115,9 +115,9 @@ module.exports = {
                     cartCount,
                 });
             } else {
-                
-            let cartCount = await productHelpers.getCartCount(user._id)
-                
+
+                let cartCount = await productHelpers.getCartCount(user._id)
+
                 var products = await productHelpers.userGetProducts(skip, pageSize);
                 var category = await productHelpers.getCategory();
                 var count = await productHelpers.userProductCount();
@@ -151,7 +151,7 @@ module.exports = {
             });
         }
     },
-    
+
 
     logout: (req, res) => {
         try {
@@ -406,17 +406,21 @@ module.exports = {
 
     postSearch: async (req, res) => {
         try {
-            var user = req.session.user
-            var searchkey = req.body.search
-            var products = await productHelpers.findAllSearchProduct( searchkey)
-            var category = await productHelpers.getCategory()
-            let cartCount = await productHelpers.getCartCount(user._id)
-
-            res.render("user_view/search", { user, products, category,cartCount });
+            let searchkey = req.body.search
+            let products = await productHelpers.findAllSearchProduct(searchkey)
+            let category = await productHelpers.getCategory()
+            let user = req.session.user
+            if (user) {
+                let cartCount = await productHelpers.getCartCount(user._id)
+                res.render("user_view/search", { user, products, category, cartCount });
+            } else {
+                res.render("user_view/search", { products, category });
+            }
 
         } catch (error) {
             res.render("error", { error });
         }
+
     },
 
 
@@ -631,7 +635,7 @@ module.exports = {
             res.render("error", { error });
         }
     },
-    geteditprofileinfo :async (req, res)=>{
+    geteditprofileinfo: async (req, res) => {
         const userId = req.session.user._id
         const user = req.session.user
         const userDetails = await user_helpers.GetUserDetails(userId)

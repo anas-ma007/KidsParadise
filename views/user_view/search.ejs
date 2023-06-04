@@ -17,13 +17,14 @@
                 </a>
 
 
-            <% category.forEach(cat=> { %>
-                <a href="/allproducts?filter=<%=cat.category%>">
-                     <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".(<%=cat.category%>)">
-                         <%=cat.category%>
-                     </button> 
-                </a>
-            <% }) %>
+                <% category.forEach(cat=> { %>
+                    <a href="/allproducts?filter=<%=cat.category%>">
+                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                            data-filter=".(<%=cat.category%>)">
+                            <%=cat.category%>
+                        </button>
+                    </a>
+                    <% }) %>
 
 
             </div>
@@ -57,7 +58,7 @@
             </div>
 
 
-            
+
             <!-- Filter -->
             <div class="dis-none panel-filter w-full p-t-10">
                 <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
@@ -127,54 +128,71 @@
             </div>
         </div>
 
+        <%if (products.length==0){%>
+            <div style="text-align: center;">
+                <h3 style="font-size: 24px; color: #333; margin-bottom: 20px;">Sorry, no results found!</h3>
+                <h4 style="font-size: 18px; color: #666; margin-bottom: 20px;">Please check the spelling or try
+                    searching for something else</h4>
+                <h3 style="margin-bottom: 20px;">
+                    <span class="pb-5">
+                        <a class="btn btn-warning mt-3" href="/allproducts"
+                            style="display: inline-block; background-color: #ffc107; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;">Go
+                            to SHOP</a>
+                    </span>
+                </h3>
+            </div>
+            <%} else { %>
         <div class="row isotope-grid">
+                   <% (products).forEach(function(pro) { %>
 
-            <% (products).forEach(function(pro) { %>
-
-                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-                    <!-- Block2 -->
-                    <div class="block2">
-                        <div class="block2-pic hov-img0">
-                            <img src="<%=pro.image[0]%>" alt="IMG-PRODUCT">
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                            <!-- Block2 -->
+                            <div class="block2">
+                                <div class="block2-pic hov-img0">
+                                    <img src="<%=pro.image[0]%>" alt="IMG-PRODUCT">
 
 
-                            <a href="/productdetails/<%=pro._id%>"
-                                class="block2-btn flex-c-m quickView stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
-                                View More </a>
+                                    <a href="/productdetails/<%=pro._id%>"
+                                        class="block2-btn flex-c-m quickView stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
+                                        View More </a>
 
-                        </div>
-                        <div class="block2-txt flex-w flex-t p-t-14">
+                                </div>
+                                <div class="block2-txt flex-w flex-t p-t-14">
 
-                            <div class="block2-txt-child1 flex-col-l ">
-                                <a href="#" class=" stext-104 cl4 hov-cl1 trans-04
-                                js-name-b2 p-b-6">
-                                    <%=pro.name%>
-                                </a>
+                                    <div class="block2-txt-child1 flex-col-l ">
+                                        <a href="#" class=" stext-104 cl4 hov-cl1 trans-04
+                                        js-name-b2 p-b-6">
+                                            <%=pro.name%>
+                                        </a>
 
-                                <span class="stext-105 cl3">
-                                    <% if ( pro.offer>0 ) { %>
-                                     <del class="mr-2"> ₹ <%=pro.price%> </del>
-                                     
-                                     <strong>  ₹ <%=(pro.price-pro.offer)%> </strong>
-                                     <% } else { %>
-                                        ₹ <%=pro.price%> 
-                                   <% }%>
+                                        <span class="stext-105 cl3">
+                                            <% if ( pro.offer>0 ) { %>
+                                                <del class="mr-2"> ₹ <%=pro.price%> </del>
 
-                                    <% if ( pro.stock==0 ) { %>
-                                        <p class="text-danger font-weight" > Out of Stock</p>
-                                   <% }%>
-                                </span>
-                               
-                                
+                                                <strong> ₹ <%=(pro.price-pro.offer)%> </strong>
+                                                <% } else { %>
+                                                    ₹ <%=pro.price%>
+                                                        <% }%>
+
+                                                            <% if ( pro.stock==0 ) { %>
+                                                                <p class="text-danger font-weight"> Out of Stock</p>
+                                                                <% }%>
+                                        </span>
+
+
+                                    </div>
+
+
+
+                                </div>
                             </div>
-
-                         
-
                         </div>
-                    </div>
-                </div>
 
-                <% }) %>
+                        <% }) %>
+                            <%}%>
+
+
+
 
         </div>
 
@@ -182,7 +200,7 @@
     </div>
 
 
-   
+
 
 
 
