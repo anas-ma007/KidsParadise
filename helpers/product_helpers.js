@@ -259,20 +259,20 @@ module.exports = {
 
 
 
-    filterGetProducts: async (skip, pageSize, filter) => {
+    filterGetProducts: async ( filter) => {
         try {
             if (filter === "high") {
                 filter = -1;
-                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).toArray()
                 return products
             } else if (filter === 'low') {
                 filter = 1
-                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).skip(skip).limit(pageSize).toArray()
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ price: filter }).toArray()
                 return products
             }
             else if (filter === "newness") {
                 filter = -1
-                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ date: filter }).skip(skip).limit(pageSize).toArray()
+                let products = await db.get().collection(collection.PRODUCTS_COLLECTION).find({ status: true }).sort({ date: filter }).toArray()
                 return products
             } else if (filter === '6k') {
                 let products = await db.get().collection(collection.PRODUCTS_COLLECTION)

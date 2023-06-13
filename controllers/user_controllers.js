@@ -101,16 +101,17 @@ module.exports = {
             if (filter) {
 
                 var category = await productHelpers.getCategory();
-                let products = await productHelpers.filterGetProducts(skip, pageSize, filter);
-                var count = await productHelpers.userProductCount(filter); // Pass the filter to count only filtered products
-                var totalPages = Math.ceil(count / pageSize);
-                var currentPage = page > totalPages ? totalPages : page;
-                res.render("user_view/all_products", {
+                let products = await productHelpers.filterGetProducts(filter);
+                console.log(products, "products in filter");
+                // var count = await productHelpers.userProductCount(filter); // Pass the filter to count only filtered products
+                // var totalPages = Math.ceil(count / pageSize);
+                // var currentPage = page > totalPages ? totalPages : page;
+                res.render("user_view/search", {
                     user,
                     products,
-                    totalPages,
-                    currentPage,
-                    pageSize,
+                    // totalPages,
+                    // currentPage,
+                    // pageSize,
                     category,
                     cartCount,
                 });
