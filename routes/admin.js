@@ -39,7 +39,7 @@ router.get("/listcategory/:id", middlewares.checkAdminLoggedIn, adminControllers
 // router.post('/editcategory/:id', middlewares.checkAdminLoggedIn,  adminControllers.postEditCategory)
 
 
-// ORDER MANAGEMENT 
+// ORDER MANAGEMENT  
 router.get('/orders_details', middlewares.checkAdminLoggedIn, adminControllers.getOrderDetails)
 router.get('/ship-product/:id',middlewares.checkAdminLoggedIn, adminControllers.shipProduct)
 router.get('/deliver-product/:id',middlewares.checkAdminLoggedIn, adminControllers.deliverProduct)

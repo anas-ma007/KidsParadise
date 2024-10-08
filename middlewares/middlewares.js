@@ -7,7 +7,7 @@ module.exports = {
         } else {
             res.redirect("/admin")
         }
-    },
+    }, 
 
     checkUserLoggedIn: async(req, res, next) => {
         if (req.session.loggedIn) {

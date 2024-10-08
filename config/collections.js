@@ -7,4 +7,4 @@ module.exports = {
     BANNERS: "banners",
     COUPONS: 'coupons',
     // WALLET: 'wallet'            //// ===>> changed to a field in under user collection
-}
+} 

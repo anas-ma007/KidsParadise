@@ -16,7 +16,7 @@ router.get('/login', usercontrollers.user_login)
 router.post('/login', usercontrollers.user_loginPost)
 router.get("/logout", usercontrollers.logout)
 
-// PRODUCTS 
+// PRODUCTS  
 router.get("/allproducts", usercontrollers.viewProducts)
 router.get("/productdetails/:id", usercontrollers.productDetails)
 
