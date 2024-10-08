@@ -9,7 +9,7 @@ const user_helpers = require('../helpers/user_helpers')
 
 module.exports = {
     viewAddCategory: () => {
-
+ 
         try {
             return new Promise(async (resolve, reject) => {
                 let category = await db.get().collection(collection.PRODUCTS_CATEGORY).find().toArray()

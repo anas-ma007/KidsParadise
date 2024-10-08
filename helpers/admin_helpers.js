@@ -326,7 +326,7 @@ module.exports = {
         });
 
     },
-
+ 
     addProductOffPrice: async (data) => {
 
         return new Promise(async (resolve, reject) => {

@@ -41,7 +41,7 @@ module.exports = {
                     email: userData.email
                 });
  
-                if (mobileExist) {
+                if (mobileExist) { 
                     resolve({ status: false, message: "This mobile number is already regsitered with another account..!" });
                 } else if (emailExist) {
                     resolve({ status: false, message: "This Email is already regsitered with another account..!" });

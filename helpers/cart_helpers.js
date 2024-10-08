@@ -23,7 +23,7 @@ module.exports = {
                 {
                   $inc: { 'products.$.quantity': 1 }
                 }).then(() => {
-                  res()
+                  res() 
                 })
           } else {
             await db.get().collection(collection.CART_COLLECTION).updateOne
